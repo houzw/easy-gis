@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.egc</groupId>
+    <artifactId>easy-gis</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>gis-taudem</module>
+        <module>gis-db</module>
+        <module>gis-raster</module>
+    </modules>
+
+
+    <name>easy-gis</name>
+    <developers>
+        <developer>
+            <name>houzhiwei</name>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <!--<gdal.version>2.1.0</gdal.version>-->
+        <gdal.version>1.11.4</gdal.version>
+
+        <postgis-jdbc.version>2.2.1</postgis-jdbc.version>
+        <psql.java8.version>9.4.1211</psql.java8.version>
+        <geolatte.version>0.14</geolatte.version>
+        <geotools.version>19.2</geotools.version>
+        <geotools-wfs.version>16.5</geotools-wfs.version>
+
+        <guava.version>19.0</guava.version>
+        <commons-lang3.version>3.5</commons-lang3.version>
+        <commons-io.version>2.5</commons-io.version>
+        <lombok.version>1.16.16</lombok.version>
+        <slf4j.version>1.7.21</slf4j.version>
+        <log4j2.version>2.11.0</log4j2.version>
+
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <!--slf4j-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <!--google通用类库-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        <!-- 帮助开发人员消除Java的冗长代码 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.egc</groupId>
+            <artifactId>commons</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>it.geosolutions</groupId>
+                <artifactId>geoserver-manager</artifactId>
+                <version>1.7.0</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.osgeo/proj4j -->
+            <dependency>
+                <groupId>org.osgeo</groupId>
+                <artifactId>proj4j</artifactId>
+                <version>0.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>net.postgis</groupId>
+                <artifactId>postgis-jdbc</artifactId>
+                <version>${postgis-jdbc.version}</version>
+            </dependency>
+            <!--
+                使用与dll文件一致的， gisinternals 提供的jar文件。使用nexus管理
+                dll文件通过配置系统环境变量解决：C:\Program Files\GDAL
+            -->
+            <dependency>
+                <groupId>org.gdal</groupId>
+                <artifactId>gdal</artifactId>
+                <version>${gdal.version}</version>
+                <classifier>gisinternals</classifier>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <!--构建部署配置-->
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>Private Nexus Snapshots Repository</name>
+            <url>http://192.168.6.56:8081/repository/nexus/</url>
+        </snapshotRepository>
+        <repository>
+            <id>nexus-releases</id>
+            <name>Private Nexus Releases Repository</name>
+            <url>http://192.168.6.56:8081/repository/nexus/</url>
+        </repository>
+    </distributionManagement>
+</project>

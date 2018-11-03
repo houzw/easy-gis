@@ -1,0 +1,6 @@
+org\egc\gis\taudem\BaseTauDEM.class
+org\egc\gis\taudem\StreamNetworkAnalysis.class
+org\egc\gis\taudem\TauDEMCommands.class
+org\egc\gis\taudem\SINMAPStabilityIndex.class
+org\egc\gis\taudem\BasicGridAnalysis.class
+org\egc\gis\taudem\SpecializedGridAnalysis.class
