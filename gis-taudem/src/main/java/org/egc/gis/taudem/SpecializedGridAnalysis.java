@@ -2,6 +2,7 @@ package org.egc.gis.taudem;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.egc.commons.command.ExecResult;
 
 import javax.validation.constraints.NotBlank;
 import java.util.LinkedHashMap;
@@ -14,12 +15,17 @@ import java.util.Map;
  * </pre>
  *
  * @author houzhiwei
- * @date 2018/10/12 16:50
+ * @date 2018 /10/12 16:50
  */
 @Slf4j
 public class SpecializedGridAnalysis extends BaseTauDEM {
     private static SpecializedGridAnalysis ourInstance = new SpecializedGridAnalysis();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static SpecializedGridAnalysis getInstance() {
         return ourInstance;
     }
@@ -30,11 +36,46 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
 
     // region  D-Infinity Avalanche Runout
 
-    public static boolean DInfinityAvalancheRunout(@NotBlank String Input_Pit_Filled_Elevation_Grid,
-                                                   @NotBlank String Input_DInfinity_Flow_Direction_Grid,
-                                                   @NotBlank String Input_Avalanche_Source_Site_Grid,
-                                                   String Output_Runout_Zone_Grid, String Output_Path_Distance_Grid,
-                                                   String inputDir, String outputDir)
+    /**
+     * D infinity avalanche runout exec result.
+     *
+     * @param Input_Pit_Filled_Elevation_Grid     the input pit filled elevation grid
+     * @param Input_DInfinity_Flow_Direction_Grid the input d infinity flow direction grid
+     * @param Input_Avalanche_Source_Site_Grid    the input avalanche source site grid
+     * @param outputDir                           the output dir
+     * @return the exec result
+     * @see #DInfinityAvalancheRunout(String, String, String, Double, Double, String, String, String, String, String)
+     */
+    public static ExecResult DInfinityAvalancheRunout(@NotBlank String Input_Pit_Filled_Elevation_Grid,
+                                                      @NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                      @NotBlank String Input_Avalanche_Source_Site_Grid,
+                                                      String outputDir)
+    {
+        return DInfinityAvalancheRunout(Input_Pit_Filled_Elevation_Grid,
+                                        Input_DInfinity_Flow_Direction_Grid,
+                                        Input_Avalanche_Source_Site_Grid,
+                                        null,
+                                        null, null, outputDir);
+    }
+
+    /**
+     * D infinity avalanche runout exec result.
+     *
+     * @param Input_Pit_Filled_Elevation_Grid     the input pit filled elevation grid
+     * @param Input_DInfinity_Flow_Direction_Grid the input d infinity flow direction grid
+     * @param Input_Avalanche_Source_Site_Grid    the input avalanche source site grid
+     * @param Output_Runout_Zone_Grid             the output runout zone grid
+     * @param Output_Path_Distance_Grid           the output path distance grid
+     * @param inputDir                            the input dir
+     * @param outputDir                           the output dir
+     * @return the exec result
+     * @see #DInfinityAvalancheRunout(String, String, String, Double, Double, String, String, String, String, String)
+     */
+    public static ExecResult DInfinityAvalancheRunout(@NotBlank String Input_Pit_Filled_Elevation_Grid,
+                                                      @NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                      @NotBlank String Input_Avalanche_Source_Site_Grid,
+                                                      String Output_Runout_Zone_Grid, String Output_Path_Distance_Grid,
+                                                      String inputDir, String outputDir)
     {
         return DInfinityAvalancheRunout(Input_Pit_Filled_Elevation_Grid,
                                         Input_DInfinity_Flow_Direction_Grid,
@@ -57,15 +98,17 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
      * @param Path_Distance_Method                This option selects the method used to measure the distance used to calculate the slope angle.
      * @param Output_Runout_Zone_Grid             This grid Identifies the avalanche's runout zone (affected area) using a runout zone indicator with value 0 to indicate that this grid cell is not in the runout zone and value > 0 to indicate that this grid cell is in the runout zone.
      * @param Output_Path_Distance_Grid           This is a grid of the flow distance from the source site that has the highest angle to each cell.
+     * @param inputDir                            the input dir
+     * @param outputDir                           the output dir
      * @return true if succeeded otherwise false
      */
-    public static boolean DInfinityAvalancheRunout(@NotBlank String Input_Pit_Filled_Elevation_Grid,
-                                                   @NotBlank String Input_DInfinity_Flow_Direction_Grid,
-                                                   @NotBlank String Input_Avalanche_Source_Site_Grid,
-                                                   Double Input_Proportion_Threshold,
-                                                   Double Input_Alpha_Angle_Threshold, String Path_Distance_Method,
-                                                   String Output_Runout_Zone_Grid, String Output_Path_Distance_Grid,
-                                                   String inputDir, String outputDir)
+    public static ExecResult DInfinityAvalancheRunout(@NotBlank String Input_Pit_Filled_Elevation_Grid,
+                                                      @NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                      @NotBlank String Input_Avalanche_Source_Site_Grid,
+                                                      Double Input_Proportion_Threshold,
+                                                      Double Input_Alpha_Angle_Threshold, String Path_Distance_Method,
+                                                      String Output_Runout_Zone_Grid, String Output_Path_Distance_Grid,
+                                                      String inputDir, String outputDir)
     {
         Map files = new LinkedHashMap();
         Map outFiles = new LinkedHashMap();
@@ -106,17 +149,42 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
 
     /**
      * DInfinityConcentrationLimitedAcccumulation
-     * <p> This function applies to the situation where an unlimited supply of a substance is loaded into flow at a concentration or solubility threshold Csol over a region indicated by an indicator grid (dg).
      *
-     * @param Input_DInfinity_Flow_Direction_Grid          A grid giving flow direction by the D-infinity method.
-     * @param Input_Effective_Runoff_Weight_Grid           A grid giving the input quantity (notionally effective runoff or excess precipitation) to be used in the D-infinity weighted contributing area evaluation of Overland Flow Specific Discharge.
-     * @param Input_Disturbance_Indicator_Grid             A grid that indicates the source zone of the area of substance supply and must be 1 inside the zone and 0 or "no data" over the rest of the domain.
-     * @param Input_Decay_Multiplier_Grid                  A grid giving the factor by which flow leaving each grid cell is multiplied before accumulation on downslope grid cells.
-     * @param Output_Overland_Flow_Specific_Discharge_Grid The grid giving the specific discharge of the flow carrying the constituent being loaded at the concentration threshold specified.
-     * @param Output_Concentration_Grid                    A grid giving the resulting concentration of the compound of interest in the flow.
-     * @return true if succeeded otherwise false
+     * @param Input_DInfinity_Flow_Direction_Grid the input d infinity flow direction grid
+     * @param Input_Effective_Runoff_Weight_Grid  the input effective runoff weight grid
+     * @param Input_Disturbance_Indicator_Grid    the input disturbance indicator grid
+     * @param Input_Decay_Multiplier_Grid         the input decay multiplier grid
+     * @param outputDir                           the output dir
+     * @return the exec result
+     * @see #DInfinityConcentrationLimitedAcccumulation(String, String, String, String, String, Double, Boolean, String, String, String, String)
      */
-    public static boolean DInfinityConcentrationLimitedAcccumulation(
+    public static ExecResult DInfinityConcentrationLimitedAcccumulation(
+            @NotBlank String Input_DInfinity_Flow_Direction_Grid, @NotBlank String Input_Effective_Runoff_Weight_Grid,
+            @NotBlank String Input_Disturbance_Indicator_Grid, @NotBlank String Input_Decay_Multiplier_Grid,
+            String outputDir)
+    {
+        return DInfinityConcentrationLimitedAcccumulation(Input_DInfinity_Flow_Direction_Grid,
+                                                          Input_Effective_Runoff_Weight_Grid,
+                                                          Input_Disturbance_Indicator_Grid, Input_Decay_Multiplier_Grid,
+                                                          null, null,
+                                                          null, outputDir);
+    }
+
+    /**
+     * DInfinityConcentrationLimitedAcccumulation
+     *
+     * @param Input_DInfinity_Flow_Direction_Grid          the input d infinity flow direction grid
+     * @param Input_Effective_Runoff_Weight_Grid           the input effective runoff weight grid
+     * @param Input_Disturbance_Indicator_Grid             the input disturbance indicator grid
+     * @param Input_Decay_Multiplier_Grid                  the input decay multiplier grid
+     * @param Output_Overland_Flow_Specific_Discharge_Grid the output overland flow specific discharge grid
+     * @param Output_Concentration_Grid                    the output concentration grid
+     * @param inputDir                                     the input dir
+     * @param outputDir                                    the output dir
+     * @return the exec result
+     * @see  #DInfinityConcentrationLimitedAcccumulation(String, String, String, String, String, Double, Boolean, String, String, String, String)
+     */
+    public static ExecResult DInfinityConcentrationLimitedAcccumulation(
             @NotBlank String Input_DInfinity_Flow_Direction_Grid, @NotBlank String Input_Effective_Runoff_Weight_Grid,
             @NotBlank String Input_Disturbance_Indicator_Grid, @NotBlank String Input_Decay_Multiplier_Grid,
             String Output_Overland_Flow_Specific_Discharge_Grid, String Output_Concentration_Grid, String inputDir,
@@ -143,9 +211,11 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
      * @param Check_for_Edge_Contamination                 This checkbox determines whether the tool should check for edge contamination.
      * @param Output_Overland_Flow_Specific_Discharge_Grid The grid giving the specific discharge of the flow carrying the constituent being loaded at the concentration threshold specified.
      * @param Output_Concentration_Grid                    A grid giving the resulting concentration of the compound of interest in the flow.
+     * @param inputDir                                     the input dir
+     * @param outputDir                                    the output dir
      * @return true if succeeded otherwise false
      */
-    public static boolean DInfinityConcentrationLimitedAcccumulation(
+    public static ExecResult DInfinityConcentrationLimitedAcccumulation(
             @NotBlank String Input_DInfinity_Flow_Direction_Grid, @NotBlank String Input_Effective_Runoff_Weight_Grid,
             @NotBlank String Input_Disturbance_Indicator_Grid, @NotBlank String Input_Decay_Multiplier_Grid,
             String Input_Outlets, Double Concentration_Threshold, Boolean Check_for_Edge_Contamination,
@@ -195,17 +265,37 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
 
     /**
      * DInfinityDecayingAccumulation
-     * <p> The D-Infinity Decaying Accumulation tool creates a grid of the accumulated quantity at each location in the domain where the quantity accumulates with the D-infinity flow field, but is subject to first order decay in moving from cell to cell.
      *
-     * @param Input_DInfinity_Flow_Direction_Grid         A grid giving flow direction by the D-infinity method.
-     * @param Input_Decay_Multiplier_Grid                 A grid giving the factor by which flow leaving each grid cell is multiplied before accumulation on downslope grid cells.
-     * @param Output_Decayed_Specific_Catchment_Area_Grid The D-Infinity Decaying Accumulation tool creates a grid of the accumulated mass at each location in the domain where mass moves with the D-infinity flow field, but is subject to first order decay in moving from cell to cell.
-     * @return true if succeeded otherwise false
+     * @param Input_DInfinity_Flow_Direction_Grid the input d infinity flow direction grid
+     * @param Input_Decay_Multiplier_Grid         the input decay multiplier grid
+     * @param outputDir                           the output dir
+     * @return the exec result
+     * @see #DInfinityDecayingAccumulation(String, String, String, String, Boolean, String, String, Integer, String, String)
      */
-    public static boolean DInfinityDecayingAccumulation(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
-                                                        @NotBlank String Input_Decay_Multiplier_Grid,
-                                                        String Output_Decayed_Specific_Catchment_Area_Grid,
-                                                        String inputDir, String outputDir)
+    public static ExecResult DInfinityDecayingAccumulation(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                           @NotBlank String Input_Decay_Multiplier_Grid,
+                                                           String outputDir)
+    {
+        return DInfinityDecayingAccumulation(Input_DInfinity_Flow_Direction_Grid, Input_Decay_Multiplier_Grid,
+                                             null, null,
+                                             outputDir);
+    }
+
+    /**
+     * DInfinityDecayingAccumulation
+     *
+     * @param Input_DInfinity_Flow_Direction_Grid         the input d infinity flow direction grid
+     * @param Input_Decay_Multiplier_Grid                 the input decay multiplier grid
+     * @param Output_Decayed_Specific_Catchment_Area_Grid the output decayed specific catchment area grid
+     * @param inputDir                                    the input dir
+     * @param outputDir                                   the output dir
+     * @return the exec result
+     * @see #DInfinityDecayingAccumulation(String, String, String, String, Boolean, String, String, Integer, String, String)
+     */
+    public static ExecResult DInfinityDecayingAccumulation(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                           @NotBlank String Input_Decay_Multiplier_Grid,
+                                                           String Output_Decayed_Specific_Catchment_Area_Grid,
+                                                           String inputDir, String outputDir)
     {
         return DInfinityDecayingAccumulation(Input_DInfinity_Flow_Direction_Grid, Input_Decay_Multiplier_Grid, null,
                                              null, false,
@@ -223,16 +313,20 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
      * @param Input_Outlets                               This optional input is a point feature  defining outlets of interest.
      * @param Check_for_Edge_Contamination                This checkbox determines whether the tool should check for edge contamination.
      * @param Output_Decayed_Specific_Catchment_Area_Grid The D-Infinity Decaying Accumulation tool creates a grid of the accumulated mass at each location in the domain where mass moves with the D-infinity flow field, but is subject to first order decay in moving from cell to cell.
+     * @param layerName                                   the layer name
+     * @param layerNumber                                 the layer number
+     * @param inputDir                                    the input dir
+     * @param outputDir                                   the output dir
      * @return true if succeeded otherwise false
      */
-    public static boolean DInfinityDecayingAccumulation(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
-                                                        @NotBlank String Input_Decay_Multiplier_Grid,
-                                                        @NotBlank String Input_Weight_Grid,
-                                                        String Input_Outlets,
-                                                        Boolean Check_for_Edge_Contamination,
-                                                        String Output_Decayed_Specific_Catchment_Area_Grid,
-                                                        String layerName, Integer layerNumber, String inputDir,
-                                                        String outputDir)
+    public static ExecResult DInfinityDecayingAccumulation(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                           @NotBlank String Input_Decay_Multiplier_Grid,
+                                                           @NotBlank String Input_Weight_Grid,
+                                                           String Input_Outlets,
+                                                           Boolean Check_for_Edge_Contamination,
+                                                           String Output_Decayed_Specific_Catchment_Area_Grid,
+                                                           String layerName, Integer layerNumber, String inputDir,
+                                                           String outputDir)
     {
 
         Map files = new LinkedHashMap();
@@ -270,19 +364,42 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
 
     /**
      * DInfinityDistanceDown
-     * <p> Calculates the distance downslope to a stream using the D-infinity flow model.
      *
-     * @param Input_DInfinity_Flow_Direction_Grid  A grid giving flow directions by the D-Infinity method.
-     * @param Input_Pit_Filled_Elevation_Grid      This input is a grid of elevation values.
-     * @param Input_Stream_Raster_Grid             A grid indicating streams, by using a grid cell value of 1 on streams and 0 off streams.
-     * @param Output_DInfinity_Drop_to_Stream_Grid Creates a grid containing the distance to stream calculated using the D-infinity flow model and the statistical and path methods chosen.
-     * @return true if succeeded otherwise false
+     * @param Input_DInfinity_Flow_Direction_Grid the input d infinity flow direction grid
+     * @param Input_Pit_Filled_Elevation_Grid     the input pit filled elevation grid
+     * @param Input_Stream_Raster_Grid            the input stream raster grid
+     * @param outputDir                           the output dir
+     * @return the exec result
+     * @see  #DInfinityDistanceDown(String, String, String, String, String, Boolean, String, String, String, String)
      */
-    public static boolean DInfinityDistanceDown(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
-                                                @NotBlank String Input_Pit_Filled_Elevation_Grid,
-                                                @NotBlank String Input_Stream_Raster_Grid,
-                                                String Output_DInfinity_Drop_to_Stream_Grid, String inputDir,
-                                                String outputDir)
+    public static ExecResult DInfinityDistanceDown(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                   @NotBlank String Input_Pit_Filled_Elevation_Grid,
+                                                   @NotBlank String Input_Stream_Raster_Grid,
+                                                   String outputDir)
+    {
+        return DInfinityDistanceDown(Input_DInfinity_Flow_Direction_Grid, Input_Pit_Filled_Elevation_Grid,
+                                     Input_Stream_Raster_Grid, null, null,
+                                     outputDir);
+    }
+
+
+    /**
+     * DInfinityDistanceDown
+     *
+     * @param Input_DInfinity_Flow_Direction_Grid  the input d infinity flow direction grid
+     * @param Input_Pit_Filled_Elevation_Grid      the input pit filled elevation grid
+     * @param Input_Stream_Raster_Grid             the input stream raster grid
+     * @param Output_DInfinity_Drop_to_Stream_Grid the output d infinity drop to stream grid
+     * @param inputDir                             the input dir
+     * @param outputDir                            the output dir
+     * @return the exec result
+     * @see #DInfinityDistanceDown(String, String, String, String, String, Boolean, String, String, String, String)
+     */
+    public static ExecResult DInfinityDistanceDown(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                   @NotBlank String Input_Pit_Filled_Elevation_Grid,
+                                                   @NotBlank String Input_Stream_Raster_Grid,
+                                                   String Output_DInfinity_Drop_to_Stream_Grid, String inputDir,
+                                                   String outputDir)
     {
         return DInfinityDistanceDown(Input_DInfinity_Flow_Direction_Grid, Input_Pit_Filled_Elevation_Grid,
                                      Input_Stream_Raster_Grid, "ave", "h",
@@ -303,15 +420,17 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
      * @param Check_for_edge_contamination         A flag that determines whether the tool should check for edge contamination.
      * @param Input_Weight_Path_Grid               A grid giving weights (loadings) to be used in the distance calculation.
      * @param Output_DInfinity_Drop_to_Stream_Grid Creates a grid containing the distance to stream calculated using the D-infinity flow model and the statistical and path methods chosen.
+     * @param inputDir                             the input dir
+     * @param outputDir                            the output dir
      * @return true if succeeded otherwise false
      */
-    public static boolean DInfinityDistanceDown(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
-                                                @NotBlank String Input_Pit_Filled_Elevation_Grid,
-                                                @NotBlank String Input_Stream_Raster_Grid, String Statistical_Method,
-                                                String Distance_Method, Boolean Check_for_edge_contamination,
-                                                @NotBlank String Input_Weight_Path_Grid,
-                                                String Output_DInfinity_Drop_to_Stream_Grid, String inputDir,
-                                                String outputDir)
+    public static ExecResult DInfinityDistanceDown(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                   @NotBlank String Input_Pit_Filled_Elevation_Grid,
+                                                   @NotBlank String Input_Stream_Raster_Grid, String Statistical_Method,
+                                                   String Distance_Method, Boolean Check_for_edge_contamination,
+                                                   @NotBlank String Input_Weight_Path_Grid,
+                                                   String Output_DInfinity_Drop_to_Stream_Grid, String inputDir,
+                                                   String outputDir)
     {
 
         Map files = new LinkedHashMap();
@@ -351,19 +470,43 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
 
     /**
      * DInfinityDistanceUp
-     * <p> This tool calculates the distance from each grid cell up to the ridge cells along the reverse D-infinity flow directions.
      *
-     * @param Input_DInfinity_Flow_Direction_Grid A grid giving flow directions by the D-Infinity method.
-     * @param Input_Pit_Filled_Elevation_Grid     This input is a grid of elevation values.
-     * @param Input_Slope_Grid                    This input is a grid of slope values.
-     * @param Output_DInfinity_Distance_Up_Grid
-     * @return true if succeeded otherwise false
+     * @param Input_DInfinity_Flow_Direction_Grid the input d infinity flow direction grid
+     * @param Input_Pit_Filled_Elevation_Grid     the input pit filled elevation grid
+     * @param Input_Slope_Grid                    the input slope grid
+     * @param outputDir                           the output dir
+     * @return the exec result
+     * @see  #DInfinityDistanceUp(String, String, String, Double, String, String, Boolean, String, String, String)
      */
-    public static boolean DInfinityDistanceUp(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
-                                              @NotBlank String Input_Pit_Filled_Elevation_Grid,
-                                              @NotBlank String Input_Slope_Grid,
-                                              String Output_DInfinity_Distance_Up_Grid, String inputDir,
-                                              String outputDir)
+    public static ExecResult DInfinityDistanceUp(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                 @NotBlank String Input_Pit_Filled_Elevation_Grid,
+                                                 @NotBlank String Input_Slope_Grid,
+                                                 String outputDir)
+    {
+        return DInfinityDistanceUp(Input_DInfinity_Flow_Direction_Grid,
+                                   Input_Pit_Filled_Elevation_Grid,
+                                   Input_Slope_Grid, null,
+                                   null, outputDir);
+
+    }
+
+    /**
+     * DInfinityDistanceUp
+     *
+     * @param Input_DInfinity_Flow_Direction_Grid the input d infinity flow direction grid
+     * @param Input_Pit_Filled_Elevation_Grid     the input pit filled elevation grid
+     * @param Input_Slope_Grid                    the input slope grid
+     * @param Output_DInfinity_Distance_Up_Grid   the output d infinity distance up grid
+     * @param inputDir                            the input dir
+     * @param outputDir                           the output dir
+     * @return the exec result
+     * @see  #DInfinityDistanceUp(String, String, String, Double, String, String, Boolean, String, String, String)
+     */
+    public static ExecResult DInfinityDistanceUp(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                 @NotBlank String Input_Pit_Filled_Elevation_Grid,
+                                                 @NotBlank String Input_Slope_Grid,
+                                                 String Output_DInfinity_Distance_Up_Grid, String inputDir,
+                                                 String outputDir)
     {
         return DInfinityDistanceUp(Input_DInfinity_Flow_Direction_Grid,
                                    Input_Pit_Filled_Elevation_Grid,
@@ -385,16 +528,18 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
      * @param Statistical_Method                  Statistical method used to calculate the distance down to the stream.
      * @param Distance_Method                     Distance method used to calculate the distance down to the stream.
      * @param Check_for_Edge_Contamination        A flag that determines whether the tool should check for edge contamination.
-     * @param Output_DInfinity_Distance_Up_Grid
+     * @param Output_DInfinity_Distance_Up_Grid   the output d infinity distance up grid
+     * @param inputDir                            the input dir
+     * @param outputDir                           the output dir
      * @return true if succeeded otherwise false
      */
-    public static boolean DInfinityDistanceUp(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
-                                              @NotBlank String Input_Pit_Filled_Elevation_Grid,
-                                              @NotBlank String Input_Slope_Grid, Double Input_Proportion_Threshold,
-                                              String Statistical_Method, String Distance_Method,
-                                              Boolean Check_for_Edge_Contamination,
-                                              String Output_DInfinity_Distance_Up_Grid, String inputDir,
-                                              String outputDir)
+    public static ExecResult DInfinityDistanceUp(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                 @NotBlank String Input_Pit_Filled_Elevation_Grid,
+                                                 @NotBlank String Input_Slope_Grid, Double Input_Proportion_Threshold,
+                                                 String Statistical_Method, String Distance_Method,
+                                                 Boolean Check_for_Edge_Contamination,
+                                                 String Output_DInfinity_Distance_Up_Grid, String inputDir,
+                                                 String outputDir)
     {
 
         Map files = new LinkedHashMap();
@@ -433,19 +578,41 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
 
     /**
      * DInfinityReverseAccumulation
+     *
+     * @param Input_DInfinity_Flow_Direction_Grid the input d infinity flow direction grid
+     * @param Input_Weight_Grid                   the input weight grid
+     * @param outputDir                           the output dir
+     * @return the exec result
+     * @see #DInfinityReverseAccumulation(String, String, String, String, String, String)
+     */
+    public static ExecResult DInfinityReverseAccumulation(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                          @NotBlank String Input_Weight_Grid,
+                                                          String outputDir)
+    {
+
+        return DInfinityReverseAccumulation(Input_DInfinity_Flow_Direction_Grid, Input_Weight_Grid,
+                                            null,
+                                            null, null, outputDir);
+    }
+
+
+    /**
+     * DInfinityReverseAccumulation
      * <p> This works in a similar way to evaluation of weighted Contributing area, except that the accumulation is by propagating the weight loadings upslope along the reverse of the flow directions to accumulate the quantity of weight loading downslope from each grid cell.
      *
      * @param Input_DInfinity_Flow_Direction_Grid A grid giving flow direction by the Dinfinity method.
      * @param Input_Weight_Grid                   A grid giving weights (loadings) to be used in the accumulation.
      * @param Output_Reverse_Accumulation_Grid    The grid giving the result of the "Reverse Accumulation" function.
      * @param Output_Maximum_Downslope_Grid       The grid giving the maximum of the weight loading grid downslope from each grid cell.
+     * @param inputDir                            the input dir
+     * @param outputDir                           the output dir
      * @return true if succeeded otherwise false
      */
-    public static boolean DInfinityReverseAccumulation(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
-                                                       @NotBlank String Input_Weight_Grid,
-                                                       String Output_Reverse_Accumulation_Grid,
-                                                       String Output_Maximum_Downslope_Grid, String inputDir,
-                                                       String outputDir)
+    public static ExecResult DInfinityReverseAccumulation(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                          @NotBlank String Input_Weight_Grid,
+                                                          String Output_Reverse_Accumulation_Grid,
+                                                          String Output_Maximum_Downslope_Grid, String inputDir,
+                                                          String outputDir)
     {
 
         Map files = new LinkedHashMap();
@@ -481,21 +648,43 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
 
     /**
      * DInfinityTransportLimitedAccumulation
-     * <p> This function is designed to calculate the transport and deposition of a substance (e.
      *
-     * @param Input_DInfinity_Flow_Direction_Grid        A grid giving flow direction by the D-infinity method.
-     * @param Input_Supply_Grid                          A grid giving the supply (loading) of material to a transport limited accumulation function.
-     * @param Input_Transport_Capacity_Grid              A grid giving the transport capacity at each grid cell for the transport limited accumulation function.
-     * @param Output_Transport_Limited_Accumulation_Grid This grid is the weighted accumulation of supply accumulated respecting the limitations in transport capacity and reports the transport rate calculated by accumulating the substance flux subject to the rule that the transport out of any grid cell is the minimum of the total supply (local supply plus transport in) to that grid cell and the transport capacity.
-     * @param Output_Deposition_Grid                     A grid giving the deposition resulting from the transport limited accumulation.
-     * @return true if succeeded otherwise false
+     * @param Input_DInfinity_Flow_Direction_Grid the input d infinity flow direction grid
+     * @param Input_Supply_Grid                   the input supply grid
+     * @param Input_Transport_Capacity_Grid       the input transport capacity grid
+     * @param outputDir                           the output dir
+     * @return the exec result
+     * @see #DInfinityTransportLimitedAccumulation(String, String, String, String, String, Boolean, String, String, String, String, Integer, String, String)
      */
-    public static boolean DInfinityTransportLimitedAccumulation(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
-                                                                @NotBlank String Input_Supply_Grid,
-                                                                @NotBlank String Input_Transport_Capacity_Grid,
-                                                                String Output_Transport_Limited_Accumulation_Grid,
-                                                                String Output_Deposition_Grid, String inputDir,
-                                                                String outputDir)
+    public static ExecResult DInfinityTransportLimitedAccumulation(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                                   @NotBlank String Input_Supply_Grid,
+                                                                   @NotBlank String Input_Transport_Capacity_Grid,
+                                                                   String outputDir)
+    {
+        return DInfinityTransportLimitedAccumulation(Input_DInfinity_Flow_Direction_Grid, Input_Supply_Grid,
+                                                     Input_Transport_Capacity_Grid, null,
+                                                     null, null, outputDir);
+    }
+
+    /**
+     * DInfinityTransportLimitedAccumulation
+     *
+     * @param Input_DInfinity_Flow_Direction_Grid        the input d infinity flow direction grid
+     * @param Input_Supply_Grid                          the input supply grid
+     * @param Input_Transport_Capacity_Grid              the input transport capacity grid
+     * @param Output_Transport_Limited_Accumulation_Grid the output transport limited accumulation grid
+     * @param Output_Deposition_Grid                     the output deposition grid
+     * @param inputDir                                   the input dir
+     * @param outputDir                                  the output dir
+     * @return the exec result
+     * @see #DInfinityTransportLimitedAccumulation(String, String, String, String, String, Boolean, String, String, String, String, Integer, String, String)
+     */
+    public static ExecResult DInfinityTransportLimitedAccumulation(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                                   @NotBlank String Input_Supply_Grid,
+                                                                   @NotBlank String Input_Transport_Capacity_Grid,
+                                                                   String Output_Transport_Limited_Accumulation_Grid,
+                                                                   String Output_Deposition_Grid, String inputDir,
+                                                                   String outputDir)
     {
         return DInfinityTransportLimitedAccumulation(Input_DInfinity_Flow_Direction_Grid, Input_Supply_Grid,
                                                      Input_Transport_Capacity_Grid, null, null,
@@ -514,23 +703,26 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
      * @param Input_Concentration_Grid                   A grid giving the concentration of a compound of interest in the supply to the transport limited accumulation function.
      * @param Input_Outlets                              This optional input is a point feature  defining outlets of interest.
      * @param Check_for_Edge_Contamination               This checkbox determines whether the tool should check for edge contamination.
-     * @param Output_Transport_Limited_Accumulation_Grid This grid is the weighted accumulation of supply accumulated respecting the limitations in transport capacity
-     *                                                   and reports the transport rate calculated by accumulating the substance flux subject to the rule that the transport out of any grid cell is the minimum of the total supply (local supply plus transport in) to that grid cell and the transport capacity.
+     * @param Output_Transport_Limited_Accumulation_Grid This grid is the weighted accumulation of supply accumulated respecting the limitations in transport capacity                                                   and reports the transport rate calculated by accumulating the substance flux subject to the rule that the transport out of any grid cell is the minimum of the total supply (local supply plus transport in) to that grid cell and the transport capacity.
      * @param Output_Deposition_Grid                     A grid giving the deposition resulting from the transport limited accumulation.
      * @param Output_Concentration_Grid                  If an input concentation in supply grid is given, then this grid is also output and gives the concentration of a compound (contaminant) adhered or bound to the transported substance (e.
+     * @param layerName                                  the layer name
+     * @param layerNumber                                the layer number
+     * @param inputDir                                   the input dir
+     * @param outputDir                                  the output dir
      * @return true if succeeded otherwise false
      */
-    public static boolean DInfinityTransportLimitedAccumulation(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
-                                                                @NotBlank String Input_Supply_Grid,
-                                                                @NotBlank String Input_Transport_Capacity_Grid,
-                                                                String Input_Concentration_Grid,
-                                                                String Input_Outlets,
-                                                                Boolean Check_for_Edge_Contamination,
-                                                                String Output_Transport_Limited_Accumulation_Grid,
-                                                                String Output_Deposition_Grid,
-                                                                String Output_Concentration_Grid, String layerName,
-                                                                Integer layerNumber, String inputDir,
-                                                                String outputDir)
+    public static ExecResult DInfinityTransportLimitedAccumulation(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                                   @NotBlank String Input_Supply_Grid,
+                                                                   @NotBlank String Input_Transport_Capacity_Grid,
+                                                                   String Input_Concentration_Grid,
+                                                                   String Input_Outlets,
+                                                                   Boolean Check_for_Edge_Contamination,
+                                                                   String Output_Transport_Limited_Accumulation_Grid,
+                                                                   String Output_Deposition_Grid,
+                                                                   String Output_Concentration_Grid, String layerName,
+                                                                   Integer layerNumber, String inputDir,
+                                                                   String outputDir)
     {
 
         Map files = new LinkedHashMap(5);
@@ -582,17 +774,39 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
 
     /**
      * DInfinityUpslopeDependence
+     *
+     * @param Input_DInfinity_Flow_Direction_Grid the input d infinity flow direction grid
+     * @param Input_Destination_Grid              the input destination grid
+     * @param outputDir                           the output dir
+     * @return the exec result
+     * @see  #DInfinityUpslopeDependence(String, String, String, String, String)
+     */
+    public static ExecResult DInfinityUpslopeDependence(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                        @NotBlank String Input_Destination_Grid,
+                                                        String outputDir)
+    {
+
+        return DInfinityUpslopeDependence(Input_DInfinity_Flow_Direction_Grid,
+                                          Input_Destination_Grid,
+                                          null, null, outputDir);
+    }
+
+
+    /**
+     * DInfinityUpslopeDependence
      * <p> The D-Infinity Upslope Dependence tool quantifies the amount each grid cell in the domain contributes to a destination set of grid cells.
      *
      * @param Input_DInfinity_Flow_Direction_Grid A grid giving flow direction by the D-Infinity method where the flow direction angle is determined as the direction of the steepest downward slope on the eight triangular facets formed in a 3 x 3 grid cell window centered on the grid cell of interest.
      * @param Input_Destination_Grid              A grid that encodes the destination zone that may receive flow from upslope.
      * @param Output_Upslope_Dependence_Grid      A grid quantifing the amount each source point in the domain contributes to the zone defined by the destination grid.
+     * @param inputDir                            the input dir
+     * @param outputDir                           the output dir
      * @return true if succeeded otherwise false
      */
-    public static boolean DInfinityUpslopeDependence(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
-                                                     @NotBlank String Input_Destination_Grid,
-                                                     String Output_Upslope_Dependence_Grid, String inputDir,
-                                                     String outputDir)
+    public static ExecResult DInfinityUpslopeDependence(@NotBlank String Input_DInfinity_Flow_Direction_Grid,
+                                                        @NotBlank String Input_Destination_Grid,
+                                                        String Output_Upslope_Dependence_Grid, String inputDir,
+                                                        String outputDir)
     {
 
         Map files = new LinkedHashMap();
@@ -620,17 +834,37 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
 
     /**
      * D8DistanceToStreams
-     * <p> D8HDistTostrm
-     * <p> Computes the horizontal distance to stream for each grid cell, moving downslope according to the D8 flow model, until a stream grid cell is encountered.
      *
-     * @param Input_D8_Flow_Direction_Grid    This input is a grid of flow directions that are encoded using the D8 method where all flow from a cells goes to a single neighboring cell in the direction of steepest descent.
-     * @param Input_Stream_Raster_Grid        A grid indicating streams.
-     * @param Output_Distance_to_Streams_Grid A grid giving the horizontal distance along the flow path as defined by the D8 Flow Directions Grid to the streams in the Stream Raster Grid.
-     * @return true if succeeded otherwise false
+     * @param Input_D8_Flow_Direction_Grid the input d 8 flow direction grid
+     * @param Input_Stream_Raster_Grid     the input stream raster grid
+     * @param outputDir                    the output dir
+     * @return the exec result
+     * @see  #D8DistanceToStreams(String, String, Integer, String, String, String)
      */
-    public static boolean D8DistanceToStreams(@NotBlank String Input_D8_Flow_Direction_Grid,
-                                              @NotBlank String Input_Stream_Raster_Grid,
-                                              String Output_Distance_to_Streams_Grid, String inputDir, String outputDir)
+    public static ExecResult D8DistanceToStreams(@NotBlank String Input_D8_Flow_Direction_Grid,
+                                                 @NotBlank String Input_Stream_Raster_Grid,
+                                                 String outputDir)
+    {
+        return D8DistanceToStreams(Input_D8_Flow_Direction_Grid,
+                                   Input_Stream_Raster_Grid, 1,
+                                   null, null, outputDir);
+    }
+
+    /**
+     * D8DistanceToStreams
+     *
+     * @param Input_D8_Flow_Direction_Grid    the input d 8 flow direction grid
+     * @param Input_Stream_Raster_Grid        the input stream raster grid
+     * @param Output_Distance_to_Streams_Grid the output distance to streams grid
+     * @param inputDir                        the input dir
+     * @param outputDir                       the output dir
+     * @return the exec result
+     * @see #D8DistanceToStreams(String, String, Integer, String, String, String)
+     */
+    public static ExecResult D8DistanceToStreams(@NotBlank String Input_D8_Flow_Direction_Grid,
+                                                 @NotBlank String Input_Stream_Raster_Grid,
+                                                 String Output_Distance_to_Streams_Grid, String inputDir,
+                                                 String outputDir)
     {
         return D8DistanceToStreams(Input_D8_Flow_Direction_Grid,
                                    Input_Stream_Raster_Grid, 1,
@@ -645,11 +879,14 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
      * @param Input_Stream_Raster_Grid        A grid indicating streams.
      * @param Threshold                       This value acts as threshold on the Stream Raster Grid to determine the location of streams.
      * @param Output_Distance_to_Streams_Grid A grid giving the horizontal distance along the flow path as defined by the D8 Flow Directions Grid to the streams in the Stream Raster Grid.
+     * @param inputDir                        the input dir
+     * @param outputDir                       the output dir
      * @return true if succeeded otherwise false
      */
-    public static boolean D8DistanceToStreams(@NotBlank String Input_D8_Flow_Direction_Grid,
-                                              @NotBlank String Input_Stream_Raster_Grid, Integer Threshold,
-                                              String Output_Distance_to_Streams_Grid, String inputDir, String outputDir)
+    public static ExecResult D8DistanceToStreams(@NotBlank String Input_D8_Flow_Direction_Grid,
+                                                 @NotBlank String Input_Stream_Raster_Grid, Integer Threshold,
+                                                 String Output_Distance_to_Streams_Grid, String inputDir,
+                                                 String outputDir)
     {
 
         Map files = new LinkedHashMap();
@@ -680,16 +917,39 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
 
     /**
      * SlopeAverageDown
-     * <p> This tool computes slope in a D8 downslope direction averaged over a user selected distance.
      *
-     * @param Input_D8_Flow_Direction_Grid    This input is a grid of flow directions that are encoded using the D8 method where all flow from a cells goes to a single neighboring cell in the direction of steepest descent.
-     * @param Input_Pit_Filled_Elevation_Grid A grid of elevation values.
-     * @param Output_Slope_Average_Down_Grid  A grid of the ratio of  specific catchment area (contributing area) to slope.
-     * @return true if succeeded otherwise false
+     * @param Input_D8_Flow_Direction_Grid    the input d 8 flow direction grid
+     * @param Input_Pit_Filled_Elevation_Grid the input pit filled elevation grid
+     * @param outputDir                       the output dir
+     * @return the exec result
+     * @see #SlopeAverageDown(String, String, Double, String, String, String)
      */
-    public static boolean SlopeAverageDown(@NotBlank String Input_D8_Flow_Direction_Grid,
-                                           @NotBlank String Input_Pit_Filled_Elevation_Grid,
-                                           String Output_Slope_Average_Down_Grid, String inputDir, String outputDir)
+    public static ExecResult SlopeAverageDown(@NotBlank String Input_D8_Flow_Direction_Grid,
+                                              @NotBlank String Input_Pit_Filled_Elevation_Grid,
+                                              String outputDir)
+    {
+
+        return SlopeAverageDown(Input_D8_Flow_Direction_Grid,
+                                Input_Pit_Filled_Elevation_Grid, null,
+                                null, outputDir);
+
+    }
+
+
+    /**
+     * SlopeAverageDown
+     *
+     * @param Input_D8_Flow_Direction_Grid    the input d 8 flow direction grid
+     * @param Input_Pit_Filled_Elevation_Grid the input pit filled elevation grid
+     * @param Output_Slope_Average_Down_Grid  the output slope average down grid
+     * @param inputDir                        the input dir
+     * @param outputDir                       the output dir
+     * @return the exec result
+     * @see #SlopeAverageDown(String, String, Double, String, String, String)
+     */
+    public static ExecResult SlopeAverageDown(@NotBlank String Input_D8_Flow_Direction_Grid,
+                                              @NotBlank String Input_Pit_Filled_Elevation_Grid,
+                                              String Output_Slope_Average_Down_Grid, String inputDir, String outputDir)
     {
 
         return SlopeAverageDown(Input_D8_Flow_Direction_Grid,
@@ -706,11 +966,13 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
      * @param Input_Pit_Filled_Elevation_Grid A grid of elevation values.
      * @param Distance                        Input parameter of downslope distance over which to calculate the slope (in horizontal map units).
      * @param Output_Slope_Average_Down_Grid  A grid of the ratio of  specific catchment area (contributing area) to slope.
+     * @param inputDir                        the input dir
+     * @param outputDir                       the output dir
      * @return true if succeeded otherwise false
      */
-    public static boolean SlopeAverageDown(@NotBlank String Input_D8_Flow_Direction_Grid,
-                                           @NotBlank String Input_Pit_Filled_Elevation_Grid, Double Distance,
-                                           String Output_Slope_Average_Down_Grid, String inputDir, String outputDir)
+    public static ExecResult SlopeAverageDown(@NotBlank String Input_D8_Flow_Direction_Grid,
+                                              @NotBlank String Input_Pit_Filled_Elevation_Grid, Double Distance,
+                                              String Output_Slope_Average_Down_Grid, String inputDir, String outputDir)
     {
 
         Map files = new LinkedHashMap();
@@ -737,6 +999,23 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
 
     // region  Slope Over Area Ratio
 
+    /**
+     * SlopeOverAreaRatio
+     *
+     * @param Input_Slope_Grid                   the input slope grid
+     * @param Input_Specific_Catchment_Area_Grid the input specific catchment area grid
+     * @param outputDir                          the output dir
+     * @return the exec result
+     * @see #SlopeOverAreaRatio(String, String, String, String, String)
+     */
+    public static ExecResult SlopeOverAreaRatio(@NotBlank String Input_Slope_Grid,
+                                                @NotBlank String Input_Specific_Catchment_Area_Grid,
+                                                String outputDir)
+    {
+        return SlopeOverAreaRatio(Input_Slope_Grid,
+                                  Input_Specific_Catchment_Area_Grid,
+                                  null, null, outputDir);
+    }
 
     /**
      * SlopeOverAreaRatio
@@ -745,12 +1024,14 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
      * @param Input_Slope_Grid                        A grid of slope.
      * @param Input_Specific_Catchment_Area_Grid      A grid giving the contributing area value for each cell taken as its own contribution plus the contribution from upslope neighbors that drain in to it.
      * @param Output_Slope_Divided_By_Area_Ratio_Grid A grid of the ratio of slope to specific catchment area (contributing area).
+     * @param inputDir                                the input dir
+     * @param outputDir                               the output dir
      * @return true if succeeded otherwise false
      */
-    public static boolean SlopeOverAreaRatio(@NotBlank String Input_Slope_Grid,
-                                             @NotBlank String Input_Specific_Catchment_Area_Grid,
-                                             String Output_Slope_Divided_By_Area_Ratio_Grid, String inputDir,
-                                             String outputDir)
+    public static ExecResult SlopeOverAreaRatio(@NotBlank String Input_Slope_Grid,
+                                                @NotBlank String Input_Specific_Catchment_Area_Grid,
+                                                String Output_Slope_Divided_By_Area_Ratio_Grid, String inputDir,
+                                                String outputDir)
     {
 
         Map files = new LinkedHashMap();
@@ -778,19 +1059,39 @@ public class SpecializedGridAnalysis extends BaseTauDEM {
 
     // region  Topographic Wetness Index
 
+    /**
+     * TopographicWetnessIndex
+     *
+     * @param Input_Specific_Catchment_Area_Grid the input specific catchment area grid
+     * @param Input_Slope_Grid                   the input slope grid
+     * @param outputDir                          the output dir
+     * @return the exec result
+     * @see #TopographicWetnessIndex(String, String, String, String, String)
+     */
+    public static ExecResult TopographicWetnessIndex(@NotBlank String Input_Specific_Catchment_Area_Grid,
+                                                     @NotBlank String Input_Slope_Grid,
+                                                     String outputDir)
+    {
+
+        return TopographicWetnessIndex(Input_Specific_Catchment_Area_Grid, Input_Slope_Grid,
+                                       null, null, outputDir);
+    }
 
     /**
      * TopographicWetnessIndex
      * <p> Calculates the ratio of the natural log of the specific catchment area (contributing area) to slope, ln(a/S), or ln(a/tan (beta)).
      *
-     * @param Input_Specific_Catchment_Area_Grid A grid of specific catchment area which is the contributing area per unit contour length.
+     * @param Input_Specific_Catchment_Area_Grid A grid of specific catchment area which is the contributing area per unit contour length.                                           If D8 or some other contributing area evaluated using the number of cells is used here                                           it should first be scaled by cell size to give specific catchment area in length units.
      * @param Input_Slope_Grid                   A grid of slope.
      * @param Output_Wetness_Index_Grid          A grid of the natural log of the ratio of specific catchment area (contributing area) to slope, ln(a/S).
+     * @param inputDir                           the input dir
+     * @param outputDir                          the output dir
      * @return true if succeeded otherwise false
      */
-    public static boolean TopographicWetnessIndex(@NotBlank String Input_Specific_Catchment_Area_Grid,
-                                                  @NotBlank String Input_Slope_Grid, String Output_Wetness_Index_Grid,
-                                                  String inputDir, String outputDir)
+    public static ExecResult TopographicWetnessIndex(@NotBlank String Input_Specific_Catchment_Area_Grid,
+                                                     @NotBlank String Input_Slope_Grid,
+                                                     String Output_Wetness_Index_Grid,
+                                                     String inputDir, String outputDir)
     {
 
         Map files = new LinkedHashMap();

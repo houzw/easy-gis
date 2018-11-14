@@ -4,3 +4,8 @@
 
 logs/
 target/
+*.iml
+logs
+*
+*.iml
+*.iml

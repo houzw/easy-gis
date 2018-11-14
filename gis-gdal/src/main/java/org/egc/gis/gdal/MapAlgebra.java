@@ -1,4 +1,4 @@
-package org.egc.gis.raster;
+package org.egc.gis.gdal;
 
 /**
  * Description:

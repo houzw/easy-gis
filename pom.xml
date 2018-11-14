@@ -11,7 +11,8 @@
     <modules>
         <module>gis-taudem</module>
         <module>gis-db</module>
-        <module>gis-raster</module>
+        <module>gis-gdal</module>
+        <module>gis-geotools</module>
     </modules>
 
 
@@ -32,8 +33,7 @@
         <postgis-jdbc.version>2.2.1</postgis-jdbc.version>
         <psql.java8.version>9.4.1211</psql.java8.version>
         <geolatte.version>0.14</geolatte.version>
-        <geotools.version>19.2</geotools.version>
-        <geotools-wfs.version>16.5</geotools-wfs.version>
+
 
         <guava.version>19.0</guava.version>
         <commons-lang3.version>3.5</commons-lang3.version>
@@ -89,7 +89,7 @@
         <dependency>
             <groupId>org.egc</groupId>
             <artifactId>commons</artifactId>
-            <version>2.0-SNAPSHOT</version>
+            <version>2.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <dependencyManagement>
@@ -120,6 +120,7 @@
                 <version>${gdal.version}</version>
                 <classifier>gisinternals</classifier>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
     <!--构建部署配置-->

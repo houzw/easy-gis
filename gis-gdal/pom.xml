@@ -9,19 +9,22 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>gis-raster</artifactId>
+    <artifactId>gis-gdal</artifactId>
 
-    <name>gis-raster</name>
+    <name>gis-gdal</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+
     </properties>
 
     <dependencies>
+        <!--
+            使用与dll文件一致的， gisinternals 提供的jar文件。使用nexus管理
+            dll文件通过配置系统环境变量解决：C:\Program Files\GDAL
+         -->
         <dependency>
             <groupId>org.gdal</groupId>
             <artifactId>gdal</artifactId>

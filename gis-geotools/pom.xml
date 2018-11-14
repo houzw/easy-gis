@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>easy-gis</artifactId>
+        <groupId>org.egc</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>gis-geotools</artifactId>
+    <properties>
+        <geotools.version>19.2</geotools.version>
+        <geotools-wfs.version>16.5</geotools-wfs.version>
+    </properties>
+    <dependencies>
+        <!-- geotools -->
+        <!--  ESRI shapefile format. NG version -->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-shapefile</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-process</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-process-raster</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <!-- Coordinate Reference Systems (CRS), conversion and transformation services -->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-referencing</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-geojson</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <!-- Implementation of GridCoverage. Provides support for rasters and some image processing like reprojection. -->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-coverage</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <!-- Datasource created to read GeoTIFF raster format. -->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-geotiff</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <!--
+        Connection to an embedded EPSG database in HSQL format.
+        This database is built from the SQL scripts delivered by EPSG.
+        -->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-epsg-hsql</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-epsg-wkt</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <!--
+            Implementation of DataStore allowing geotools code to work with an OGC Web Feature Service.
+            Offers client code for WFS 1.0 and WFS 1.1.
+            -->
+        <!--<dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-wfs</artifactId>
+            <version>${geotools-wfs.version}</version>
+        </dependency>-->
+        <!--An API for creating custom processes/operations plus a collection of pre-written processes including vector/raster conversion-->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-process</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <!--
+           An OGC Web Map Server client implementation that can be used directly or as through the GridCoverageExchange API.
+           Direct usage is recommended, as the GridCoverageExchange access for WMS is not well tested and is complicated to use.
+           It supports WMS versions 1.0.0, 1.1.0, 1.1.1, and 1.3.0.
+           -->
+       <!-- <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-wms</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/org.geotools/gt-arcgrid -->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-arcgrid</artifactId>
+            <version>18.4</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.geotools/gt-epsg-extension:http://repo.boundlessgeo.com/main/ -->
+        <!--Contains extra CRS defined by ESRI (and other parties) in the EPSG namespace-->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-epsg-extension</artifactId>
+            <version>19.2</version>
+        </dependency>
+
+
+
+    </dependencies>
+
+</project>
