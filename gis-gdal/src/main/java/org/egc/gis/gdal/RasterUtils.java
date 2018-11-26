@@ -1,12 +1,13 @@
 package org.egc.gis.gdal;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egc.commons.util.StringUtil;
+import org.egc.gis.gdal.dto.GdalDrivers;
 import org.egc.gis.gdal.dto.RasterMetadata;
 import org.gdal.gdal.Band;
 import org.gdal.gdal.Dataset;
 import org.gdal.gdal.Driver;
 import org.gdal.gdal.gdal;
-import org.gdal.gdalconst.gdalconstConstants;
 import org.gdal.osr.SpatialReference;
 
 /**
@@ -18,6 +19,7 @@ import org.gdal.osr.SpatialReference;
  * @author houzhiwei
  * @date 2018/11/13 9:08
  */
+@Slf4j
 public class RasterUtils {
     /**
      * 利用gdal获取栅格数据元数据
@@ -27,9 +29,8 @@ public class RasterUtils {
      */
     public static RasterMetadata getMetadata(String tif) {
         StringUtil.isNullOrEmptyPrecondition(tif, "Raster file must exists");
-        gdal.AllRegister();
         RasterMetadata metadata = new RasterMetadata();
-        Dataset dataset = gdal.Open(tif, gdalconstConstants.GA_ReadOnly);
+        Dataset dataset = IOFactory.rasterIO().read(tif);
         Driver driver = dataset.GetDriver();
         metadata.setFormat(driver.getShortName());
         SpatialReference sr = new SpatialReference(dataset.GetProjectionRef());
@@ -92,5 +93,22 @@ public class RasterUtils {
         dataset.delete();
         gdal.GDALDestroyDriverManager();
         return metadata;
+    }
+
+
+    public static boolean toGeoTiff(String srcFile, String dstFile, Integer dstEpsg) {
+        Dataset src = IOFactory.rasterIO().read(srcFile);
+        Driver driver = gdal.GetDriverByName(GdalDrivers.GTiff.name());
+        Dataset out_ds = driver.CreateCopy(dstFile, src);
+        SpatialReference srs = new SpatialReference();
+        if (dstEpsg != null) {
+            srs.ImportFromEPSG(dstEpsg);
+            out_ds.SetProjection(srs.ExportToWkt());
+        }
+        driver.delete();
+        src.delete();
+        out_ds.delete();
+        log.debug("--------------转换成功--------------");
+        return true;
     }
 }

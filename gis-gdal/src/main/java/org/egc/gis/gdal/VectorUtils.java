@@ -1,13 +1,17 @@
 package org.egc.gis.gdal;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.egc.gis.gdal.dto.VectorMetadata;
 import org.gdal.ogr.DataSource;
 import org.gdal.ogr.Driver;
 import org.gdal.ogr.Layer;
-import org.gdal.ogr.ogr;
 import org.gdal.osr.SpatialReference;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * Description:
@@ -18,6 +22,7 @@ import org.gdal.osr.SpatialReference;
  * @author houzhiwei
  * @date 2018/11/3 21:37
  */
+@Slf4j
 public class VectorUtils {
 
     /**
@@ -28,8 +33,7 @@ public class VectorUtils {
      */
     public static VectorMetadata getShapefileMetadata(String shapefile) {
 
-        ogr.RegisterAll();
-        DataSource ds = ogr.Open(shapefile, false);
+        DataSource ds = IOFactory.vectorIO().read(shapefile);
         Driver driver = ds.GetDriver();
 
         VectorMetadata metadata = new VectorMetadata();
@@ -42,6 +46,20 @@ public class VectorUtils {
         metadata.setGeometry(layer.GetNextFeature().GetGeometryRef().GetGeometryName());
 
         SpatialReference sr = layer.GetSpatialRef();
+        // 若没有投影则设置为 wgs 84
+        if (sr == null) {
+            log.warn("No projection found in {} ! Project to WGS84.", shapefile);
+            // 没有参考说明没有prj文件，需要创建一个同名的prj文件
+            sr = new SpatialReference();
+            sr.ImportFromEPSG(4326);
+            //sr.MorphToESRI(); // 这样的话拿不到epsg，但是如果是读取自ESRI的wkt，则必须包含此句，否则报错：不支持的SRS
+            File prj = new File(FilenameUtils.removeExtension(shapefile) + ".prj");
+            try {
+                Files.write(prj.toPath(), sr.ExportToWkt().getBytes());
+            } catch (IOException e) {
+                log.warn("Create prj file failed.", e);
+            }
+        }
         String authorityCode = sr.GetAuthorityCode(null);
         String authorityName = sr.GetAuthorityName(null);
         if (StringUtils.isNotBlank(authorityCode)) {

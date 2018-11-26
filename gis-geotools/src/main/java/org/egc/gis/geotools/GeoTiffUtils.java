@@ -27,6 +27,7 @@ import java.io.IOException;
 @Slf4j
 public class GeoTiffUtils {
     /**
+     * write GridCoverage2D to geotiff
      * https://www.programcreek.com/java-api-examples/?class=org.geotools.gce.geotiff.GeoTiffWriter&method=write
      *
      * @param coverage2D
@@ -55,6 +56,12 @@ public class GeoTiffUtils {
         }
     }
 
+    /**
+     * read geotiff to GridCoverage2D
+     *
+     * @param file
+     * @return
+     */
     public GridCoverage2D read(String file) {
         Hints hints = new Hints(Hints.FORCE_LONGITUDE_FIRST_AXIS_ORDER, Boolean.TRUE);
         GeoTiffReader reader = null;

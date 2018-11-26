@@ -13,11 +13,11 @@ import org.egc.gis.gdal.impl.VectorIO;
  * @date 2018/11/13 10:25
  */
 public class IOFactory {
-    public static RasterIO getRasterIO() {
+    public static RasterIO rasterIO() {
         return new RasterIO();
     }
 
-    public static VectorIO getVectorIO() {
+    public static VectorIO vectorIO() {
         return new VectorIO();
     }
 }

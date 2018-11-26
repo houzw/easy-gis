@@ -1,8 +1,10 @@
 package org.egc.taudem.test;
 
 import org.egc.commons.command.ExecResult;
-import org.egc.gis.taudem.BasicGridAnalysis;
-import org.egc.gis.taudem.StreamNetworkAnalysis;
+import org.egc.gis.taudem.TauDEMAnalysis;
+import org.egc.gis.taudem.params.D8FlowDirectionsParams;
+import org.egc.gis.taudem.params.PitRemoveParams;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -17,38 +19,39 @@ import org.junit.Test;
 public class BasicTest {
 
     String dem = "H:/xcDEM.tif";
-    String outdir = "H:/gisdemo/out/taudem/1102/";
+    String outdir = "H:/gisdemo/out/taudem/1126/";
+    TauDEMAnalysis analysis;
+
+    @Before
+    public void init() {
+        analysis = TauDEMAnalysis.getInstance();
+        analysis.init(outdir);
+    }
 
     @Test
     public void testPitRemove() {
-//        boolean flag = BasicGridAnalysis.PitRemove(dem, "xcDEM_Pit_Removed_Elevation_27.tif", null, outdir);
-        ExecResult flag = BasicGridAnalysis.PitRemove(dem, null, null, outdir);
+
+        PitRemoveParams pitRemoveParams = new PitRemoveParams(dem);
+        ExecResult flag = analysis.PitRemove(pitRemoveParams);
         System.out.println(flag.getOut());
+        PitRemoveParams params = (PitRemoveParams) flag.getParams();
+        System.out.println(pitRemoveParams.getOutput_Pit_Removed_Elevation_Grid());
+        System.out.println(params.getOutput_Pit_Removed_Elevation_Grid());
     }
 
     @Test
     public void testFlowDir() {
-
-        ExecResult flag = BasicGridAnalysis.D8FlowDirections(outdir + "xcDEM_Pit_Removed_Elevation_Grid.tif",
-                                                             "",
-                                                             "", null, outdir);
+        D8FlowDirectionsParams params = new D8FlowDirectionsParams(
+                outdir + "xcDEM_Pit_Removed_Elevation_Grid.tif");
+        ExecResult flag = analysis.D8FlowDirections(params);
+        System.out.println(params.getOutput_D8_Slope_Grid());
         System.out.println(flag.getOut());
     }
 
-    @Test
-    public void testSCA() {
-
-        BasicGridAnalysis.D8ContributingArea(outdir + "xcDEM_D8_Flow_Direction_Grid.tif",
-                                             "", null, outdir);
-
-    }
 
     @Test
     public void test() {
 
-        StreamNetworkAnalysis.ConnectDown("H:/gisdemo/in/test/cubdemp.tif",
-                                          "H:/gisdemo/in/test/cubdemad8.tif",
-                                          "H:/gisdemo/in/test/cubdemw.tif",null);
 
     }
 

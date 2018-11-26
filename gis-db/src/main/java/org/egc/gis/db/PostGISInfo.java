@@ -3,6 +3,8 @@ package org.egc.gis.db;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * Description:
  * <pre>
@@ -30,8 +32,11 @@ public class PostGISInfo {
         this.password = password;
     }
 
+    @NotBlank
     private String username;
+    @NotBlank
     private String database;
+    @NotBlank
     private String password;
     private Integer port = 5432;
     private String host = "localhost";

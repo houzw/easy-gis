@@ -1,6 +1,6 @@
 package org.egc.gis.gdal.impl;
 
-import org.egc.gis.raster.Projection;
+import org.egc.gis.gdal.Projection;
 
 /**
  * Description:
@@ -13,7 +13,7 @@ import org.egc.gis.raster.Projection;
  */
 public class RasterPojection implements Projection {
     @Override
-    public String reproject(String inputFile, String to) {
+    public String reProject(String inputFile, String to) {
 
         return null;
     }
