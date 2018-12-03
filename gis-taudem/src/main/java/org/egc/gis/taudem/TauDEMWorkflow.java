@@ -53,19 +53,21 @@ public class TauDEMWorkflow {
 
         log.debug("-----------generating hydrologically correct DEM-----------");
         // pit remove/fill
-        PitRemoveParams felParams = new PitRemoveParams(Elevation_Grid);
+        PitRemoveParams felParams = new PitRemoveParams.Builder(Elevation_Grid).build();
+
         tauDEMAnalysis.PitRemove(felParams);
         String Pit_Removed_Elevation_Grid = felParams.getOutput_Pit_Removed_Elevation_Grid();
 
         // D8 Flow Directions
-        D8FlowDirectionsParams d8FlowDirParams = new D8FlowDirectionsParams(Pit_Removed_Elevation_Grid);
+        D8FlowDirectionsParams d8FlowDirParams = new D8FlowDirectionsParams.Builder(Pit_Removed_Elevation_Grid).build();
         tauDEMAnalysis.D8FlowDirections(d8FlowDirParams);
 
         String D8_Flow_Direction_Grid = d8FlowDirParams.getOutput_D8_Flow_Direction_Grid();
         String D8_Slope_Grid = d8FlowDirParams.getOutput_D8_Slope_Grid();
 
         // D8 Contributing Area
-        D8ContributingAreaParams ad8Params = new D8ContributingAreaParams(D8_Flow_Direction_Grid);
+        D8ContributingAreaParams ad8Params = new D8ContributingAreaParams.Builder(D8_Flow_Direction_Grid).Input_Outlets(
+                outlets).build();
         tauDEMAnalysis.D8ContributingArea(ad8Params);
         String D8_Contributing_Area_Grid = ad8Params.getOutput_D8_Contributing_Area_Grid();
 
@@ -73,12 +75,10 @@ public class TauDEMWorkflow {
         // 使用 drop analysis 自动获取优化的阈值
         if (threshold == null || threshold <= 0) {
             String drp = "drp.txt";
-            StreamDropAnalysisParams dropParams = new StreamDropAnalysisParams();
-            dropParams.setInput_D8_Flow_Direction_Grid(D8_Flow_Direction_Grid);
-            dropParams.setInput_Pit_Filled_Elevation_Grid(Pit_Removed_Elevation_Grid);
-            dropParams.setInput_D8_Contributing_Area_Grid(D8_Contributing_Area_Grid);
-            dropParams.setInput_Accumulated_Stream_Source_Grid(D8_Contributing_Area_Grid);
-            dropParams.setOutput_Drop_Analysis_Text_File(drp);
+            StreamDropAnalysisParams dropParams = new StreamDropAnalysisParams
+                    .Builder(Pit_Removed_Elevation_Grid, D8_Flow_Direction_Grid, D8_Contributing_Area_Grid,
+                             D8_Contributing_Area_Grid).Input_Outlets(outlets)
+                    .Output_Drop_Analysis_Text_File(drp).build();
             log.debug("----------------executing drop analysis to select optimal threshold------------");
             tauDEMAnalysis.StreamDropAnalysis(dropParams);
             try {
@@ -92,37 +92,36 @@ public class TauDEMWorkflow {
         }
         // Stream Definition By Threshold
         StreamDefinitionByThresholdParams thresholdParams =
-                new StreamDefinitionByThresholdParams(D8_Contributing_Area_Grid);
+                new StreamDefinitionByThresholdParams.Builder(D8_Contributing_Area_Grid).build();
         log.debug("threshold value: {} ", threshold);
         tauDEMAnalysis.StreamDefinitionByThreshold(thresholdParams);
         String Stream_Raster_Grid = thresholdParams.getOutput_Stream_Raster_Grid();
 
         if (StringUtils.isBlank(outlets)) {
             // Connect Down
-            ConnectDownParams connectDownParams = new ConnectDownParams(D8_Flow_Direction_Grid,
-                                                                        D8_Contributing_Area_Grid, null);
+            ConnectDownParams connectDownParams = new ConnectDownParams
+                    .Builder(D8_Flow_Direction_Grid, D8_Contributing_Area_Grid).build();
             tauDEMAnalysis.ConnectDown(connectDownParams);
             outlets = connectDownParams.getOutput_Outlets_file();
         }
         // Move Outlets To Streams
-        String moved_outlets = null;
-        moved_outlets = "moved_outlets_file.shp";
+        String moved_outlets = "moved_outlets_file.shp";
         MoveOutletsToStreamsParams toStreamsParams =
-                new MoveOutletsToStreamsParams(D8_Flow_Direction_Grid, Stream_Raster_Grid, outlets);
-        toStreamsParams.setOutput_Outlets_file(moved_outlets);
+                new MoveOutletsToStreamsParams.Builder(D8_Flow_Direction_Grid, Stream_Raster_Grid,
+                                                       outlets).Output_Outlets_file(moved_outlets).build();
         tauDEMAnalysis.MoveOutletsToStreams(toStreamsParams);
 
         // Peuker Douglas
-        PeukerDouglasParams peukerParams = new PeukerDouglasParams(Elevation_Grid);
+        PeukerDouglasParams peukerParams = new PeukerDouglasParams.Builder(Elevation_Grid).build();
         tauDEMAnalysis.PeukerDouglas(peukerParams);
         String Stream_Source_Grid = peukerParams.getOutput_Stream_Source_Grid();
         // Stream Reach And Watershed
         String Watershed_Grid = FilenameUtils.getBaseName(Elevation_Grid) + "_Watershed_Grid.tif";
         StreamReachAndWatershedParams watershedParams =
-                new StreamReachAndWatershedParams(Pit_Removed_Elevation_Grid, D8_Flow_Direction_Grid,
-                                                  D8_Contributing_Area_Grid,
-                                                  Stream_Source_Grid);
-        watershedParams.setOutput_Watershed_Grid(Watershed_Grid);
+                new StreamReachAndWatershedParams.Builder(Pit_Removed_Elevation_Grid, D8_Flow_Direction_Grid,
+                                                          D8_Contributing_Area_Grid,
+                                                          Stream_Source_Grid).Output_Watershed_Grid(
+                        Watershed_Grid).build();
         ExecResult result = tauDEMAnalysis
                 .StreamReachAndWatershed(watershedParams);
 
@@ -151,24 +150,28 @@ public class TauDEMWorkflow {
 
         String inputDir = outputDir;
         log.debug("----------------generating hydrologically correct DEM------------");
-        PitRemoveParams felParams = new PitRemoveParams(Elevation_Grid);
+        PitRemoveParams felParams = new PitRemoveParams.Builder(Elevation_Grid).build();
+        ;
         tauDEMAnalysis.PitRemove(felParams);
         String Pit_Removed_Grid = felParams.getOutput_Pit_Removed_Elevation_Grid();
 
         //generating D-Infinity Flow Directions
-        DInfinityFlowDirectionsParams dInfFlowDirParams = new DInfinityFlowDirectionsParams(Pit_Removed_Grid);
+        DInfinityFlowDirectionsParams dInfFlowDirParams = new DInfinityFlowDirectionsParams.Builder(
+                Pit_Removed_Grid).build();
         tauDEMAnalysis.DInfinityFlowDirections(dInfFlowDirParams);
         String Dinf_Flow_Direction_Grid = dInfFlowDirParams.getOutput_DInfinity_Flow_Direction_Grid();
         String DInf_Slope_Grid = dInfFlowDirParams.getOutput_DInfinity_Slope_Grid();
 
         //calculating D-Infinity Contributing Area
-        DInfinityContributingAreaParams dInfCAParams = new DInfinityContributingAreaParams(Dinf_Flow_Direction_Grid);
+        DInfinityContributingAreaParams dInfCAParams = new DInfinityContributingAreaParams.Builder(
+                Dinf_Flow_Direction_Grid).build();
         tauDEMAnalysis.DInfinityContributingArea(dInfCAParams);
         String DInf_SCArea = dInfCAParams.getOutput_DInfinity_Specific_Catchment_Area_Grid();
 
 
         //calculating Topographic Wetness Index
-        TopographicWetnessIndexParams twiParams = new TopographicWetnessIndexParams(DInf_SCArea, DInf_Slope_Grid);
+        TopographicWetnessIndexParams twiParams = new TopographicWetnessIndexParams.Builder(DInf_SCArea,
+                                                                                            DInf_Slope_Grid).build();
         tauDEMAnalysis.TopographicWetnessIndex(twiParams);
         log.info("------------Topographic Wetness Index Calculation done in: " + String.valueOf(
                 System.currentTimeMillis() - start) + " ms--------------");

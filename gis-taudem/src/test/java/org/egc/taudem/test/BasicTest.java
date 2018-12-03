@@ -31,7 +31,7 @@ public class BasicTest {
     @Test
     public void testPitRemove() {
 
-        PitRemoveParams pitRemoveParams = new PitRemoveParams(dem);
+        PitRemoveParams pitRemoveParams = new PitRemoveParams.Builder(dem).build();
         ExecResult flag = analysis.PitRemove(pitRemoveParams);
         System.out.println(flag.getOut());
         PitRemoveParams params = (PitRemoveParams) flag.getParams();
@@ -41,19 +41,20 @@ public class BasicTest {
 
     @Test
     public void testFlowDir() {
-        D8FlowDirectionsParams params = new D8FlowDirectionsParams(
-                outdir + "xcDEM_Pit_Removed_Elevation_Grid.tif");
+        D8FlowDirectionsParams params = new D8FlowDirectionsParams.Builder(
+                outdir + "xcDEM_Pit_Removed_Elevation_Grid.tif").build();
         ExecResult flag = analysis.D8FlowDirections(params);
         System.out.println(params.getOutput_D8_Slope_Grid());
         System.out.println(flag.getOut());
     }
 
-
     @Test
     public void test() {
-
-
+        PitRemoveParams pitRemoveParams = new PitRemoveParams.Builder(dem).build();
+        ExecResult flag = analysis.PitRemove(pitRemoveParams);
+        D8FlowDirectionsParams params = new D8FlowDirectionsParams.Builder(pitRemoveParams.getOutput_Pit_Removed_Elevation_Grid()).build();
+        analysis.D8FlowDirections(params);
+        System.out.println(params.getOutput_D8_Slope_Grid());
     }
-
 
 }
