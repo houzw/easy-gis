@@ -117,13 +117,10 @@ public class TauDEMWorkflow {
         String Stream_Source_Grid = peukerParams.getOutput_Stream_Source_Grid();
         // Stream Reach And Watershed
         String Watershed_Grid = FilenameUtils.getBaseName(Elevation_Grid) + "_Watershed_Grid.tif";
-        StreamReachAndWatershedParams watershedParams =
-                new StreamReachAndWatershedParams.Builder(Pit_Removed_Elevation_Grid, D8_Flow_Direction_Grid,
-                                                          D8_Contributing_Area_Grid,
-                                                          Stream_Source_Grid).Output_Watershed_Grid(
-                        Watershed_Grid).build();
-        ExecResult result = tauDEMAnalysis
-                .StreamReachAndWatershed(watershedParams);
+        StreamReachAndWatershedParams watershedParams = new StreamReachAndWatershedParams.Builder(
+                Pit_Removed_Elevation_Grid, D8_Flow_Direction_Grid, D8_Contributing_Area_Grid,
+                Stream_Source_Grid).Output_Watershed_Grid(Watershed_Grid).build();
+        ExecResult result = tauDEMAnalysis.StreamReachAndWatershed(watershedParams);
 
         log.info("---Watershed Delineation done in:  " + String.valueOf(System.currentTimeMillis() - start) + " ms---");
         // 与 Watershed_Grid 不同的是包含了目录

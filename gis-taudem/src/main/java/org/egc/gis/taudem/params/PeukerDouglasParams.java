@@ -1,6 +1,6 @@
 package org.egc.gis.taudem.params;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.Setter;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,9 +17,9 @@ import java.io.File;
 /**
  * Wrapper of parameters of PeukerDouglas
  * @author houzhiwei
- * @date 2018-12-03T19:26:14+08:00
+ * @date 2018-12-17T22:40:56+08:00
  */
-@Getter
+@Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class PeukerDouglasParams implements Params {
