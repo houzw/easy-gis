@@ -6,7 +6,7 @@
 <dependency>
     <groupId>org.egc</groupId>
     <artifactId>commons</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.1-SNAPSHOT</version>
 </dependency>
 ```
 

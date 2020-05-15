@@ -1,6 +1,6 @@
 ## 注意事项
 
-GDAL 版本为 `2.1.0` （理论上应当是兼容新版本的），对应 `gdal-201-1800-x64-core.msi`
+GDAL 版本为 `2.4.4` ，对应 `gdal-204-1900-x64-core.msi`
 
 GDAL 安装文件及 JAR 文件下载自 http://www.gisinternals.com/archive.php 
 
@@ -8,8 +8,8 @@ GDAL 安装文件及 JAR 文件下载自 http://www.gisinternals.com/archive.php
 
 `dll`文件通过配置系统环境变量解决：`C:\Program Files\GDAL`
 
-
 ---
 reference:
 - https://gdal.org/java/overview-summary.html
 - https://trac.osgeo.org/gdal/browser/trunk/gdal/swig/java/apps/
+

@@ -1,11 +1,5 @@
-.idea
-
-*.iml
-
+.idea/
+*.iml/
 logs/
 target/
-*.iml
-logs
-*
-*.iml
 *.iml
