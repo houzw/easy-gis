@@ -1,8 +1,9 @@
-package org.egc.gis.gdal;
+package org.egc.gis.gdal.vector;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.egc.gis.gdal.IOFactory;
 import org.egc.gis.gdal.dto.VectorMetadata;
 import org.gdal.ogr.DataSource;
 import org.gdal.ogr.Driver;
@@ -33,7 +34,7 @@ public class VectorUtils {
      */
     public static VectorMetadata getShapefileMetadata(String shapefile) {
 
-        DataSource ds = IOFactory.vectorIO().read(shapefile);
+        DataSource ds = IOFactory.createVectorIO().read(shapefile);
         Driver driver = ds.GetDriver();
 
         VectorMetadata metadata = new VectorMetadata();

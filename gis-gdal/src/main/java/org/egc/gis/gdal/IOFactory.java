@@ -1,23 +1,23 @@
 package org.egc.gis.gdal;
 
-import org.egc.gis.gdal.impl.RasterIO;
-import org.egc.gis.gdal.impl.VectorIO;
+import org.egc.gis.gdal.raster.RasterIO;
+import org.egc.gis.gdal.vector.VectorIO;
 
 /**
  * Description:
  * <pre>
- * gdal io factory
+ * gdal/ogr io factory
  * </pre>
  *
  * @author houzhiwei
  * @date 2018/11/13 10:25
  */
 public class IOFactory {
-    public static RasterIO rasterIO() {
+    public static RasterIO createRasterIO() {
         return new RasterIO();
     }
 
-    public static VectorIO vectorIO() {
+    public static VectorIO createVectorIO() {
         return new VectorIO();
     }
 }

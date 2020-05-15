@@ -11,6 +11,7 @@ import java.io.Serializable;
  * @date 2018 /8/28 18:55
  */
 @Data
+@Deprecated
 public class RasterMetadata implements Serializable {
 
     /**
@@ -39,11 +40,44 @@ public class RasterMetadata implements Serializable {
     /**
      * sample standard deviation
      */
-    private double sdev;
+    private double stdev;
+
+    /**
+     * upper_left_x
+     */
     private double minX;
-    private double maxX;
-    private double minY;
+    /**
+     * upper_left_y
+     */
     private double maxY;
+
+    /**
+     * lower_right_x
+     */
+    private double maxX;
+    /**
+     * lower_right_y
+     */
+    private double minY;
+
+    /**
+     * minx
+     */
+    private double upperLeftX;
+    /**
+     * maxx
+     */
+    private double lowerRightX;
+    /**
+     * maxy
+     */
+    private double upperLeftY;
+
+    /**
+     * miny
+     */
+    private double lowerRightY;
+
     private double centerX;
     private double centerY;
     private double pixelSize;
@@ -64,6 +98,46 @@ public class RasterMetadata implements Serializable {
     private double[] upperRight;
     private double[] lowerLeft;
     private double[] lowerRight;
+
+    public void setMinX(double minX) {
+        this.minX = minX;
+        this.upperLeftX = minX;
+    }
+
+    public void setMaxY(double maxY) {
+        this.maxY = maxY;
+        this.upperLeftY = maxY;
+    }
+
+    public void setMaxX(double maxX) {
+        this.maxX = maxX;
+        this.lowerRightX = maxX;
+    }
+
+    public void setMinY(double minY) {
+        this.minY = minY;
+        this.lowerRightY = minY;
+    }
+
+    public void setUpperLeftX(double upperLeftX) {
+        this.upperLeftX = upperLeftX;
+        this.minX = upperLeftX;
+    }
+
+    public void setLowerRightX(double lowerRightX) {
+        this.lowerRightX = lowerRightX;
+        this.maxX = lowerRightX;
+    }
+
+    public void setUpperLeftY(double upperLeftY) {
+        this.upperLeftY = upperLeftY;
+        this.maxY = upperLeftY;
+    }
+
+    public void setLowerRightY(double lowerRightY) {
+        this.lowerRightY = lowerRightY;
+        this.minY = lowerRightY;
+    }
 
     /**
      * Get upper left .

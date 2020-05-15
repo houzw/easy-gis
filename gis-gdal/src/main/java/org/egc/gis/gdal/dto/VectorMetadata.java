@@ -11,6 +11,7 @@ import java.io.Serializable;
  */
 @Slf4j
 @Data
+@Deprecated
 public class VectorMetadata implements Serializable {
     private String name;
     private String encoding;
@@ -38,7 +39,62 @@ public class VectorMetadata implements Serializable {
     private double maxX;
     private double minY;
     private double maxY;
+    /**
+     * minx
+     */
+    private double upperLeftX;
+    /**
+     * maxx
+     */
+    private double lowerRightX;
+    /**
+     * maxy
+     */
+    private double upperLeftY;
 
+    /**
+     * miny
+     */
+    private double lowerRightY;
+    public void setMinX(double minX) {
+        this.minX = minX;
+        this.upperLeftX = minX;
+    }
+
+    public void setMaxY(double maxY) {
+        this.maxY = maxY;
+        this.upperLeftY = maxY;
+    }
+
+    public void setMaxX(double maxX) {
+        this.maxX = maxX;
+        this.lowerRightX = maxX;
+    }
+
+    public void setMinY(double minY) {
+        this.minY = minY;
+        this.lowerRightY = minY;
+    }
+
+    public void setUpperLeftX(double upperLeftX) {
+        this.upperLeftX = upperLeftX;
+        this.minX = upperLeftX;
+    }
+
+    public void setLowerRightX(double lowerRightX) {
+        this.lowerRightX = lowerRightX;
+        this.maxX = lowerRightX;
+    }
+
+    public void setUpperLeftY(double upperLeftY) {
+        this.upperLeftY = upperLeftY;
+        this.maxY = upperLeftY;
+    }
+
+    public void setLowerRightY(double lowerRightY) {
+        this.lowerRightY = lowerRightY;
+        this.minY = lowerRightY;
+    }
     /**
      * left + " " + buttom + " " + right + " " + top
      *
