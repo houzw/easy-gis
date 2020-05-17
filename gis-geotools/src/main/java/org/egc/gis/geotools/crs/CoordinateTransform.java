@@ -1,16 +1,15 @@
-package org.egc.gis.geotools.utils;
+package org.egc.gis.geotools.crs;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
 import lombok.extern.slf4j.Slf4j;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.ReferencingFactoryFinder;
 import org.geotools.referencing.operation.DefaultMathTransformFactory;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
 import org.opengis.parameter.ParameterValueGroup;
 import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchIdentifierException;
 import org.opengis.referencing.crs.CRSFactory;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
@@ -30,34 +29,30 @@ import java.awt.geom.Rectangle2D;
  * @date 2018 /10/7 15:08
  */
 @Slf4j
-public class CoordinateTransformUtil {
+public class CoordinateTransform {
 
-    private CoordinateTransformUtil() {}
+    private CoordinateTransform() {
+    }
 
     private static final double WGS84_AXIS_MINOR = 6356752.314;
     private static final double WGS84_AXIS_MAJOR = 6378137.000;
 
-    // new Coordinate( latitude, longitude)
+    // latitude, longitude
+    private static final Coordinate ORIGIN = new Coordinate(0, 0);
 
-    private static final Coordinate origin = new Coordinate(0, 0);
-
-    public static MathTransform customCRS() {
+    public static MathTransform customCrs() {
         MathTransformFactory factory = new DefaultMathTransformFactory();
         try {
             ParameterValueGroup p = factory.getDefaultParameters("Transverse_Mercator");
             // wkt 的 PROJECTION 部分的 parameter
             p.parameter("semi_major").setValue(WGS84_AXIS_MAJOR);
             p.parameter("semi_minor").setValue(WGS84_AXIS_MINOR);
-            p.parameter("central_meridian").setValue(origin.y);
-            p.parameter("latitude_of_origin").setValue(origin.x);
+            p.parameter("central_meridian").setValue(ORIGIN.y);
+            p.parameter("latitude_of_origin").setValue(ORIGIN.x);
             //false_easting/false_northing/standard_parallel_1/standard_parallel_2
             MathTransform tr = factory.createParameterizedTransform(p).inverse();
             return tr;
-        } catch (NoSuchIdentifierException e) {
-            e.printStackTrace();
-        } catch (NoninvertibleTransformException e) {
-            e.printStackTrace();
-        } catch (FactoryException e) {
+        } catch (NoninvertibleTransformException | FactoryException e) {
             e.printStackTrace();
         }
         return null;
@@ -69,7 +64,7 @@ public class CoordinateTransformUtil {
      * @param wkt
      * @return
      */
-    public static CoordinateReferenceSystem customCRSFromWkt(String wkt) {
+    public static CoordinateReferenceSystem customCrsFromWkt(String wkt) {
         CRSFactory factory = ReferencingFactoryFinder.getCRSFactory(null);
         try {
             CoordinateReferenceSystem customCRS = factory.createFromWKT(wkt);
@@ -91,9 +86,8 @@ public class CoordinateTransformUtil {
      * @throws TransformException the transform exception
      * @throws FactoryException   the factory exception
      */
-    public static Coordinate transformEPSGCoordinate(int fromEPSG, int toEPSG, double x, double y) throws
-            TransformException, FactoryException
-    {
+    public static Coordinate transformEpsgCoordinate(int fromEPSG, int toEPSG, double x, double y) throws
+            TransformException, FactoryException {
         return transformCoordinate("EPSG:" + fromEPSG, "EPSG:" + toEPSG, x, y);
     }
 
@@ -109,8 +103,7 @@ public class CoordinateTransformUtil {
      * @throws FactoryException   the factory exception
      */
     public static Coordinate transformCoordinate(String fromAuthority, String toAuthority, double x, double y) throws
-            TransformException, FactoryException
-    {
+            TransformException, FactoryException {
         CoordinateReferenceSystem sourceCRS = CRS.decode(fromAuthority);
         CoordinateReferenceSystem targetCRS = CRS.decode(toAuthority);
         // allow for some error due to different datums
@@ -135,18 +128,17 @@ public class CoordinateTransformUtil {
      * @throws FactoryException the factory exception
      */
     public static ReferencedEnvelope transformEnvelope(String fromAuthority, String toAuthority,
-                                                       Rectangle2D bounds) throws FactoryException
-    {
+                                                       Rectangle2D bounds) throws FactoryException {
         CoordinateReferenceSystem fromCRS = CRS.decode(fromAuthority);
         CoordinateReferenceSystem toCRS = CRS.decode(toAuthority);
         try {
             MathTransform transform = CRS.findMathTransform(fromCRS, toCRS);
             Envelope sourceEnvelope = new Envelope(bounds.getMinX(), bounds.getMaxX(),
-                                                   bounds.getMinY(), bounds.getMaxY());
+                    bounds.getMinY(), bounds.getMaxY());
             final Envelope envelope = JTS.transform(sourceEnvelope, transform);
             return new ReferencedEnvelope(envelope.getMinX(), envelope.getMaxX(),
-                                          envelope.getMinY(), envelope.getMaxY(),
-                                          toCRS);
+                    envelope.getMinY(), envelope.getMaxY(),
+                    toCRS);
         } catch (FactoryException | TransformException e) {
             e.printStackTrace();
             return null;
@@ -164,7 +156,7 @@ public class CoordinateTransformUtil {
      * @throws TransformException the transform exception
      * @throws FactoryException   the factory exception
      */
-    public static Coordinate fromBeijing54ToWGS84(double lon, double lat) throws TransformException, FactoryException {
-        return transformEPSGCoordinate(4214, 4326, lat, lon);
+    public static Coordinate fromBeijing54ToWgs84(double lon, double lat) throws TransformException, FactoryException {
+        return transformEpsgCoordinate(4214, 4326, lat, lon);
     }
 }
