@@ -1,13 +1,17 @@
 package org.egc.gis.geotools.formats;
 
 import lombok.extern.slf4j.Slf4j;
+import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.data.store.ContentFeatureCollection;
+import org.geotools.data.store.ContentFeatureSource;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.geojson.feature.FeatureJSON;
 import org.geotools.geojson.geom.GeometryJSON;
 import org.locationtech.jts.geom.GeometryCollection;
 
 import java.io.*;
+import java.nio.charset.Charset;
 
 /**
  * @author houzhiwei
@@ -15,6 +19,7 @@ import java.io.*;
  */
 @Slf4j
 public class GeoJSON {
+
     public static FeatureCollection readGeoJSONFile(String geojsonFile) throws IOException {
         FeatureJSON featureJSON = new FeatureJSON();
         featureJSON.setEncodeNullValues(true);
@@ -36,6 +41,23 @@ public class GeoJSON {
         GeometryJSON gjson = new GeometryJSON();
         Reader reader = new StringReader(json);
         return gjson.readGeometryCollection(reader);
+    }
+
+    public boolean shp2geojson(String shpPath, String geojsonPath, Charset shpCharset) {
+        boolean result = false;
+        try {
+            ShapefileDataStore shapefileDataStore = new ShapefileDataStore(new File(shpPath).toURI().toURL());
+            shapefileDataStore.setCharset(shpCharset);
+            ContentFeatureSource featureSource = shapefileDataStore.getFeatureSource();
+            ContentFeatureCollection contentFeatureCollection = featureSource.getFeatures();
+            FeatureJSON featureJSON = new FeatureJSON(new GeometryJSON(15));
+            featureJSON.writeFeatureCollection(contentFeatureCollection, new File(geojsonPath));
+            shapefileDataStore.dispose();
+            result = true;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return result;
     }
 
     public static String toGeoJSON(SimpleFeatureCollection collection) throws IOException {
