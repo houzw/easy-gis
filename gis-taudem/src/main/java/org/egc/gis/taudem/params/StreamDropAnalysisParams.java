@@ -15,177 +15,199 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
 
 /**
- * Wrapper of parameters of StreamDropAnalysis
+ * Wrapper of parameters of streamDropAnalysis
+ *
  * @author houzhiwei
- * @date 2018-12-17T22:40:56+08:00
+ * @date 2020-05-21T14:24:36+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class StreamDropAnalysisParams implements Params {
+    private static final long serialVersionUID = 9150419155882553598L;
 
     /**
      * <pre>
-     * Input_Pit_Filled_Elevation_Grid
-     * Input_D8_Flow_Direction_Grid
-     * Input_D8_Contributing_Area_Grid
-     * Input_Accumulated_Stream_Source_Grid
+     * pitFilledElevation
+     * d8FlowDirection
+     * d8ContributingArea
+     * accumulatedStreamSource
+     * outlets
      *  </pre>
-     * @see Builder#Builder( String,  String,  String,  String)
+     *
+     * @see Builder#Builder(String, String, String, String)
      */
-    public StreamDropAnalysisParams(){}
+    public StreamDropAnalysisParams() {
+    }
+
     /**
      * A grid of elevation values.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Pit_Filled_Elevation_Grid;
+    private String pitFilledElevation;
+
     /**
      * A grid of D8 flow directions which are defined, for each cell, as the direction of the one of its eight adjacent or diagonal neighbors with the steepest downward slope.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_D8_Flow_Direction_Grid;
+    private String d8FlowDirection;
+
     /**
      * A grid of contributing area values for each cell that were calculated using the D8 algorithm.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_D8_Contributing_Area_Grid;
+    private String d8ContributingArea;
+
     /**
      * This grid must be monotonically increasing along the downslope D8 flow directions.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Accumulated_Stream_Source_Grid;
+    private String accumulatedStreamSource;
+
     /**
-    * A point feature defining the outlets upstream of which drop analysis is performed.
-    */
-    private String Input_Outlets;
+     * A point feature defining the outlets upstream of which drop analysis is performed.
+     */
+    private String outlets;
+
+
     /**
-    * default is 5d.
-    * This parameter is the lowest end of the range searched for possible threshold values using drop analysis.
-    */
+     * default is 5d.
+     * This parameter is the lowest end of the range searched for possible threshold values using drop analysis.
+     */
     @XmlElement(defaultValue = "5")
-    private Double Minimum_Threshold_Value = 5d;
+    private Double minimumThresholdValue = 5d;
+
 
     /**
-    * default is 500d.
-    * This parameter is the highest end of the range searched for possible threshold values using drop analysis.
-    */
+     * default is 500d.
+     * This parameter is the highest end of the range searched for possible threshold values using drop analysis.
+     */
     @XmlElement(defaultValue = "500")
-    private Double Maximum_Threshold_Value = 500d;
+    private Double maximumThresholdValue = 500d;
+
 
     /**
-    * default is 10d.
-    * The parameter is the number of steps to divide the search range into when looking for possible threshold values using drop analysis.
-    */
+     * default is 10d.
+     * The parameter is the number of steps to divide the search range into when looking for possible threshold values using drop analysis.
+     */
     @XmlElement(defaultValue = "10")
-    private Double Number_of_Threshold_Values = 10d;
+    private Double numberOfThresholdValues = 10d;
+
 
     /**
-    * default is true.
-    * This checkbox indicates whether logarithmic or linear spacing should be used when looking for possible threshold values using drop ananlysis.
-    */
+     * default is true.
+     * This checkbox indicates whether logarithmic or linear spacing should be used when looking for possible threshold values using drop ananlysis.
+     */
     @XmlElement(defaultValue = "true")
-    private Boolean Use_logarithmic_spacing_for_threshold_values = true;
+    private Boolean useLogarithmicSpacingForThresholdValues = true;
+
 
     /**
-    * default is "drp.txt".
-    * This is a comma delimited text file with the following header line: Threshold, DrainDen, NoFirstOrd, NoHighOrd, MeanDFirstOrd, MeanDHighOrd, StdDevFirstOrd, StdDevHighOrd, T The file then contains one line of data for each threshold value examined, and then a summary line that indicates the optimum threshold value.
-    */
-    @XmlElement(defaultValue = "drp.txt")
-    private String Output_Drop_Analysis_Text_File = "drp.txt";
+     * This is a comma delimited text file with the following header line: Threshold, DrainDen, NoFirstOrd, NoHighOrd, MeanDFirstOrd, MeanDHighOrd, StdDevFirstOrd, StdDevHighOrd, T The file then contains one line of data for each threshold value examined, and then a summary line that indicates the optimum threshold value.
+     */
+    @XmlElement
+    private String dropAnalysisTextFile;
+
 
     @Setter
-    @XmlElement(defaultValue = "./")
-    private String outputDir = "./";
+    @XmlElement
+    private String outputDir = System.getProperty("java.io.tmpdir");
 
-    public String getOutput_Drop_Analysis_Text_File() {
-        if (StringUtils.isBlank(Output_Drop_Analysis_Text_File)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_Pit_Filled_Elevation_Grid, "Output_Drop_Analysis_Text_File", "File", null));
+    // if no output filename provided
+    public String getDropAnalysisTextFile() {
+        if (StringUtils.isBlank(dropAnalysisTextFile)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "dropAnalysisTextFile", "Text File", "txt"));
         }
-        return this.Output_Drop_Analysis_Text_File;
+        return dropAnalysisTextFile;
     }
 
-    private StreamDropAnalysisParams(Builder builder){
-        this.Input_Pit_Filled_Elevation_Grid = builder.Input_Pit_Filled_Elevation_Grid;
-        this.Input_D8_Flow_Direction_Grid = builder.Input_D8_Flow_Direction_Grid;
-        this.Input_D8_Contributing_Area_Grid = builder.Input_D8_Contributing_Area_Grid;
-        this.Input_Accumulated_Stream_Source_Grid = builder.Input_Accumulated_Stream_Source_Grid;
-        this.Input_Outlets = builder.Input_Outlets;
-        this.Minimum_Threshold_Value = builder.Minimum_Threshold_Value;
-        this.Maximum_Threshold_Value = builder.Maximum_Threshold_Value;
-        this.Number_of_Threshold_Values = builder.Number_of_Threshold_Values;
-        this.Use_logarithmic_spacing_for_threshold_values = builder.Use_logarithmic_spacing_for_threshold_values;
-        this.Output_Drop_Analysis_Text_File = builder.Output_Drop_Analysis_Text_File;
+    private StreamDropAnalysisParams(Builder builder) {
+        pitFilledElevation = builder.pitFilledElevation;
+        d8FlowDirection = builder.d8FlowDirection;
+        d8ContributingArea = builder.d8ContributingArea;
+        accumulatedStreamSource = builder.accumulatedStreamSource;
+        outlets = builder.outlets;
+        minimumThresholdValue = builder.minimumThresholdValue;
+        maximumThresholdValue = builder.maximumThresholdValue;
+        numberOfThresholdValues = builder.numberOfThresholdValues;
+        useLogarithmicSpacingForThresholdValues = builder.useLogarithmicSpacingForThresholdValues;
+        dropAnalysisTextFile = builder.dropAnalysisTextFile;
     }
 
     @XmlRootElement
     @XmlAccessorType(XmlAccessType.FIELD)
     public static final class Builder {
-        private String Input_Pit_Filled_Elevation_Grid;
-        private String Input_D8_Flow_Direction_Grid;
-        private String Input_D8_Contributing_Area_Grid;
-        private String Input_Accumulated_Stream_Source_Grid;
-        private String Input_Outlets;
-        private Double Minimum_Threshold_Value;
-        private Double Maximum_Threshold_Value;
-        private Double Number_of_Threshold_Values;
-        private Boolean Use_logarithmic_spacing_for_threshold_values;
-        private String Output_Drop_Analysis_Text_File;
+        private String pitFilledElevation;
+        private String d8FlowDirection;
+        private String d8ContributingArea;
+        private String accumulatedStreamSource;
+        private String outlets;
+        private Double minimumThresholdValue;
+        private Double maximumThresholdValue;
+        private Double numberOfThresholdValues;
+        private Boolean useLogarithmicSpacingForThresholdValues;
+        private String dropAnalysisTextFile;
 
         /**
-        * @param Input_Pit_Filled_Elevation_Grid A grid of elevation values.
-        * @param Input_D8_Flow_Direction_Grid A grid of D8 flow directions which are defined, for each cell, as the direction of the one of its eight adjacent or diagonal neighbors with the steepest downward slope.
-        * @param Input_D8_Contributing_Area_Grid A grid of contributing area values for each cell that were calculated using the D8 algorithm.
-        * @param Input_Accumulated_Stream_Source_Grid This grid must be monotonically increasing along the downslope D8 flow directions.
-        */
-        public Builder(@NotBlank String Input_Pit_Filled_Elevation_Grid, @NotBlank String Input_D8_Flow_Direction_Grid, @NotBlank String Input_D8_Contributing_Area_Grid, @NotBlank String Input_Accumulated_Stream_Source_Grid){
-            this.Input_Pit_Filled_Elevation_Grid = Input_Pit_Filled_Elevation_Grid;
-            this.Input_D8_Flow_Direction_Grid = Input_D8_Flow_Direction_Grid;
-            this.Input_D8_Contributing_Area_Grid = Input_D8_Contributing_Area_Grid;
-            this.Input_Accumulated_Stream_Source_Grid = Input_Accumulated_Stream_Source_Grid;
+         * @param pitFilledElevation      A grid of elevation values.
+         * @param d8FlowDirection         A grid of D8 flow directions which are defined, for each cell, as the direction of the one of its eight adjacent or diagonal neighbors with the steepest downward slope.
+         * @param d8ContributingArea      A grid of contributing area values for each cell that were calculated using the D8 algorithm.
+         * @param accumulatedStreamSource This grid must be monotonically increasing along the downslope D8 flow directions.
+         */
+        public Builder(@NotBlank String pitFilledElevation, @NotBlank String d8FlowDirection, @NotBlank String d8ContributingArea, @NotBlank String accumulatedStreamSource) {
+            this.pitFilledElevation = pitFilledElevation;
+            this.d8FlowDirection = d8FlowDirection;
+            this.d8ContributingArea = d8ContributingArea;
+            this.accumulatedStreamSource = accumulatedStreamSource;
         }
 
-        public Builder Input_Pit_Filled_Elevation_Grid(String val){
-            this.Input_Pit_Filled_Elevation_Grid = val;
+        public Builder pitFilledElevation(String val) {
+            pitFilledElevation = val;
             return this;
         }
-        public Builder Input_D8_Flow_Direction_Grid(String val){
-            this.Input_D8_Flow_Direction_Grid = val;
+
+        public Builder d8FlowDirection(String val) {
+            d8FlowDirection = val;
             return this;
         }
-        public Builder Input_D8_Contributing_Area_Grid(String val){
-            this.Input_D8_Contributing_Area_Grid = val;
+
+        public Builder d8ContributingArea(String val) {
+            d8ContributingArea = val;
             return this;
         }
-        public Builder Input_Accumulated_Stream_Source_Grid(String val){
-            this.Input_Accumulated_Stream_Source_Grid = val;
+
+        public Builder accumulatedStreamSource(String val) {
+            accumulatedStreamSource = val;
             return this;
         }
-        public Builder Input_Outlets(String val){
-            this.Input_Outlets = val;
+
+        public Builder outlets(String val) {
+            outlets = val;
             return this;
         }
-        public Builder Minimum_Threshold_Value(Double val){
-            this.Minimum_Threshold_Value = val;
+
+        public Builder minimumThresholdValue(Double val) {
+            minimumThresholdValue = val;
             return this;
         }
-        public Builder Maximum_Threshold_Value(Double val){
-            this.Maximum_Threshold_Value = val;
+
+        public Builder maximumThresholdValue(Double val) {
+            maximumThresholdValue = val;
             return this;
         }
-        public Builder Number_of_Threshold_Values(Double val){
-            this.Number_of_Threshold_Values = val;
+
+        public Builder numberOfThresholdValues(Double val) {
+            numberOfThresholdValues = val;
             return this;
         }
-        public Builder Use_logarithmic_spacing_for_threshold_values(Boolean val){
-            this.Use_logarithmic_spacing_for_threshold_values = val;
+
+        public Builder useLogarithmicSpacingForThresholdValues(Boolean val) {
+            useLogarithmicSpacingForThresholdValues = val;
             return this;
         }
-        public Builder Output_Drop_Analysis_Text_File(String val){
-            this.Output_Drop_Analysis_Text_File = val;
+
+        public Builder dropAnalysisTextFile(String val) {
+            dropAnalysisTextFile = val;
             return this;
         }
 

@@ -15,100 +15,117 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
 
 /**
- * Wrapper of parameters of D8ContributingArea
+ * Wrapper of parameters of d8ContributingArea
+ *
  * @author houzhiwei
- * @date 2018-12-17T22:40:56+08:00
+ * @date 2020-05-21T14:24:36+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class D8ContributingAreaParams implements Params {
+    private static final long serialVersionUID = 3396007760293404491L;
 
     /**
      * <pre>
-     * Input_D8_Flow_Direction_Grid
+     * d8FlowDirection
+     * outlets
+     * weight
      *  </pre>
-     * @see Builder#Builder( String)
+     *
+     * @see Builder#Builder(String)
      */
-    public D8ContributingAreaParams(){}
+    public D8ContributingAreaParams() {
+    }
+
     /**
      * A grid of D8 flow directions which are defined, for each cell, as the direction of the one of its eight adjacent or diagonal neighbors with the steepest downward slope.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_D8_Flow_Direction_Grid;
+    private String d8FlowDirection;
+
     /**
-    * A point feature defining the outlets of interest.
-    */
-    private String Input_Outlets;
+     * A point feature defining the outlets of interest.
+     */
+    private String outlets;
+
     /**
-    * A grid giving contribution to flow for each cell.
-    */
-    private String Input_Weight_Grid;
+     * A grid giving contribution to flow for each cell.
+     */
+    private String weight;
+
+
     /**
-    * default is true.
-    * A flag that indicates whether the tool should check for edge contamination.
-    */
+     * default is true.
+     * A flag that indicates whether the tool should check for edge contamination.
+     */
     @XmlElement(defaultValue = "true")
-    private Boolean Check_for_edge_contamination = true;
+    private Boolean checkForEdgeContamination = true;
+
 
     /**
-    * A grid of contributing area values calculated as the cells own contribution plus the contribution from upslope neighbors that drain in to it according to the D8 flow model.
-    */
-    private String Output_D8_Contributing_Area_Grid;
-    @Setter
-    @XmlElement(defaultValue = "./")
-    private String outputDir = "./";
+     * A grid of contributing area values calculated as the cells own contribution plus the contribution from upslope neighbors that drain in to it according to the D8 flow model.
+     */
+    private String d8ContributingArea;
 
-    public String getOutput_D8_Contributing_Area_Grid() {
-        if (StringUtils.isBlank(Output_D8_Contributing_Area_Grid)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_D8_Flow_Direction_Grid, "Output_D8_Contributing_Area_Grid", "Raster Dataset", null));
+    @Setter
+    @XmlElement
+    private String outputDir = System.getProperty("java.io.tmpdir");
+
+    // if no output filename provided
+    public String getD8ContributingArea() {
+        if (StringUtils.isBlank(d8ContributingArea)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(d8FlowDirection, "d8ContributingArea", "Raster Dataset", "tif"));
         }
-        return this.Output_D8_Contributing_Area_Grid;
+        return d8ContributingArea;
     }
 
-    private D8ContributingAreaParams(Builder builder){
-        this.Input_D8_Flow_Direction_Grid = builder.Input_D8_Flow_Direction_Grid;
-        this.Input_Outlets = builder.Input_Outlets;
-        this.Input_Weight_Grid = builder.Input_Weight_Grid;
-        this.Check_for_edge_contamination = builder.Check_for_edge_contamination;
-        this.Output_D8_Contributing_Area_Grid = builder.Output_D8_Contributing_Area_Grid;
+    private D8ContributingAreaParams(Builder builder) {
+        d8FlowDirection = builder.d8FlowDirection;
+        outlets = builder.outlets;
+        weight = builder.weight;
+        checkForEdgeContamination = builder.checkForEdgeContamination;
+        d8ContributingArea = builder.d8ContributingArea;
     }
 
     @XmlRootElement
     @XmlAccessorType(XmlAccessType.FIELD)
     public static final class Builder {
-        private String Input_D8_Flow_Direction_Grid;
-        private String Input_Outlets;
-        private String Input_Weight_Grid;
-        private Boolean Check_for_edge_contamination;
-        private String Output_D8_Contributing_Area_Grid;
+        private String d8FlowDirection;
+        private String outlets;
+        private String weight;
+        private Boolean checkForEdgeContamination;
+        private String d8ContributingArea;
 
         /**
-        * @param Input_D8_Flow_Direction_Grid A grid of D8 flow directions which are defined, for each cell, as the direction of the one of its eight adjacent or diagonal neighbors with the steepest downward slope.
-        */
-        public Builder(@NotBlank String Input_D8_Flow_Direction_Grid){
-            this.Input_D8_Flow_Direction_Grid = Input_D8_Flow_Direction_Grid;
+         * @param d8FlowDirection A grid of D8 flow directions which are defined, for each cell, as the direction of the one of its eight adjacent or diagonal neighbors with the steepest downward slope.
+         */
+        public Builder(@NotBlank String d8FlowDirection) {
+            this.d8FlowDirection = d8FlowDirection;
         }
 
-        public Builder Input_D8_Flow_Direction_Grid(String val){
-            this.Input_D8_Flow_Direction_Grid = val;
+        public Builder d8FlowDirection(String val) {
+            d8FlowDirection = val;
             return this;
         }
-        public Builder Input_Outlets(String val){
-            this.Input_Outlets = val;
+
+        public Builder outlets(String val) {
+            outlets = val;
             return this;
         }
-        public Builder Input_Weight_Grid(String val){
-            this.Input_Weight_Grid = val;
+
+        public Builder weight(String val) {
+            weight = val;
             return this;
         }
-        public Builder Check_for_edge_contamination(Boolean val){
-            this.Check_for_edge_contamination = val;
+
+        public Builder checkForEdgeContamination(Boolean val) {
+            checkForEdgeContamination = val;
             return this;
         }
-        public Builder Output_D8_Contributing_Area_Grid(String val){
-            this.Output_D8_Contributing_Area_Grid = val;
+
+        public Builder d8ContributingArea(String val) {
+            d8ContributingArea = val;
             return this;
         }
 

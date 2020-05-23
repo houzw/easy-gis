@@ -15,95 +15,107 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
 
 /**
- * Wrapper of parameters of D8DistanceToStreams
+ * Wrapper of parameters of d8DistanceToStreams
+ *
  * @author houzhiwei
- * @date 2018-12-17T22:40:56+08:00
+ * @date 2020-05-21T14:24:36+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class D8DistanceToStreamsParams implements Params {
+    private static final long serialVersionUID = -2093292811600675024L;
 
     /**
      * <pre>
-     * Input_D8_Flow_Direction_Grid
-     * Input_Stream_Raster_Grid
+     * d8FlowDirection
+     * streamRaster
      *  </pre>
-     * @see Builder#Builder( String,  String)
+     *
+     * @see Builder#Builder(String, String)
      */
-    public D8DistanceToStreamsParams(){}
+    public D8DistanceToStreamsParams() {
+    }
+
     /**
      * This input is a grid of flow directions that are encoded using the D8 method where all flow from a cells goes to a single neighboring cell in the direction of steepest descent.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_D8_Flow_Direction_Grid;
+    private String d8FlowDirection;
+
     /**
      * A grid indicating streams.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Stream_Raster_Grid;
+    private String streamRaster;
+
+
     /**
-    * default is 50d.
-    * This value acts as threshold on the Stream Raster Grid to determine the location of streams.
-    */
+     * default is 50d.
+     * This value acts as threshold on the Stream Raster Grid to determine the location of streams.
+     */
     @XmlElement(defaultValue = "50")
-    private Double Threshold = 50d;
+    private Double threshold = 50d;
+
 
     /**
-    * A grid giving the horizontal distance along the flow path as defined by the D8 Flow Directions Grid to the streams in the Stream Raster Grid.
-    */
-    private String Output_Distance_to_Streams_Grid;
-    @Setter
-    @XmlElement(defaultValue = "./")
-    private String outputDir = "./";
+     * A grid giving the horizontal distance along the flow path as defined by the D8 Flow Directions Grid to the streams in the Stream Raster Grid.
+     */
+    private String distanceToStreams;
 
-    public String getOutput_Distance_to_Streams_Grid() {
-        if (StringUtils.isBlank(Output_Distance_to_Streams_Grid)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_D8_Flow_Direction_Grid, "Output_Distance_to_Streams_Grid", "Raster Dataset", null));
+    @Setter
+    @XmlElement
+    private String outputDir = System.getProperty("java.io.tmpdir");
+
+    // if no output filename provided
+    public String getDistanceToStreams() {
+        if (StringUtils.isBlank(distanceToStreams)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(d8FlowDirection, "distanceToStreams", "Raster Dataset", "tif"));
         }
-        return this.Output_Distance_to_Streams_Grid;
+        return distanceToStreams;
     }
 
-    private D8DistanceToStreamsParams(Builder builder){
-        this.Input_D8_Flow_Direction_Grid = builder.Input_D8_Flow_Direction_Grid;
-        this.Input_Stream_Raster_Grid = builder.Input_Stream_Raster_Grid;
-        this.Threshold = builder.Threshold;
-        this.Output_Distance_to_Streams_Grid = builder.Output_Distance_to_Streams_Grid;
+    private D8DistanceToStreamsParams(Builder builder) {
+        d8FlowDirection = builder.d8FlowDirection;
+        streamRaster = builder.streamRaster;
+        threshold = builder.threshold;
+        distanceToStreams = builder.distanceToStreams;
     }
 
     @XmlRootElement
     @XmlAccessorType(XmlAccessType.FIELD)
     public static final class Builder {
-        private String Input_D8_Flow_Direction_Grid;
-        private String Input_Stream_Raster_Grid;
-        private Double Threshold;
-        private String Output_Distance_to_Streams_Grid;
+        private String d8FlowDirection;
+        private String streamRaster;
+        private Double threshold;
+        private String distanceToStreams;
 
         /**
-        * @param Input_D8_Flow_Direction_Grid This input is a grid of flow directions that are encoded using the D8 method where all flow from a cells goes to a single neighboring cell in the direction of steepest descent.
-        * @param Input_Stream_Raster_Grid A grid indicating streams.
-        */
-        public Builder(@NotBlank String Input_D8_Flow_Direction_Grid, @NotBlank String Input_Stream_Raster_Grid){
-            this.Input_D8_Flow_Direction_Grid = Input_D8_Flow_Direction_Grid;
-            this.Input_Stream_Raster_Grid = Input_Stream_Raster_Grid;
+         * @param d8FlowDirection This input is a grid of flow directions that are encoded using the D8 method where all flow from a cells goes to a single neighboring cell in the direction of steepest descent.
+         * @param streamRaster    A grid indicating streams.
+         */
+        public Builder(@NotBlank String d8FlowDirection, @NotBlank String streamRaster) {
+            this.d8FlowDirection = d8FlowDirection;
+            this.streamRaster = streamRaster;
         }
 
-        public Builder Input_D8_Flow_Direction_Grid(String val){
-            this.Input_D8_Flow_Direction_Grid = val;
+        public Builder d8FlowDirection(String val) {
+            d8FlowDirection = val;
             return this;
         }
-        public Builder Input_Stream_Raster_Grid(String val){
-            this.Input_Stream_Raster_Grid = val;
+
+        public Builder streamRaster(String val) {
+            streamRaster = val;
             return this;
         }
-        public Builder Threshold(Double val){
-            this.Threshold = val;
+
+        public Builder threshold(Double val) {
+            threshold = val;
             return this;
         }
-        public Builder Output_Distance_to_Streams_Grid(String val){
-            this.Output_Distance_to_Streams_Grid = val;
+
+        public Builder distanceToStreams(String val) {
+            distanceToStreams = val;
             return this;
         }
 

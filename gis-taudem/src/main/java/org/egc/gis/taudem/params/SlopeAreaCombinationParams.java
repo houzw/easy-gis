@@ -15,108 +15,122 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
 
 /**
- * Wrapper of parameters of SlopeAreaCombination
+ * Wrapper of parameters of slopeAreaCombination
+ *
  * @author houzhiwei
- * @date 2018-12-17T22:40:56+08:00
+ * @date 2020-05-21T14:24:35+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class SlopeAreaCombinationParams implements Params {
+    private static final long serialVersionUID = 7260747079578982986L;
 
     /**
      * <pre>
-     * Input_Slope_Grid
-     * Input_Area_Grid
+     * slope
+     * area
      *  </pre>
-     * @see Builder#Builder( String,  String)
+     *
+     * @see Builder#Builder(String, String)
      */
-    public SlopeAreaCombinationParams(){}
+    public SlopeAreaCombinationParams() {
+    }
+
     /**
      * This input is a grid of slope values.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Slope_Grid;
+    private String slope;
+
     /**
      * A grid giving the specific catchment area for each cell taken as its own contribution (grid cell length or summation of weights) plus the proportional contribution from upslope neighbors that drain in to it.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Area_Grid;
+    private String area;
+
+
     /**
-    * default is 2d.
-    * The slope exponent (m) parameter which will be used in the formula: (S^m)(A^n), that is used to create the slope-area grid.
-    */
+     * default is 2d.
+     * The slope exponent (m) parameter which will be used in the formula: (S^m)(A^n), that is used to create the slope-area grid.
+     */
     @XmlElement(defaultValue = "2")
-    private Double Slope_Exponent_m = 2d;
+    private Double slopeExponentM = 2d;
+
 
     /**
-    * default is 1d.
-    * The area exponent (n) parameter which will be used in the formula: (S^m)(A^n), that is used to create the slope-area grid.
-    */
+     * default is 1d.
+     * The area exponent (n) parameter which will be used in the formula: (S^m)(A^n), that is used to create the slope-area grid.
+     */
     @XmlElement(defaultValue = "1")
-    private Double Area_Exponent_n = 1d;
+    private Double areaExponentN = 1d;
+
 
     /**
-    * A grid of slope-area values = (S^m)(A^n) calculated from the slope grid, specific catchment area grid, m slope exponent parameter, and n area exponent parameter.
-    */
-    private String Output_Slope_Area_Grid;
-    @Setter
-    @XmlElement(defaultValue = "./")
-    private String outputDir = "./";
+     * A grid of slope-area values = (S^m)(A^n) calculated from the slope grid, specific catchment area grid, m slope exponent parameter, and n area exponent parameter.
+     */
+    private String slopeArea;
 
-    public String getOutput_Slope_Area_Grid() {
-        if (StringUtils.isBlank(Output_Slope_Area_Grid)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_Slope_Grid, "Output_Slope_Area_Grid", "Raster Dataset", null));
+    @Setter
+    @XmlElement
+    private String outputDir = System.getProperty("java.io.tmpdir");
+
+    // if no output filename provided
+    public String getSlopeArea() {
+        if (StringUtils.isBlank(slopeArea)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(slope, "slopeArea", "Raster Dataset", "tif"));
         }
-        return this.Output_Slope_Area_Grid;
+        return slopeArea;
     }
 
-    private SlopeAreaCombinationParams(Builder builder){
-        this.Input_Slope_Grid = builder.Input_Slope_Grid;
-        this.Input_Area_Grid = builder.Input_Area_Grid;
-        this.Slope_Exponent_m = builder.Slope_Exponent_m;
-        this.Area_Exponent_n = builder.Area_Exponent_n;
-        this.Output_Slope_Area_Grid = builder.Output_Slope_Area_Grid;
+    private SlopeAreaCombinationParams(Builder builder) {
+        slope = builder.slope;
+        area = builder.area;
+        slopeExponentM = builder.slopeExponentM;
+        areaExponentN = builder.areaExponentN;
+        slopeArea = builder.slopeArea;
     }
 
     @XmlRootElement
     @XmlAccessorType(XmlAccessType.FIELD)
     public static final class Builder {
-        private String Input_Slope_Grid;
-        private String Input_Area_Grid;
-        private Double Slope_Exponent_m;
-        private Double Area_Exponent_n;
-        private String Output_Slope_Area_Grid;
+        private String slope;
+        private String area;
+        private Double slopeExponentM;
+        private Double areaExponentN;
+        private String slopeArea;
 
         /**
-        * @param Input_Slope_Grid This input is a grid of slope values.
-        * @param Input_Area_Grid A grid giving the specific catchment area for each cell taken as its own contribution (grid cell length or summation of weights) plus the proportional contribution from upslope neighbors that drain in to it.
-        */
-        public Builder(@NotBlank String Input_Slope_Grid, @NotBlank String Input_Area_Grid){
-            this.Input_Slope_Grid = Input_Slope_Grid;
-            this.Input_Area_Grid = Input_Area_Grid;
+         * @param slope This input is a grid of slope values.
+         * @param area  A grid giving the specific catchment area for each cell taken as its own contribution (grid cell length or summation of weights) plus the proportional contribution from upslope neighbors that drain in to it.
+         */
+        public Builder(@NotBlank String slope, @NotBlank String area) {
+            this.slope = slope;
+            this.area = area;
         }
 
-        public Builder Input_Slope_Grid(String val){
-            this.Input_Slope_Grid = val;
+        public Builder slope(String val) {
+            slope = val;
             return this;
         }
-        public Builder Input_Area_Grid(String val){
-            this.Input_Area_Grid = val;
+
+        public Builder area(String val) {
+            area = val;
             return this;
         }
-        public Builder Slope_Exponent_m(Double val){
-            this.Slope_Exponent_m = val;
+
+        public Builder slopeExponentM(Double val) {
+            slopeExponentM = val;
             return this;
         }
-        public Builder Area_Exponent_n(Double val){
-            this.Area_Exponent_n = val;
+
+        public Builder areaExponentN(Double val) {
+            areaExponentN = val;
             return this;
         }
-        public Builder Output_Slope_Area_Grid(String val){
-            this.Output_Slope_Area_Grid = val;
+
+        public Builder slopeArea(String val) {
+            slopeArea = val;
             return this;
         }
 

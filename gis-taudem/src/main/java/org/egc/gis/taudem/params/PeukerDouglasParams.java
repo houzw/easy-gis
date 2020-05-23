@@ -15,106 +15,121 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
 
 /**
- * Wrapper of parameters of PeukerDouglas
+ * Wrapper of parameters of peukerDouglas
+ *
  * @author houzhiwei
- * @date 2018-12-17T22:40:56+08:00
+ * @date 2020-05-21T14:24:35+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class PeukerDouglasParams implements Params {
+    private static final long serialVersionUID = 5330469577871357499L;
 
     /**
      * <pre>
-     * Input_Elevation_Grid
+     * elevation
      *  </pre>
-     * @see Builder#Builder( String)
+     *
+     * @see Builder#Builder(String)
      */
-    public PeukerDouglasParams(){}
+    public PeukerDouglasParams() {
+    }
+
     /**
      * A grid of elevation values.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Elevation_Grid;
+    private String elevation;
+
+
     /**
-    * default is 0.4d.
-    * The center weight parameter used by a kernel to smooth the DEM before the tool identifies upwardly curved grid cells.
-    */
+     * default is 0.4d.
+     * The center weight parameter used by a kernel to smooth the DEM before the tool identifies upwardly curved grid cells.
+     */
     @XmlElement(defaultValue = "0.4")
-    private Double Center_Smoothing_Weight = 0.4d;
+    private Double centerSmoothingWeight = 0.4d;
+
 
     /**
-    * default is 0.1d.
-    * The side weight parameter used by a kernel to smooth the DEM before the tool identifies upwardly curved grid cells.
-    */
+     * default is 0.1d.
+     * The side weight parameter used by a kernel to smooth the DEM before the tool identifies upwardly curved grid cells.
+     */
     @XmlElement(defaultValue = "0.1")
-    private Double Side_Smoothing_Weight = 0.1d;
+    private Double sideSmoothingWeight = 0.1d;
+
 
     /**
-    * default is 0.05d.
-    * The diagonal weight parameter used by a kernel to smooth the DEM before the tool identifies upwardly curved grid cells.
-    */
+     * default is 0.05d.
+     * The diagonal weight parameter used by a kernel to smooth the DEM before the tool identifies upwardly curved grid cells.
+     */
     @XmlElement(defaultValue = "0.05")
-    private Double Diagonal_Smoothing_Weight = 0.05d;
+    private Double diagonalSmoothingWeight = 0.05d;
+
 
     /**
-    * An indicator grid (1,0) of upward curved grid cells according to the Peuker and Douglas algorithm, and if viewed, resembles a channel network.
-    */
-    private String Output_Stream_Source_Grid;
-    @Setter
-    @XmlElement(defaultValue = "./")
-    private String outputDir = "./";
+     * An indicator grid (1,0) of upward curved grid cells according to the Peuker and Douglas algorithm, and if viewed, resembles a channel network.
+     */
+    private String streamSource;
 
-    public String getOutput_Stream_Source_Grid() {
-        if (StringUtils.isBlank(Output_Stream_Source_Grid)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_Elevation_Grid, "Output_Stream_Source_Grid", "Raster Dataset", null));
+    @Setter
+    @XmlElement
+    private String outputDir = System.getProperty("java.io.tmpdir");
+
+    // if no output filename provided
+    public String getStreamSource() {
+        if (StringUtils.isBlank(streamSource)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(elevation, "streamSource", "Raster Dataset", "tif"));
         }
-        return this.Output_Stream_Source_Grid;
+        return streamSource;
     }
 
-    private PeukerDouglasParams(Builder builder){
-        this.Input_Elevation_Grid = builder.Input_Elevation_Grid;
-        this.Center_Smoothing_Weight = builder.Center_Smoothing_Weight;
-        this.Side_Smoothing_Weight = builder.Side_Smoothing_Weight;
-        this.Diagonal_Smoothing_Weight = builder.Diagonal_Smoothing_Weight;
-        this.Output_Stream_Source_Grid = builder.Output_Stream_Source_Grid;
+    private PeukerDouglasParams(Builder builder) {
+        elevation = builder.elevation;
+        centerSmoothingWeight = builder.centerSmoothingWeight;
+        sideSmoothingWeight = builder.sideSmoothingWeight;
+        diagonalSmoothingWeight = builder.diagonalSmoothingWeight;
+        streamSource = builder.streamSource;
     }
 
     @XmlRootElement
     @XmlAccessorType(XmlAccessType.FIELD)
     public static final class Builder {
-        private String Input_Elevation_Grid;
-        private Double Center_Smoothing_Weight;
-        private Double Side_Smoothing_Weight;
-        private Double Diagonal_Smoothing_Weight;
-        private String Output_Stream_Source_Grid;
+        private String elevation;
+        private Double centerSmoothingWeight;
+        private Double sideSmoothingWeight;
+        private Double diagonalSmoothingWeight;
+        private String streamSource;
 
         /**
-        * @param Input_Elevation_Grid A grid of elevation values.
-        */
-        public Builder(@NotBlank String Input_Elevation_Grid){
-            this.Input_Elevation_Grid = Input_Elevation_Grid;
+         * @param elevation A grid of elevation values.
+         */
+        public Builder(@NotBlank String elevation) {
+            this.elevation = elevation;
         }
 
-        public Builder Input_Elevation_Grid(String val){
-            this.Input_Elevation_Grid = val;
+        public Builder elevation(String val) {
+            elevation = val;
             return this;
         }
-        public Builder Center_Smoothing_Weight(Double val){
-            this.Center_Smoothing_Weight = val;
+
+        public Builder centerSmoothingWeight(Double val) {
+            centerSmoothingWeight = val;
             return this;
         }
-        public Builder Side_Smoothing_Weight(Double val){
-            this.Side_Smoothing_Weight = val;
+
+        public Builder sideSmoothingWeight(Double val) {
+            sideSmoothingWeight = val;
             return this;
         }
-        public Builder Diagonal_Smoothing_Weight(Double val){
-            this.Diagonal_Smoothing_Weight = val;
+
+        public Builder diagonalSmoothingWeight(Double val) {
+            diagonalSmoothingWeight = val;
             return this;
         }
-        public Builder Output_Stream_Source_Grid(String val){
-            this.Output_Stream_Source_Grid = val;
+
+        public Builder streamSource(String val) {
+            streamSource = val;
             return this;
         }
 

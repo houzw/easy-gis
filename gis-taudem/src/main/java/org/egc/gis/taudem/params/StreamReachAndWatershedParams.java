@@ -15,199 +15,232 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
 
 /**
- * Wrapper of parameters of StreamReachAndWatershed
+ * Wrapper of parameters of streamReachAndWatershed
+ *
  * @author houzhiwei
- * @date 2018-12-17T22:40:56+08:00
+ * @date 2020-05-21T14:24:36+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class StreamReachAndWatershedParams implements Params {
+    private static final long serialVersionUID = -8730494915989904370L;
 
     /**
      * <pre>
-     * Input_Pit_Filled_Elevation_Grid
-     * Input_D8_Flow_Direction_Grid
-     * Input_D8_Drainage_Area
-     * Input_Stream_Raster_Grid
+     * pitFilledElevation
+     * d8FlowDirection
+     * d8DrainageArea
+     * streamRaster
+     * outlets
      *  </pre>
-     * @see Builder#Builder( String,  String,  String,  String)
+     *
+     * @see Builder#Builder(String, String, String, String)
      */
-    public StreamReachAndWatershedParams(){}
+    public StreamReachAndWatershedParams() {
+    }
+
     /**
      * This input is a grid of elevation values.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Pit_Filled_Elevation_Grid;
+    private String pitFilledElevation;
+
     /**
      * This input is a grid of flow directions that are encoded using the D8 method where all flow from a cells goes to a single neighboring cell in the direction of steepest descent.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_D8_Flow_Direction_Grid;
+    private String d8FlowDirection;
+
     /**
      * A grid giving the contributing area value in terms of the number of grid cells (or the summation of weights) for each cell taken as its own contribution plus the contribution from upslope neighbors that drain in to it using the D8 algorithm.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_D8_Drainage_Area;
+    private String d8DrainageArea;
+
     /**
      * An indicator grid indicating streams, by using a grid cell value of 1 on streams and 0 off streams.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Stream_Raster_Grid;
+    private String streamRaster;
+
     /**
-    * A point feature defining points of interest.
-    */
-    private String Input_Outlets;
+     * A point feature defining points of interest.
+     */
+    private String outlets;
+
+
     /**
-    * default is false.
-    * This option causes the tool to delineate a single watershed by representing the entire area draining to the Stream Network as a single value in the output watershed grid.
-    */
+     * default is false.
+     * This option causes the tool to delineate a single watershed by representing the entire area draining to the Stream Network as a single value in the output watershed grid.
+     */
     @XmlElement(defaultValue = "false")
-    private Boolean Delineate_Single_Watershed = false;
+    private Boolean delineateSingleWatershed = false;
+
 
     /**
-    * The Stream Order Grid has cells values of streams ordered according to the Strahler order system.
-    */
-    private String Output_Stream_Order_Grid;
+     * The Stream Order Grid has cells values of streams ordered according to the Strahler order system.
+     */
+    private String streamOrder;
+
     /**
-    * This output is a text file that details the network topological connectivity is stored in the Stream Network Tree file.
-    */
-    private String Output_Network_Connectivity_Tree;
+     * This output is a text file that details the network topological connectivity is stored in the Stream Network Tree file.
+     */
+    private String networkConnectivityTree;
+
     /**
-    * This output is a text file that contains the coordinates and attributes of points along the stream network.
-    */
-    private String Output_Network_Coordinates;
+     * This output is a text file that contains the coordinates and attributes of points along the stream network.
+     */
+    private String networkCoordinates;
+
     /**
-    * This output is a polyline OGR file giving the links in a stream network.
-    */
-    private String Output_Stream_Reach_file;
+     * This output is a polyline OGR file giving the links in a stream network.
+     */
+    private String streamReachFile;
+
     /**
-    * This output grid identified each reach watershed with a unique ID number, or in the case where the delineate single watershed option was checked, the entire area draining to the stream network is identified with a single ID.
-    */
-    private String Output_Watershed_Grid;
+     * This output grid identified each reach watershed with a unique ID number, or in the case where the delineate single watershed option was checked, the entire area draining to the stream network is identified with a single ID.
+     */
+    private String watershed;
+
     @Setter
-    @XmlElement(defaultValue = "./")
-    private String outputDir = "./";
+    @XmlElement
+    private String outputDir = System.getProperty("java.io.tmpdir");
 
-    public String getOutput_Stream_Order_Grid() {
-        if (StringUtils.isBlank(Output_Stream_Order_Grid)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_Pit_Filled_Elevation_Grid, "Output_Stream_Order_Grid", "Raster Dataset", null));
+    // if no output filename provided
+    public String getStreamOrder() {
+        if (StringUtils.isBlank(streamOrder)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "streamOrder", "Raster Dataset", "tif"));
         }
-        return this.Output_Stream_Order_Grid;
-    }
-    public String getOutput_Network_Connectivity_Tree() {
-        if (StringUtils.isBlank(Output_Network_Connectivity_Tree)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_Pit_Filled_Elevation_Grid, "Output_Network_Connectivity_Tree", "File", null));
-        }
-        return this.Output_Network_Connectivity_Tree;
-    }
-    public String getOutput_Network_Coordinates() {
-        if (StringUtils.isBlank(Output_Network_Coordinates)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_Pit_Filled_Elevation_Grid, "Output_Network_Coordinates", "File", null));
-        }
-        return this.Output_Network_Coordinates;
-    }
-    public String getOutput_Stream_Reach_file() {
-        if (StringUtils.isBlank(Output_Stream_Reach_file)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_Pit_Filled_Elevation_Grid, "Output_Stream_Reach_file", "File", null));
-        }
-        return this.Output_Stream_Reach_file;
-    }
-    public String getOutput_Watershed_Grid() {
-        if (StringUtils.isBlank(Output_Watershed_Grid)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_Pit_Filled_Elevation_Grid, "Output_Watershed_Grid", "Raster Dataset", null));
-        }
-        return this.Output_Watershed_Grid;
+        return streamOrder;
     }
 
-    private StreamReachAndWatershedParams(Builder builder){
-        this.Input_Pit_Filled_Elevation_Grid = builder.Input_Pit_Filled_Elevation_Grid;
-        this.Input_D8_Flow_Direction_Grid = builder.Input_D8_Flow_Direction_Grid;
-        this.Input_D8_Drainage_Area = builder.Input_D8_Drainage_Area;
-        this.Input_Stream_Raster_Grid = builder.Input_Stream_Raster_Grid;
-        this.Input_Outlets = builder.Input_Outlets;
-        this.Delineate_Single_Watershed = builder.Delineate_Single_Watershed;
-        this.Output_Stream_Order_Grid = builder.Output_Stream_Order_Grid;
-        this.Output_Network_Connectivity_Tree = builder.Output_Network_Connectivity_Tree;
-        this.Output_Network_Coordinates = builder.Output_Network_Coordinates;
-        this.Output_Stream_Reach_file = builder.Output_Stream_Reach_file;
-        this.Output_Watershed_Grid = builder.Output_Watershed_Grid;
+    // if no output filename provided
+    public String getNetworkConnectivityTree() {
+        if (StringUtils.isBlank(networkConnectivityTree)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "networkConnectivityTree", "File", "txt"));
+        }
+        return networkConnectivityTree;
+    }
+
+    // if no output filename provided
+    public String getNetworkCoordinates() {
+        if (StringUtils.isBlank(networkCoordinates)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "networkCoordinates", "File", "txt"));
+        }
+        return networkCoordinates;
+    }
+
+    // if no output filename provided
+    public String getStreamReachFile() {
+        if (StringUtils.isBlank(streamReachFile)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "streamReachFile", "File", "txt"));
+        }
+        return streamReachFile;
+    }
+
+    // if no output filename provided
+    public String getWatershed() {
+        if (StringUtils.isBlank(watershed)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "watershed", "Raster Dataset", "tif"));
+        }
+        return watershed;
+    }
+
+    private StreamReachAndWatershedParams(Builder builder) {
+        pitFilledElevation = builder.pitFilledElevation;
+        d8FlowDirection = builder.d8FlowDirection;
+        d8DrainageArea = builder.d8DrainageArea;
+        streamRaster = builder.streamRaster;
+        outlets = builder.outlets;
+        delineateSingleWatershed = builder.delineateSingleWatershed;
+        streamOrder = builder.streamOrder;
+        networkConnectivityTree = builder.networkConnectivityTree;
+        networkCoordinates = builder.networkCoordinates;
+        streamReachFile = builder.streamReachFile;
+        watershed = builder.watershed;
     }
 
     @XmlRootElement
     @XmlAccessorType(XmlAccessType.FIELD)
     public static final class Builder {
-        private String Input_Pit_Filled_Elevation_Grid;
-        private String Input_D8_Flow_Direction_Grid;
-        private String Input_D8_Drainage_Area;
-        private String Input_Stream_Raster_Grid;
-        private String Input_Outlets;
-        private Boolean Delineate_Single_Watershed;
-        private String Output_Stream_Order_Grid;
-        private String Output_Network_Connectivity_Tree;
-        private String Output_Network_Coordinates;
-        private String Output_Stream_Reach_file;
-        private String Output_Watershed_Grid;
+        private String pitFilledElevation;
+        private String d8FlowDirection;
+        private String d8DrainageArea;
+        private String streamRaster;
+        private String outlets;
+        private Boolean delineateSingleWatershed;
+        private String streamOrder;
+        private String networkConnectivityTree;
+        private String networkCoordinates;
+        private String streamReachFile;
+        private String watershed;
 
         /**
-        * @param Input_Pit_Filled_Elevation_Grid This input is a grid of elevation values.
-        * @param Input_D8_Flow_Direction_Grid This input is a grid of flow directions that are encoded using the D8 method where all flow from a cells goes to a single neighboring cell in the direction of steepest descent.
-        * @param Input_D8_Drainage_Area A grid giving the contributing area value in terms of the number of grid cells (or the summation of weights) for each cell taken as its own contribution plus the contribution from upslope neighbors that drain in to it using the D8 algorithm.
-        * @param Input_Stream_Raster_Grid An indicator grid indicating streams, by using a grid cell value of 1 on streams and 0 off streams.
-        */
-        public Builder(@NotBlank String Input_Pit_Filled_Elevation_Grid, @NotBlank String Input_D8_Flow_Direction_Grid, @NotBlank String Input_D8_Drainage_Area, @NotBlank String Input_Stream_Raster_Grid){
-            this.Input_Pit_Filled_Elevation_Grid = Input_Pit_Filled_Elevation_Grid;
-            this.Input_D8_Flow_Direction_Grid = Input_D8_Flow_Direction_Grid;
-            this.Input_D8_Drainage_Area = Input_D8_Drainage_Area;
-            this.Input_Stream_Raster_Grid = Input_Stream_Raster_Grid;
+         * @param pitFilledElevation This input is a grid of elevation values.
+         * @param d8FlowDirection    This input is a grid of flow directions that are encoded using the D8 method where all flow from a cells goes to a single neighboring cell in the direction of steepest descent.
+         * @param d8DrainageArea     A grid giving the contributing area value in terms of the number of grid cells (or the summation of weights) for each cell taken as its own contribution plus the contribution from upslope neighbors that drain in to it using the D8 algorithm.
+         * @param streamRaster       An indicator grid indicating streams, by using a grid cell value of 1 on streams and 0 off streams.
+         */
+        public Builder(@NotBlank String pitFilledElevation, @NotBlank String d8FlowDirection, @NotBlank String d8DrainageArea, @NotBlank String streamRaster) {
+            this.pitFilledElevation = pitFilledElevation;
+            this.d8FlowDirection = d8FlowDirection;
+            this.d8DrainageArea = d8DrainageArea;
+            this.streamRaster = streamRaster;
         }
 
-        public Builder Input_Pit_Filled_Elevation_Grid(String val){
-            this.Input_Pit_Filled_Elevation_Grid = val;
+        public Builder pitFilledElevation(String val) {
+            pitFilledElevation = val;
             return this;
         }
-        public Builder Input_D8_Flow_Direction_Grid(String val){
-            this.Input_D8_Flow_Direction_Grid = val;
+
+        public Builder d8FlowDirection(String val) {
+            d8FlowDirection = val;
             return this;
         }
-        public Builder Input_D8_Drainage_Area(String val){
-            this.Input_D8_Drainage_Area = val;
+
+        public Builder d8DrainageArea(String val) {
+            d8DrainageArea = val;
             return this;
         }
-        public Builder Input_Stream_Raster_Grid(String val){
-            this.Input_Stream_Raster_Grid = val;
+
+        public Builder streamRaster(String val) {
+            streamRaster = val;
             return this;
         }
-        public Builder Input_Outlets(String val){
-            this.Input_Outlets = val;
+
+        public Builder outlets(String val) {
+            outlets = val;
             return this;
         }
-        public Builder Delineate_Single_Watershed(Boolean val){
-            this.Delineate_Single_Watershed = val;
+
+        public Builder delineateSingleWatershed(Boolean val) {
+            delineateSingleWatershed = val;
             return this;
         }
-        public Builder Output_Stream_Order_Grid(String val){
-            this.Output_Stream_Order_Grid = val;
+
+        public Builder streamOrder(String val) {
+            streamOrder = val;
             return this;
         }
-        public Builder Output_Network_Connectivity_Tree(String val){
-            this.Output_Network_Connectivity_Tree = val;
+
+        public Builder networkConnectivityTree(String val) {
+            networkConnectivityTree = val;
             return this;
         }
-        public Builder Output_Network_Coordinates(String val){
-            this.Output_Network_Coordinates = val;
+
+        public Builder networkCoordinates(String val) {
+            networkCoordinates = val;
             return this;
         }
-        public Builder Output_Stream_Reach_file(String val){
-            this.Output_Stream_Reach_file = val;
+
+        public Builder streamReachFile(String val) {
+            streamReachFile = val;
             return this;
         }
-        public Builder Output_Watershed_Grid(String val){
-            this.Output_Watershed_Grid = val;
+
+        public Builder watershed(String val) {
+            watershed = val;
             return this;
         }
 

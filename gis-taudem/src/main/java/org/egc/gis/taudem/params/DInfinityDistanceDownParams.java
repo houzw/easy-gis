@@ -15,146 +15,166 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
 
 /**
- * Wrapper of parameters of DInfinityDistanceDown
+ * Wrapper of parameters of dInfinityDistanceDown
+ *
  * @author houzhiwei
- * @date 2018-12-17T22:40:56+08:00
+ * @date 2020-05-21T14:24:36+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class DInfinityDistanceDownParams implements Params {
+    private static final long serialVersionUID = -8193415301265100637L;
 
     /**
      * <pre>
-     * Input_DInfinity_Flow_Direction_Grid
-     * Input_Pit_Filled_Elevation_Grid
-     * Input_Stream_Raster_Grid
+     * dinfinityFlowDirection
+     * pitFilledElevation
+     * streamRaster
+     * weightPath
      *  </pre>
-     * @see Builder#Builder( String,  String,  String)
+     *
+     * @see Builder#Builder(String, String, String)
      */
-    public DInfinityDistanceDownParams(){}
+    public DInfinityDistanceDownParams() {
+    }
+
     /**
      * A grid giving flow directions by the D-Infinity method.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_DInfinity_Flow_Direction_Grid;
+    private String dinfinityFlowDirection;
+
     /**
      * This input is a grid of elevation values.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Pit_Filled_Elevation_Grid;
+    private String pitFilledElevation;
+
     /**
      * A grid indicating streams, by using a grid cell value of 1 on streams and 0 off streams.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Stream_Raster_Grid;
+    private String streamRaster;
+
+
     /**
-    * default is "ave".
-    * Alternative values are ave, max, min, where ave for Average, max for Maximum, min for Minimum Statistical method used to calculate the distance down to the stream.
-    */
+     * default is "ave".
+     * Alternative values are ave, max, min, where ave for Average, max for Maximum, min for Minimum Statistical method used to calculate the distance down to the stream.
+     */
     @XmlElement(defaultValue = "ave")
-    private String Statistical_Method = "ave";
+    private String statisticalMethod = "ave";
+
 
     /**
-    * default is "h".
-    * Alternative values are h, v, p, s, where h for Horizontal, v for Vertical, p for Pythagoras, s for Surface Distance method used to calculate the distance down to the stream.
-    */
+     * default is "h".
+     * Alternative values are h, v, p, s, where h for Horizontal, v for Vertical, p for Pythagoras, s for Surface Distance method used to calculate the distance down to the stream.
+     */
     @XmlElement(defaultValue = "h")
-    private String Distance_Method = "h";
+    private String distanceMethod = "h";
+
 
     /**
-    * default is true.
-    * A flag that determines whether the tool should check for edge contamination.
-    */
+     * default is true.
+     * A flag that determines whether the tool should check for edge contamination.
+     */
     @XmlElement(defaultValue = "true")
-    private Boolean Check_for_edge_contamination = true;
+    private Boolean checkForEdgeContamination = true;
+
 
     /**
-    * A grid giving weights (loadings) to be used in the distance calculation.
-    */
-    private String Input_Weight_Path_Grid;
+     * A grid giving weights (loadings) to be used in the distance calculation.
+     */
+    private String weightPath;
+
     /**
-    * Creates a grid containing the distance to stream calculated using the D-infinity flow model and the statistical and path methods chosen.
-    */
-    private String Output_DInfinity_Drop_to_Stream_Grid;
+     * Creates a grid containing the distance to stream calculated using the D-infinity flow model and the statistical and path methods chosen.
+     */
+    private String dinfinityDropToStream;
+
     @Setter
-    @XmlElement(defaultValue = "./")
-    private String outputDir = "./";
+    @XmlElement
+    private String outputDir = System.getProperty("java.io.tmpdir");
 
-    public String getOutput_DInfinity_Drop_to_Stream_Grid() {
-        if (StringUtils.isBlank(Output_DInfinity_Drop_to_Stream_Grid)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_DInfinity_Flow_Direction_Grid, "Output_DInfinity_Drop_to_Stream_Grid", "Raster Dataset", null));
+    // if no output filename provided
+    public String getDinfinityDropToStream() {
+        if (StringUtils.isBlank(dinfinityDropToStream)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(dinfinityFlowDirection, "dinfinityDropToStream", "Raster Dataset", "tif"));
         }
-        return this.Output_DInfinity_Drop_to_Stream_Grid;
+        return dinfinityDropToStream;
     }
 
-    private DInfinityDistanceDownParams(Builder builder){
-        this.Input_DInfinity_Flow_Direction_Grid = builder.Input_DInfinity_Flow_Direction_Grid;
-        this.Input_Pit_Filled_Elevation_Grid = builder.Input_Pit_Filled_Elevation_Grid;
-        this.Input_Stream_Raster_Grid = builder.Input_Stream_Raster_Grid;
-        this.Statistical_Method = builder.Statistical_Method;
-        this.Distance_Method = builder.Distance_Method;
-        this.Check_for_edge_contamination = builder.Check_for_edge_contamination;
-        this.Input_Weight_Path_Grid = builder.Input_Weight_Path_Grid;
-        this.Output_DInfinity_Drop_to_Stream_Grid = builder.Output_DInfinity_Drop_to_Stream_Grid;
+    private DInfinityDistanceDownParams(Builder builder) {
+        dinfinityFlowDirection = builder.dinfinityFlowDirection;
+        pitFilledElevation = builder.pitFilledElevation;
+        streamRaster = builder.streamRaster;
+        statisticalMethod = builder.statisticalMethod;
+        distanceMethod = builder.distanceMethod;
+        checkForEdgeContamination = builder.checkForEdgeContamination;
+        weightPath = builder.weightPath;
+        dinfinityDropToStream = builder.dinfinityDropToStream;
     }
 
     @XmlRootElement
     @XmlAccessorType(XmlAccessType.FIELD)
     public static final class Builder {
-        private String Input_DInfinity_Flow_Direction_Grid;
-        private String Input_Pit_Filled_Elevation_Grid;
-        private String Input_Stream_Raster_Grid;
-        private String Statistical_Method;
-        private String Distance_Method;
-        private Boolean Check_for_edge_contamination;
-        private String Input_Weight_Path_Grid;
-        private String Output_DInfinity_Drop_to_Stream_Grid;
+        private String dinfinityFlowDirection;
+        private String pitFilledElevation;
+        private String streamRaster;
+        private String statisticalMethod;
+        private String distanceMethod;
+        private Boolean checkForEdgeContamination;
+        private String weightPath;
+        private String dinfinityDropToStream;
 
         /**
-        * @param Input_DInfinity_Flow_Direction_Grid A grid giving flow directions by the D-Infinity method.
-        * @param Input_Pit_Filled_Elevation_Grid This input is a grid of elevation values.
-        * @param Input_Stream_Raster_Grid A grid indicating streams, by using a grid cell value of 1 on streams and 0 off streams.
-        */
-        public Builder(@NotBlank String Input_DInfinity_Flow_Direction_Grid, @NotBlank String Input_Pit_Filled_Elevation_Grid, @NotBlank String Input_Stream_Raster_Grid){
-            this.Input_DInfinity_Flow_Direction_Grid = Input_DInfinity_Flow_Direction_Grid;
-            this.Input_Pit_Filled_Elevation_Grid = Input_Pit_Filled_Elevation_Grid;
-            this.Input_Stream_Raster_Grid = Input_Stream_Raster_Grid;
+         * @param dinfinityFlowDirection A grid giving flow directions by the D-Infinity method.
+         * @param pitFilledElevation     This input is a grid of elevation values.
+         * @param streamRaster           A grid indicating streams, by using a grid cell value of 1 on streams and 0 off streams.
+         */
+        public Builder(@NotBlank String dinfinityFlowDirection, @NotBlank String pitFilledElevation, @NotBlank String streamRaster) {
+            this.dinfinityFlowDirection = dinfinityFlowDirection;
+            this.pitFilledElevation = pitFilledElevation;
+            this.streamRaster = streamRaster;
         }
 
-        public Builder Input_DInfinity_Flow_Direction_Grid(String val){
-            this.Input_DInfinity_Flow_Direction_Grid = val;
+        public Builder dinfinityFlowDirection(String val) {
+            dinfinityFlowDirection = val;
             return this;
         }
-        public Builder Input_Pit_Filled_Elevation_Grid(String val){
-            this.Input_Pit_Filled_Elevation_Grid = val;
+
+        public Builder pitFilledElevation(String val) {
+            pitFilledElevation = val;
             return this;
         }
-        public Builder Input_Stream_Raster_Grid(String val){
-            this.Input_Stream_Raster_Grid = val;
+
+        public Builder streamRaster(String val) {
+            streamRaster = val;
             return this;
         }
-        public Builder Statistical_Method(String val){
-            this.Statistical_Method = val;
+
+        public Builder statisticalMethod(String val) {
+            statisticalMethod = val;
             return this;
         }
-        public Builder Distance_Method(String val){
-            this.Distance_Method = val;
+
+        public Builder distanceMethod(String val) {
+            distanceMethod = val;
             return this;
         }
-        public Builder Check_for_edge_contamination(Boolean val){
-            this.Check_for_edge_contamination = val;
+
+        public Builder checkForEdgeContamination(Boolean val) {
+            checkForEdgeContamination = val;
             return this;
         }
-        public Builder Input_Weight_Path_Grid(String val){
-            this.Input_Weight_Path_Grid = val;
+
+        public Builder weightPath(String val) {
+            weightPath = val;
             return this;
         }
-        public Builder Output_DInfinity_Drop_to_Stream_Grid(String val){
-            this.Output_DInfinity_Drop_to_Stream_Grid = val;
+
+        public Builder dinfinityDropToStream(String val) {
+            dinfinityDropToStream = val;
             return this;
         }
 

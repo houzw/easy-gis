@@ -15,83 +15,95 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
 
 /**
- * Wrapper of parameters of DInfinityFlowDirections
+ * Wrapper of parameters of dInfinityFlowDirections
+ *
  * @author houzhiwei
- * @date 2018-12-17T22:40:56+08:00
+ * @date 2020-05-21T14:24:36+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class DInfinityFlowDirectionsParams implements Params {
+    private static final long serialVersionUID = -7496107106353065598L;
 
     /**
      * <pre>
-     * Input_Pit_FIlled_Elevation_Grid
+     * pitFilledElevation
      *  </pre>
-     * @see Builder#Builder( String)
+     *
+     * @see Builder#Builder(String)
      */
-    public DInfinityFlowDirectionsParams(){}
+    public DInfinityFlowDirectionsParams() {
+    }
+
     /**
      * A grid of elevation values.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Pit_FIlled_Elevation_Grid;
+    private String pitFilledElevation;
+
     /**
-    * A grid of flow directions based on the D-infinity flow method using the steepest slope of a triangular facet (Tarboton, 1997, "A New Method for the Determination of Flow Directions and Contributing Areas in Grid Digital Elevation Models," Water Resources Research, 33(2): 309-319).
-    */
-    private String Output_DInfinity_Flow_Direction_Grid;
+     * A grid of flow directions based on the D-infinity flow method using the steepest slope of a triangular facet (Tarboton, 1997, "A New Method for the Determination of Flow Directions and Contributing Areas in Grid Digital Elevation Models," Water Resources Research, 33(2): 309-319).
+     */
+    private String dinfinityFlowDirection;
+
     /**
-    * A grid of slope evaluated using the D-infinity method described in Tarboton, D.
-    */
-    private String Output_DInfinity_Slope_Grid;
+     * A grid of slope evaluated using the D-infinity method described in Tarboton, D.
+     */
+    private String dinfinitySlope;
+
     @Setter
-    @XmlElement(defaultValue = "./")
-    private String outputDir = "./";
+    @XmlElement
+    private String outputDir = System.getProperty("java.io.tmpdir");
 
-    public String getOutput_DInfinity_Flow_Direction_Grid() {
-        if (StringUtils.isBlank(Output_DInfinity_Flow_Direction_Grid)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_Pit_FIlled_Elevation_Grid, "Output_DInfinity_Flow_Direction_Grid", "Raster Dataset", null));
+    // if no output filename provided
+    public String getDinfinityFlowDirection() {
+        if (StringUtils.isBlank(dinfinityFlowDirection)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "dinfinityFlowDirection", "Raster Dataset", "tif"));
         }
-        return this.Output_DInfinity_Flow_Direction_Grid;
-    }
-    public String getOutput_DInfinity_Slope_Grid() {
-        if (StringUtils.isBlank(Output_DInfinity_Slope_Grid)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_Pit_FIlled_Elevation_Grid, "Output_DInfinity_Slope_Grid", "Raster Dataset", null));
-        }
-        return this.Output_DInfinity_Slope_Grid;
+        return dinfinityFlowDirection;
     }
 
-    private DInfinityFlowDirectionsParams(Builder builder){
-        this.Input_Pit_FIlled_Elevation_Grid = builder.Input_Pit_FIlled_Elevation_Grid;
-        this.Output_DInfinity_Flow_Direction_Grid = builder.Output_DInfinity_Flow_Direction_Grid;
-        this.Output_DInfinity_Slope_Grid = builder.Output_DInfinity_Slope_Grid;
+    // if no output filename provided
+    public String getDinfinitySlope() {
+        if (StringUtils.isBlank(dinfinitySlope)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "dinfinitySlope", "Raster Dataset", "tif"));
+        }
+        return dinfinitySlope;
+    }
+
+    private DInfinityFlowDirectionsParams(Builder builder) {
+        pitFilledElevation = builder.pitFilledElevation;
+        dinfinityFlowDirection = builder.dinfinityFlowDirection;
+        dinfinitySlope = builder.dinfinitySlope;
     }
 
     @XmlRootElement
     @XmlAccessorType(XmlAccessType.FIELD)
     public static final class Builder {
-        private String Input_Pit_FIlled_Elevation_Grid;
-        private String Output_DInfinity_Flow_Direction_Grid;
-        private String Output_DInfinity_Slope_Grid;
+        private String pitFilledElevation;
+        private String dinfinityFlowDirection;
+        private String dinfinitySlope;
 
         /**
-        * @param Input_Pit_FIlled_Elevation_Grid A grid of elevation values.
-        */
-        public Builder(@NotBlank String Input_Pit_FIlled_Elevation_Grid){
-            this.Input_Pit_FIlled_Elevation_Grid = Input_Pit_FIlled_Elevation_Grid;
+         * @param pitFilledElevation A grid of elevation values.
+         */
+        public Builder(@NotBlank String pitFilledElevation) {
+            this.pitFilledElevation = pitFilledElevation;
         }
 
-        public Builder Input_Pit_FIlled_Elevation_Grid(String val){
-            this.Input_Pit_FIlled_Elevation_Grid = val;
+        public Builder pitFilledElevation(String val) {
+            pitFilledElevation = val;
             return this;
         }
-        public Builder Output_DInfinity_Flow_Direction_Grid(String val){
-            this.Output_DInfinity_Flow_Direction_Grid = val;
+
+        public Builder dinfinityFlowDirection(String val) {
+            dinfinityFlowDirection = val;
             return this;
         }
-        public Builder Output_DInfinity_Slope_Grid(String val){
-            this.Output_DInfinity_Slope_Grid = val;
+
+        public Builder dinfinitySlope(String val) {
+            dinfinitySlope = val;
             return this;
         }
 

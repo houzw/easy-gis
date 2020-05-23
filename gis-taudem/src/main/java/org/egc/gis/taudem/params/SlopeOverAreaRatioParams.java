@@ -15,82 +15,91 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
 
 /**
- * Wrapper of parameters of SlopeOverAreaRatio
+ * Wrapper of parameters of slopeOverAreaRatio
+ *
  * @author houzhiwei
- * @date 2018-12-17T22:40:56+08:00
+ * @date 2020-05-21T14:24:36+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class SlopeOverAreaRatioParams implements Params {
+    private static final long serialVersionUID = 6043820173424244273L;
 
     /**
      * <pre>
-     * Input_Slope_Grid
-     * Input_Specific_Catchment_Area_Grid
+     * slope
+     * specificCatchmentArea
      *  </pre>
-     * @see Builder#Builder( String,  String)
+     *
+     * @see Builder#Builder(String, String)
      */
-    public SlopeOverAreaRatioParams(){}
+    public SlopeOverAreaRatioParams() {
+    }
+
     /**
      * A grid of slope.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Slope_Grid;
+    private String slope;
+
     /**
      * A grid giving the contributing area value for each cell taken as its own contribution plus the contribution from upslope neighbors that drain in to it.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Specific_Catchment_Area_Grid;
-    /**
-    * A grid of the ratio of slope to specific catchment area (contributing area).
-    */
-    private String Output_Slope_Divided_By_Area_Ratio_Grid;
-    @Setter
-    @XmlElement(defaultValue = "./")
-    private String outputDir = "./";
+    private String specificCatchmentArea;
 
-    public String getOutput_Slope_Divided_By_Area_Ratio_Grid() {
-        if (StringUtils.isBlank(Output_Slope_Divided_By_Area_Ratio_Grid)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_Slope_Grid, "Output_Slope_Divided_By_Area_Ratio_Grid", "Raster Dataset", null));
+    /**
+     * A grid of the ratio of slope to specific catchment area (contributing area).
+     */
+    private String slopeDividedByAreaRatio;
+
+    @Setter
+    @XmlElement
+    private String outputDir = System.getProperty("java.io.tmpdir");
+
+    // if no output filename provided
+    public String getSlopeDividedByAreaRatio() {
+        if (StringUtils.isBlank(slopeDividedByAreaRatio)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(slope, "slopeDividedByAreaRatio", "Raster Dataset", "tif"));
         }
-        return this.Output_Slope_Divided_By_Area_Ratio_Grid;
+        return slopeDividedByAreaRatio;
     }
 
-    private SlopeOverAreaRatioParams(Builder builder){
-        this.Input_Slope_Grid = builder.Input_Slope_Grid;
-        this.Input_Specific_Catchment_Area_Grid = builder.Input_Specific_Catchment_Area_Grid;
-        this.Output_Slope_Divided_By_Area_Ratio_Grid = builder.Output_Slope_Divided_By_Area_Ratio_Grid;
+    private SlopeOverAreaRatioParams(Builder builder) {
+        slope = builder.slope;
+        specificCatchmentArea = builder.specificCatchmentArea;
+        slopeDividedByAreaRatio = builder.slopeDividedByAreaRatio;
     }
 
     @XmlRootElement
     @XmlAccessorType(XmlAccessType.FIELD)
     public static final class Builder {
-        private String Input_Slope_Grid;
-        private String Input_Specific_Catchment_Area_Grid;
-        private String Output_Slope_Divided_By_Area_Ratio_Grid;
+        private String slope;
+        private String specificCatchmentArea;
+        private String slopeDividedByAreaRatio;
 
         /**
-        * @param Input_Slope_Grid A grid of slope.
-        * @param Input_Specific_Catchment_Area_Grid A grid giving the contributing area value for each cell taken as its own contribution plus the contribution from upslope neighbors that drain in to it.
-        */
-        public Builder(@NotBlank String Input_Slope_Grid, @NotBlank String Input_Specific_Catchment_Area_Grid){
-            this.Input_Slope_Grid = Input_Slope_Grid;
-            this.Input_Specific_Catchment_Area_Grid = Input_Specific_Catchment_Area_Grid;
+         * @param slope                 A grid of slope.
+         * @param specificCatchmentArea A grid giving the contributing area value for each cell taken as its own contribution plus the contribution from upslope neighbors that drain in to it.
+         */
+        public Builder(@NotBlank String slope, @NotBlank String specificCatchmentArea) {
+            this.slope = slope;
+            this.specificCatchmentArea = specificCatchmentArea;
         }
 
-        public Builder Input_Slope_Grid(String val){
-            this.Input_Slope_Grid = val;
+        public Builder slope(String val) {
+            slope = val;
             return this;
         }
-        public Builder Input_Specific_Catchment_Area_Grid(String val){
-            this.Input_Specific_Catchment_Area_Grid = val;
+
+        public Builder specificCatchmentArea(String val) {
+            specificCatchmentArea = val;
             return this;
         }
-        public Builder Output_Slope_Divided_By_Area_Ratio_Grid(String val){
-            this.Output_Slope_Divided_By_Area_Ratio_Grid = val;
+
+        public Builder slopeDividedByAreaRatio(String val) {
+            slopeDividedByAreaRatio = val;
             return this;
         }
 

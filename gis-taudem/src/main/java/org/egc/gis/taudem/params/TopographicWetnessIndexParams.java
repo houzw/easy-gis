@@ -15,82 +15,91 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
 
 /**
- * Wrapper of parameters of TopographicWetnessIndex
+ * Wrapper of parameters of topographicWetnessIndex
+ *
  * @author houzhiwei
- * @date 2018-12-17T22:40:56+08:00
+ * @date 2020-05-21T14:24:36+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class TopographicWetnessIndexParams implements Params {
+    private static final long serialVersionUID = -8524078692617939530L;
 
     /**
      * <pre>
-     * Input_Specific_Catchment_Area_Grid
-     * Input_Slope_Grid
+     * specificCatchmentArea
+     * slope
      *  </pre>
-     * @see Builder#Builder( String,  String)
+     *
+     * @see Builder#Builder(String, String)
      */
-    public TopographicWetnessIndexParams(){}
+    public TopographicWetnessIndexParams() {
+    }
+
     /**
      * A grid of specific catchment area which is the contributing area per unit contour length.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Specific_Catchment_Area_Grid;
+    private String specificCatchmentArea;
+
     /**
      * A grid of slope.
      */
     @NotNull
-    @XmlElement(required = true)
-    private String Input_Slope_Grid;
-    /**
-    * A grid of the natural log of the ratio of specific catchment area (contributing area) to slope, ln(a/S).
-    */
-    private String Output_Wetness_Index_Grid;
-    @Setter
-    @XmlElement(defaultValue = "./")
-    private String outputDir = "./";
+    private String slope;
 
-    public String getOutput_Wetness_Index_Grid() {
-        if (StringUtils.isBlank(Output_Wetness_Index_Grid)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(Input_Specific_Catchment_Area_Grid, "Output_Wetness_Index_Grid", "Raster Dataset", null));
+    /**
+     * A grid of the natural log of the ratio of specific catchment area (contributing area) to slope, ln(a/S).
+     */
+    private String wetnessIndex;
+
+    @Setter
+    @XmlElement
+    private String outputDir = System.getProperty("java.io.tmpdir");
+
+    // if no output filename provided
+    public String getWetnessIndex() {
+        if (StringUtils.isBlank(wetnessIndex)) {
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(specificCatchmentArea, "wetnessIndex", "Raster Dataset", "tif"));
         }
-        return this.Output_Wetness_Index_Grid;
+        return wetnessIndex;
     }
 
-    private TopographicWetnessIndexParams(Builder builder){
-        this.Input_Specific_Catchment_Area_Grid = builder.Input_Specific_Catchment_Area_Grid;
-        this.Input_Slope_Grid = builder.Input_Slope_Grid;
-        this.Output_Wetness_Index_Grid = builder.Output_Wetness_Index_Grid;
+    private TopographicWetnessIndexParams(Builder builder) {
+        specificCatchmentArea = builder.specificCatchmentArea;
+        slope = builder.slope;
+        wetnessIndex = builder.wetnessIndex;
     }
 
     @XmlRootElement
     @XmlAccessorType(XmlAccessType.FIELD)
     public static final class Builder {
-        private String Input_Specific_Catchment_Area_Grid;
-        private String Input_Slope_Grid;
-        private String Output_Wetness_Index_Grid;
+        private String specificCatchmentArea;
+        private String slope;
+        private String wetnessIndex;
 
         /**
-        * @param Input_Specific_Catchment_Area_Grid A grid of specific catchment area which is the contributing area per unit contour length.
-        * @param Input_Slope_Grid A grid of slope.
-        */
-        public Builder(@NotBlank String Input_Specific_Catchment_Area_Grid, @NotBlank String Input_Slope_Grid){
-            this.Input_Specific_Catchment_Area_Grid = Input_Specific_Catchment_Area_Grid;
-            this.Input_Slope_Grid = Input_Slope_Grid;
+         * @param specificCatchmentArea A grid of specific catchment area which is the contributing area per unit contour length.
+         * @param slope                 A grid of slope.
+         */
+        public Builder(@NotBlank String specificCatchmentArea, @NotBlank String slope) {
+            this.specificCatchmentArea = specificCatchmentArea;
+            this.slope = slope;
         }
 
-        public Builder Input_Specific_Catchment_Area_Grid(String val){
-            this.Input_Specific_Catchment_Area_Grid = val;
+        public Builder specificCatchmentArea(String val) {
+            specificCatchmentArea = val;
             return this;
         }
-        public Builder Input_Slope_Grid(String val){
-            this.Input_Slope_Grid = val;
+
+        public Builder slope(String val) {
+            slope = val;
             return this;
         }
-        public Builder Output_Wetness_Index_Grid(String val){
-            this.Output_Wetness_Index_Grid = val;
+
+        public Builder wetnessIndex(String val) {
+            wetnessIndex = val;
             return this;
         }
 
