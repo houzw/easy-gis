@@ -110,8 +110,7 @@ public class RasterInfo {
         Band band = dataset.GetRasterBand(1);
         double[] min = new double[1], max = new double[1], mean = new double[1], stddev = new double[1];
         band.GetStatistics(true, true, min, max, mean, stddev);
-        double[] stats = {min[0], max[0], mean[0], stddev[0]};
-        return stats;
+        return new double[]{min[0], max[0], mean[0], stddev[0]};
     }
 
     /**

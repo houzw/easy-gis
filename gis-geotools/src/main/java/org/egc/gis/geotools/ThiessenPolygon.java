@@ -39,7 +39,7 @@ public class ThiessenPolygon {
 
     public static final String TYPE_NAME = "ThiessenPolygon";
 
-    static final String FID_FIELD = "FID";
+    static final String FID_FIELD = "ID";
 
     private double proximalTolerance = 0d;
 

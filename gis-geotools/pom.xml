@@ -20,7 +20,6 @@
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-shapefile</artifactId>
-            <version>${geotools.version}</version>
         </dependency>
         <dependency>
             <groupId>org.geotools</groupId>
@@ -36,7 +35,6 @@
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-geojson</artifactId>
-            <version>${geotools.version}</version>
         </dependency>
         <!-- Implementation of GridCoverage. Provides support for rasters and some image processing like reprojection. -->
         <dependency>
@@ -124,6 +122,13 @@
             <groupId>org.locationtech.jts</groupId>
             <artifactId>jts-io</artifactId>
             <version>1.16.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.locationtech.spatial4j/spatial4j -->
+        <!-- https://github.com/locationtech/spatial4j-->
+        <dependency>
+            <groupId>org.locationtech.spatial4j</groupId>
+            <artifactId>spatial4j</artifactId>
+            <version>0.7</version>
         </dependency>
 
     </dependencies>

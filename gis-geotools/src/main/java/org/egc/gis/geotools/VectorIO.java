@@ -2,7 +2,6 @@ package org.egc.gis.geotools;
 
 import lombok.extern.slf4j.Slf4j;
 import org.egc.gis.geotools.utils.SimpleFeatureTypes;
-import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
 import org.geotools.data.Transaction;
@@ -41,17 +40,20 @@ public class VectorIO {
 
     public SimpleFeatureCollection readShp(String shp) {
         File shpFile = new File(shp);
-        DataStore store = null;
+        //DataStore store = null;
+        ShapefileDataStore store = null;
         SimpleFeatureCollection features = null;
         try {
             store = new ShapefileDataStore(shpFile.toURI().toURL());
-            features = store.getFeatureSource(
-                    store.getTypeNames()[0]).getFeatures();
+            //store.setCharset(StandardCharsets.UTF_8);
+            features = store.getFeatureSource().getFeatures();
+//            features = store.getFeatureSource(store.getTypeNames()[0]).getFeatures();
+            store.dispose();
+            return features;
         } catch (java.io.IOException e) {
             log.error("Exception while trying to read shapefile.", e);
             throw new RuntimeException("Exception while trying to read shapefile");
         }
-        return features;
     }
 
     /**

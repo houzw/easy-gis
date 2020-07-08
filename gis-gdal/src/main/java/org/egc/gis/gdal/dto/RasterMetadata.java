@@ -1,6 +1,7 @@
 package org.egc.gis.gdal.dto;
 
 import lombok.Data;
+import org.egc.commons.util.Formatter;
 
 import java.io.Serializable;
 
@@ -11,9 +12,9 @@ import java.io.Serializable;
  * @date 2018 /8/28 18:55
  */
 @Data
-@Deprecated
 public class RasterMetadata implements Serializable {
 
+    private static final long serialVersionUID = -634650075152957495L;
     /**
      * Coordinate Reference System Identify
      */
@@ -32,52 +33,67 @@ public class RasterMetadata implements Serializable {
      * 参考：http://epsg.io
      */
     private Integer srid;
+    private Integer epsg;
     private double nodata;
     private String format;
+    private String semantic;
     private double maxValue;
     private double minValue;
     private double meanValue;
+    private String quantileBreaks;
+    private String uniqueValues;
+    private boolean isProjected = false;
     /**
      * sample standard deviation
      */
     private double stdev;
-
     /**
-     * upper_left_x
+     * left/west
      */
     private double minX;
     /**
-     * upper_left_y
-     */
-    private double maxY;
-
-    /**
-     * lower_right_x
+     * right/east
      */
     private double maxX;
+
     /**
-     * lower_right_y
+     * left/west
+     *
+     * @return minx
+     */
+    public double getMinX() {
+        return minX;
+    }
+
+    /**
+     * right/east
+     */
+    public double getMaxX() {
+        return maxX;
+    }
+
+    /**
+     * bottom/south
+     */
+    public double getMinY() {
+        return minY;
+    }
+
+    /**
+     * upper/north
+     */
+    public double getMaxY() {
+        return maxY;
+    }
+
+    /**
+     * bottom/south
      */
     private double minY;
-
     /**
-     * minx
+     * upper/north
      */
-    private double upperLeftX;
-    /**
-     * maxx
-     */
-    private double lowerRightX;
-    /**
-     * maxy
-     */
-    private double upperLeftY;
-
-    /**
-     * miny
-     */
-    private double lowerRightY;
-
+    private double maxY;
     private double centerX;
     private double centerY;
     private double pixelSize;
@@ -87,6 +103,21 @@ public class RasterMetadata implements Serializable {
     private double height;
 
     private double width;
+
+    /**
+     * @return rasterYSize
+     */
+    public int getSizeHeight() {
+        return sizeHeight;
+    }
+
+    /**
+     * @return rasterXSize
+     */
+    public int getSizeWidth() {
+        return sizeWidth;
+    }
+
     /**
      * 像素个数
      */
@@ -94,50 +125,22 @@ public class RasterMetadata implements Serializable {
     private int sizeWidth;
 
     private String unit;
+
+    /**
+     * extent of the data
+     *
+     * @return left(minx) + " " + buttom (miny) + " " + right(maxx) + " " + top(maxy)
+     */
+    public String getExtent() {
+        return Formatter.formatDoubleStr(minX, 4) + " " + Formatter.formatDoubleStr(minY, 4)
+                + " " + Formatter.formatDoubleStr(maxX, 4) + " " + Formatter.formatDoubleStr(maxY, 4);
+    }
+
+    private String extent;
     private double[] upperLeft;
     private double[] upperRight;
     private double[] lowerLeft;
     private double[] lowerRight;
-
-    public void setMinX(double minX) {
-        this.minX = minX;
-        this.upperLeftX = minX;
-    }
-
-    public void setMaxY(double maxY) {
-        this.maxY = maxY;
-        this.upperLeftY = maxY;
-    }
-
-    public void setMaxX(double maxX) {
-        this.maxX = maxX;
-        this.lowerRightX = maxX;
-    }
-
-    public void setMinY(double minY) {
-        this.minY = minY;
-        this.lowerRightY = minY;
-    }
-
-    public void setUpperLeftX(double upperLeftX) {
-        this.upperLeftX = upperLeftX;
-        this.minX = upperLeftX;
-    }
-
-    public void setLowerRightX(double lowerRightX) {
-        this.lowerRightX = lowerRightX;
-        this.maxX = lowerRightX;
-    }
-
-    public void setUpperLeftY(double upperLeftY) {
-        this.upperLeftY = upperLeftY;
-        this.maxY = upperLeftY;
-    }
-
-    public void setLowerRightY(double lowerRightY) {
-        this.lowerRightY = lowerRightY;
-        this.minY = lowerRightY;
-    }
 
     /**
      * Get upper left .
@@ -145,7 +148,7 @@ public class RasterMetadata implements Serializable {
      * @return [minX, maxY]
      */
     public double[] getUpperLeft() {
-        this.upperLeft = new double[]{minX, maxY};
+        upperLeft = new double[]{minX, maxY};
         return upperLeft;
     }
 
@@ -155,7 +158,7 @@ public class RasterMetadata implements Serializable {
      * @return [maxX, maxY]
      */
     public double[] getUpperRight() {
-        this.upperRight = new double[]{maxX, maxY};
+        upperRight = new double[]{maxX, maxY};
         return upperRight;
     }
 
@@ -165,7 +168,7 @@ public class RasterMetadata implements Serializable {
      * @return [minX, minY]
      */
     public double[] getLowerLeft() {
-        this.lowerLeft = new double[]{minX, minY};
+        lowerLeft = new double[]{minX, minY};
         return lowerLeft;
     }
 
@@ -175,7 +178,7 @@ public class RasterMetadata implements Serializable {
      * @return the [minX, minY]
      */
     public double[] getLowerRight() {
-        this.lowerRight = new double[]{minX, minY};
+        lowerRight = new double[]{minX, minY};
         return lowerRight;
     }
 

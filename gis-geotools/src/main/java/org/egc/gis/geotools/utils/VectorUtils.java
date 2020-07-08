@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Description:
  * <pre>
- *
+ * vector data utilities
  * </pre>
  *
  * @author houzhiwei
@@ -38,8 +38,8 @@ public class VectorUtils {
     public static Geometry boundaryPolygon(SimpleFeatureCollection inputFeatures) throws ShapefileException {
         SimpleFeature feature = inputFeatures.features().next();
         Class<?> binding = feature.getFeatureType().getGeometryDescriptor().getType().getBinding();
-        if (!binding.isAssignableFrom(Polygon.class) || !binding.isAssignableFrom(MultiPolygon.class)) {
-            throw new ShapefileException("The geometry type is " + binding.getName() + ". Not a polygon/multipolygon.");
+        if (!binding.isAssignableFrom(Polygon.class) && !binding.isAssignableFrom(MultiPolygon.class)) {
+            throw new ShapefileException("The geometry type is " + binding.getName() + ", not a polygon/multipolygon.");
         }
         return (Geometry) feature.getDefaultGeometry();
     }

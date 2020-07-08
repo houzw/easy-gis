@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Description:
  * <pre>
- * 读写geotiff
  * </pre>
  *
  * @author houzhiwei

@@ -5,13 +5,14 @@ import lombok.Getter;
 /**
  * Description:
  * <pre>
- *
+ * use {@link GDALDriversEnum}
  * </pre>
  *
  * @author houzhiwei
  * @date 2019/9/12 19:27
  */
 @Getter
+@Deprecated
 public enum OgrDriversEnum {
     DB2ODBC("DB2ODBC", "raster, vector", "read, write and update", "IBM DB2 Spatial Database",""),
     PCIDSK("PCIDSK", "raster, vector", "read, write and update, supporting virtual IO", "PCIDSK Database File","pix"),

@@ -5,16 +5,11 @@ import org.apache.commons.io.FilenameUtils;
 import org.egc.gis.gdal.FormatConversion;
 import org.egc.gis.gdal.dto.Consts;
 import org.egc.gis.gdal.dto.GDALDriversEnum;
-import org.gdal.gdal.Dataset;
-import org.gdal.gdal.Driver;
-import org.gdal.gdal.VectorTranslateOptions;
 import org.gdal.gdal.gdal;
 import org.gdal.gdalconst.gdalconst;
-import org.gdal.ogr.DataSource;
-import org.gdal.ogr.ogr;
+import org.gdal.ogr.*;
 
 import java.io.IOException;
-import java.util.Vector;
 
 /**
  * Description:
@@ -29,13 +24,21 @@ import java.util.Vector;
 public class VectorIO implements FormatConversion {
 
     /**
-     * To geo json string.
+     * Gemetry to geojson string.
      *
      * @param srcFile the src file
      * @return the geojson string
      */
     public String toGeoJSON(String srcFile) {
-        return "";
+        DataSource source = read(srcFile);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < source.GetLayerCount(); i++) {
+            Layer layer = source.GetLayer(i);
+            Feature feature = layer.GetNextFeature();
+            sb.append(feature.GetGeometryRef().ExportToJson());
+        }
+        source.delete();
+        return sb.toString();
     }
 
     /**
@@ -45,8 +48,8 @@ public class VectorIO implements FormatConversion {
      * @param dstFile the dst file
      * @return the GeoJSON file
      */
-    public String toGeoJSONFile(String srcFile, String dstFile) throws IOException {
-        return formatConvert(srcFile, dstFile, GDALDriversEnum.GeoJSON);
+    public void toGeoJSONFile(String srcFile, String dstFile) throws IOException {
+        formatConvert(srcFile, dstFile, GDALDriversEnum.GeoJSON);
     }
 
     /**
@@ -66,11 +69,38 @@ public class VectorIO implements FormatConversion {
      * @return the KML String
      */
     public String toKML(String srcFile) throws IOException {
-        return "";
+        DataSource source = read(srcFile);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < source.GetLayerCount(); i++) {
+            Layer layer = source.GetLayer(i);
+            Feature feature = layer.GetNextFeature();
+            sb.append(feature.GetGeometryRef().ExportToKML());
+        }
+        source.delete();
+        return sb.toString();
     }
 
     /**
-     * vector format conversion
+     * To WKT string.
+     *
+     * @param srcFile the src file
+     * @return the WKT String
+     * @throws IOException the io exception
+     */
+    public String toWKT(String srcFile) throws IOException {
+        DataSource source = read(srcFile);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < source.GetLayerCount(); i++) {
+            Layer layer = source.GetLayer(i);
+            Feature feature = layer.GetNextFeature();
+            sb.append(feature.GetGeometryRef().ExportToWkt());
+        }
+        source.delete();
+        return sb.toString();
+    }
+
+    /**
+     * vector format conversion, guess format from dst extention
      *
      * @param srcFile
      * @param dstFile
@@ -94,22 +124,20 @@ public class VectorIO implements FormatConversion {
     @Override
     public String formatConvert(String srcFile, String dstFile, GDALDriversEnum format) throws IOException {
         gdal.AllRegister();
-        Dataset ds = gdal.Open(srcFile);//?
+        ogr.RegisterAll();
+        DataSource datasource = ogr.Open(srcFile);
         log.info("Convert from {} to {} format", srcFile, format.name());
-        Driver driver = gdal.GetDriverByName(format.name());
+        Driver driver = ogr.GetDriverByName(format.name());
         if (driver == null) {
             log.error("Output Format {} Not Supported", format.name());
             throw new IOException("Output Format " + format.name() + " Not Supported");
         }
-        Vector<String> vector = new Vector<String>();
-        vector.add("-f");
-        vector.add(driver.getShortName());
         String ext = format.getExtension();
         String newName = outputName(srcFile, dstFile, ext);
-        Dataset dataset = gdal.VectorTranslate(newName, ds, new VectorTranslateOptions(vector));
-        ds.delete();
-        gdal.GDALDestroyDriverManager();
-        return dataset != null ? newName : null;
+        driver.CopyDataSource(datasource, newName);
+        datasource.delete();
+        driver.delete();
+        return newName;
     }
 
     public DataSource read(String vector) {

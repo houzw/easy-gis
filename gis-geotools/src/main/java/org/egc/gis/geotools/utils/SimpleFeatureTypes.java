@@ -3,6 +3,8 @@ package org.egc.gis.geotools.utils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.geotools.data.DataUtilities;
+import org.geotools.data.collection.ListFeatureCollection;
+import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
@@ -10,6 +12,7 @@ import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.MultiLineString;
 import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Polygon;
+import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.GeometryDescriptor;
@@ -17,6 +20,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import javax.validation.constraints.NotNull;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -81,6 +85,15 @@ public class SimpleFeatureTypes {
     public static boolean existProeprty(SimpleFeatureType schema, String propertyName) {
         propertyName = validateProperty(schema, propertyName);
         return schema.indexOf(propertyName) != -1;
+    }
+
+    /**
+     * SimpleFeatureStore has a method to add features from a
+     * SimpleFeatureCollection object, so we use the ListFeatureCollection
+     * class to wrap our list of features.
+     */
+    public static SimpleFeatureCollection simpleFeatureCollection(List<SimpleFeature> features, SimpleFeatureType TYPE) {
+        return new ListFeatureCollection(TYPE, features);
     }
 
     public static String validateProperty(SimpleFeatureType schema, String propertyName) {

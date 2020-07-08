@@ -32,8 +32,6 @@ import java.io.IOException;
 @Slf4j
 public class RasterIO {
 
-
-
     public static GridCoverage2D readZippedGeoTIFF(String zipFile) {
         Hints hints = new Hints(Hints.FORCE_LONGITUDE_FIRST_AXIS_ORDER,
                 Boolean.TRUE);
@@ -55,8 +53,7 @@ public class RasterIO {
         GeoTiffReader reader;
         try {
             reader = new GeoTiffReader(zippedFile, hints);
-            GridCoverage2D coverage = (GridCoverage2D) reader.read(null);
-            return coverage;
+            return (GridCoverage2D) reader.read(null);
         } catch (Exception e) {
             log.error("Exception while trying to read zipped geotiff.", e);
             throw new RuntimeException("Exception while trying to read zipped geotiff.", e);
@@ -109,13 +106,13 @@ public class RasterIO {
      */
     public static boolean write(GridCoverage2D coverage2D, String dstFile) {
         try {
-            final GeoTiffWriteParams wp = new GeoTiffWriteParams();
+            GeoTiffWriteParams wp = new GeoTiffWriteParams();
             wp.setCompressionMode(GeoTiffWriteParams.MODE_DEFAULT);
             wp.setCompressionMode(GeoTiffWriteParams.MODE_EXPLICIT);
             wp.setCompressionType("LZW");
             wp.setTilingMode(GeoToolsWriteParams.MODE_DEFAULT);
-            final GeoTiffFormat format = new GeoTiffFormat();
-            final ParameterValueGroup paramWrite = format.getWriteParameters();
+            GeoTiffFormat format = new GeoTiffFormat();
+            ParameterValueGroup paramWrite = format.getWriteParameters();
 
             paramWrite.parameter(AbstractGridFormat.GEOTOOLS_WRITE_PARAMS.getName().toString()).setValue(wp);
             GeoTiffWriter gtw = (GeoTiffWriter) format.getWriter(new File(dstFile));

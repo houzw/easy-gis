@@ -15,12 +15,13 @@ import java.util.function.Function;
  *
  * @author houzhiwei
  * @date 2018/10/9
+ * @date 2020-5-23
  */
 @Getter
 public enum GDALDriversEnum {
     BAG("BAG", "raster", "read-only", "Bathymetry Attributed Grid", "bag"),
     FITS("FITS", "raster", "read, write and update", "Flexible Image Transport System", "fits"),
-    GMT("GMT", "raster", "read or write", "GMT NetCDF Grid Format", ""),
+    GMT("GMT", "raster", "read or write", "GMT NetCDF Grid Format", "nc"),
     HDF4("HDF4", "raster", "ros", "Hierarchical Data Format Release 4", "hdf"),
     HDF4Image("HDF4Image", "raster", "read, write and update", "HDF4 Dataset", ""),
     HDF5("HDF5", "raster", "ros", "Hierarchical Data Format Release 5", "hdf5"),
@@ -88,7 +89,7 @@ public enum GDALDriversEnum {
             "grd"),
     COSAR("COSAR", "raster", " read-only and virtual IO", "COSAR Annotated Binary Matrix (TerraSAR-X)", ""),
     TSX("TSX", "raster", " read-only and virtual IO", "TerraSAR-X Product", ""),
-    COASP("COASP", "raster", "read-only", "DRDC COASP SAR Processor Raster", ""),
+    COASP("COASP", "raster", "read-only", "DRDC COASP SAR Processor Raster", "hdr"),
     R("R", "raster", "rwv", "R Object Data Store", "rda"),
     MAP("MAP", "raster", " read-only and virtual IO", "OziExplorer .MAP", "map"),
     KMLSUPEROVERLAY("KMLSUPEROVERLAY", "raster", "rwv", "Kml Super Overlay", ""),
@@ -154,7 +155,7 @@ public enum GDALDriversEnum {
     PDF("PDF", "raster, vector", "w+", "Geospatial PDF", "pdf"),
     ESRI_Shapefile("ESRI Shapefile", "vector", "read, write and update, supporting virtual IO", "ESRI Shapefile", ""),
     MapInfo_File("MapInfo File", "vector", "read, write and update, supporting virtual IO", "MapInfo File", ""),
-    UK_NTF("UK .NTF", "vector", "read-only", "UK .NTF", ""),
+    UK_NTF("UK_NTF", "vector", "read-only", "UK .NTF", ""),
     OGR_SDTS("OGR_SDTS", "vector", "read-only", "SDTS", ""),
     S57("S57", "vector", "read, write and update, supporting virtual IO", "IHO S-57 (ENC)", "000"),
     DGN("DGN", "vector", "read, write and update", "Microstation DGN", "dgn"),
@@ -226,7 +227,7 @@ public enum GDALDriversEnum {
     private String description;
     private String extension;
 
-    GDALDriversEnum(String name, String readOrWrite, String type, String description, String extension) {
+    GDALDriversEnum(String name, String type, String readOrWrite, String description, String extension) {
         this.name = name;
         this.type = type;
         this.readOrWrite = readOrWrite;

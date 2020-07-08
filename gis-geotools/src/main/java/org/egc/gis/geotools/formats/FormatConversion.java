@@ -2,6 +2,7 @@ package org.egc.gis.geotools.formats;
 
 import lombok.extern.slf4j.Slf4j;
 import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.gml2.GML;
 import org.geotools.gml2.GMLConfiguration;
 import org.geotools.xsd.Configuration;
@@ -46,10 +47,13 @@ public class FormatConversion {
     public static String feature2Wkt(SimpleFeatureCollection collection) {
         WKTWriter wktWriter = new WKTWriter();
         StringBuilder sb = new StringBuilder();
-        while (collection.features().hasNext()) {
-            SimpleFeature feature = collection.features().next();
-            Geometry geometry = (Geometry) feature.getDefaultGeometry();
-            sb.append(wktWriter.write(geometry));
+        try (SimpleFeatureIterator itr = collection.features()) {
+            while (itr.hasNext()) {
+                SimpleFeature feature = itr.next();
+                Geometry geometry = (Geometry) feature.getDefaultGeometry();
+                sb.append(wktWriter.write(geometry));
+            }
+            itr.close();
         }
         return sb.toString();
     }
