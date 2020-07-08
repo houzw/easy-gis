@@ -16,6 +16,7 @@
         <module>gis-ows</module>
         <module>gis-data</module>
         <module>gis-proj</module>
+        <module>gis-whitebox</module>
     </modules>
 
     <name>easy-gis</name>
@@ -30,6 +31,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <gdal.version>2.4.4</gdal.version>
+        <geotools.version>22.0</geotools.version>
 
         <postgis-jdbc.version>2.2.1</postgis-jdbc.version>
         <psql.java8.version>9.4.1211</psql.java8.version>
@@ -37,14 +39,13 @@
 
         <httpclient.version>4.5.2</httpclient.version>
         <commonsHttp.version>3.0.1</commonsHttp.version>
-
+        <geotools.version>22.0</geotools.version>
         <guava.version>19.0</guava.version>
         <commons-lang3.version>3.5</commons-lang3.version>
         <commons-io.version>2.5</commons-io.version>
         <lombok.version>1.16.16</lombok.version>
         <slf4j.version>1.7.21</slf4j.version>
         <log4j2.version>2.11.0</log4j2.version>
-
     </properties>
 
     <dependencies>
@@ -97,7 +98,11 @@
             <groupId>org.egc</groupId>
             <artifactId>commons</artifactId>
             <version>2.1-SNAPSHOT</version>
-        </dependency>
+        </dependency>  <dependency>
+        <groupId>org.geotools</groupId>
+        <artifactId>gt-geojsondatastore</artifactId>
+        <version>${geotools.version}</version>
+    </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -122,6 +127,26 @@
     </build>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.geotools.jdbc</groupId>
+                <artifactId>gt-jdbc-postgis</artifactId>
+                <version>${geotools.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.geotools</groupId>
+                <artifactId>gt-shapefile</artifactId>
+                <version>${geotools.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.geotools</groupId>
+                <artifactId>gt-geojson</artifactId>
+                <version>${geotools.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.geotools</groupId>
+                <artifactId>gt-geojsondatastore</artifactId>
+                <version>${geotools.version}</version>
+            </dependency>
             <dependency>
                 <groupId>it.geosolutions</groupId>
                 <artifactId>geoserver-manager</artifactId>
