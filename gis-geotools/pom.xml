@@ -36,6 +36,10 @@
             <groupId>org.geotools</groupId>
             <artifactId>gt-geojson</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-geojsondatastore</artifactId>
+        </dependency>
         <!-- Implementation of GridCoverage. Provides support for rasters and some image processing like reprojection. -->
         <dependency>
             <groupId>org.geotools</groupId>

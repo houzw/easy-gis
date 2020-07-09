@@ -29,9 +29,9 @@ import java.awt.geom.Rectangle2D;
  * @date 2018 /10/7 15:08
  */
 @Slf4j
-public class CoordinateTransform {
+public class CoordinateTransformer {
 
-    private CoordinateTransform() {
+    private CoordinateTransformer() {
     }
 
     private static final double WGS84_AXIS_MINOR = 6356752.314;
@@ -70,7 +70,7 @@ public class CoordinateTransform {
             CoordinateReferenceSystem customCRS = factory.createFromWKT(wkt);
             return customCRS;
         } catch (FactoryException e) {
-            log.error("Create custom CRS error", e.getLocalizedMessage());
+            log.error("Create custom CRS error", e);
             return null;
         }
     }
@@ -117,7 +117,6 @@ public class CoordinateTransform {
         return target;
     }
 
-
     /**
      * Transform envelope referenced envelope.
      *
@@ -135,7 +134,7 @@ public class CoordinateTransform {
             MathTransform transform = CRS.findMathTransform(fromCRS, toCRS);
             Envelope sourceEnvelope = new Envelope(bounds.getMinX(), bounds.getMaxX(),
                     bounds.getMinY(), bounds.getMaxY());
-            final Envelope envelope = JTS.transform(sourceEnvelope, transform);
+            Envelope envelope = JTS.transform(sourceEnvelope, transform);
             return new ReferencedEnvelope(envelope.getMinX(), envelope.getMaxX(),
                     envelope.getMinY(), envelope.getMaxY(),
                     toCRS);
@@ -144,7 +143,6 @@ public class CoordinateTransform {
             return null;
         }
     }
-
 
     /**
      * From beijing 54 to wgs 84 coordinate.
@@ -159,4 +157,6 @@ public class CoordinateTransform {
     public static Coordinate fromBeijing54ToWgs84(double lon, double lat) throws TransformException, FactoryException {
         return transformEpsgCoordinate(4214, 4326, lat, lon);
     }
+
+
 }

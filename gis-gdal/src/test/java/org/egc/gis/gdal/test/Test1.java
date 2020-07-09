@@ -1,10 +1,11 @@
 package org.egc.gis.gdal.test;
 
 import org.egc.gis.gdal.IOFactory;
-import org.egc.gis.gdal.dto.GDALDriversEnum;
 import org.egc.gis.gdal.dto.RasterMetadata;
 import org.egc.gis.gdal.raster.RasterInfo;
+import org.egc.gis.gdal.vector.VectorFormat;
 import org.gdal.gdal.gdal;
+import org.gdal.ogr.DataSource;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -43,14 +44,22 @@ public class Test1 {
     public void testVector() throws IOException {
         String json = "H:\\GIS data\\hydrology_data\\TaoXi_model data\\outlet\\outlet.json";
 
-        IOFactory.createVectorIO().formatConvert(shp, json, GDALDriversEnum.GeoJSON);
-        IOFactory.createVectorIO().toGeoJSON(shp);
+        VectorFormat vectorFormat = new VectorFormat();
+//        IOFactory.createVectorIO().formatConvert(shp, json, GDALDriversEnum.GeoJSON);
+        vectorFormat.toGeoJson(shp);
     }
 
-
+  
     @Test
     public void testExport() throws IOException {
-        System.out.println(IOFactory.createVectorIO().toGeoJSON(shp));
-        System.out.println(IOFactory.createVectorIO().toWKT(shp));
+        VectorFormat vectorFormat = new VectorFormat();
+        System.out.println(vectorFormat.toGeoJson(shp));
+        System.out.println(vectorFormat.toWkt(shp));
+    }
+
+    @Test
+    public void write() throws IOException {
+        DataSource ds = IOFactory.createVectorIO().read(shp);
+        IOFactory.createVectorIO().write(ds, "H:\\gisdemo\\out\\outlet_new.shp");
     }
 }

@@ -1,5 +1,10 @@
 package org.egc.gis.gdal.crs;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.egc.gis.gdal.IOFactory;
+import org.gdal.gdal.Dataset;
+import org.gdal.ogr.DataSource;
 import org.gdal.osr.CoordinateTransformation;
 import org.gdal.osr.SpatialReference;
 
@@ -16,7 +21,60 @@ import org.gdal.osr.SpatialReference;
  * @author houzhiwei
  * @date 2019/10/15 9:43
  */
+@Slf4j
 public class ProjectionUtils {
+
+    public static String getProj4(String vectorFile) {
+        DataSource ds = IOFactory.createVectorIO().read(vectorFile);
+        return ds.GetLayer(0).GetSpatialRef().ExportToProj4();
+    }
+
+    public static String getRasterProj4(String rasterFile) {
+        Dataset ds = IOFactory.createRasterIO().read(rasterFile);
+        SpatialReference sr = new SpatialReference();
+        sr.ImportFromWkt(ds.GetProjection());
+        return sr.ExportToProj4();
+    }
+
+    public static String getRasterProjWkt(String rasterFile) {
+        Dataset ds = IOFactory.createRasterIO().read(rasterFile);
+        return ds.GetProjection();
+    }
+
+    public static String getProjectionWkt(String vectorFile) {
+        DataSource ds = IOFactory.createVectorIO().read(vectorFile);
+        return ds.GetLayer(0).GetSpatialRef().ExportToWkt();
+    }
+
+    public static SpatialReference createSpatialReference(int epsg) {
+        SpatialReference srs = new SpatialReference();
+        if (epsg <= 0) {
+            log.error("Invalid EPSG code {}", epsg);
+            throw new RuntimeException("Invalid EPSG code " + epsg + ". Must larger than 0");
+        }
+        srs.ImportFromEPSG(epsg);
+        return srs;
+    }
+
+    public static SpatialReference createSpatialReference(String wktCrs) {
+        SpatialReference srs = new SpatialReference();
+        if (StringUtils.isBlank(wktCrs)) {
+            log.error("Invalid projection string");
+            throw new RuntimeException("Invalid projection string Must larger than 0");
+        }
+        srs.ImportFromWkt(wktCrs);
+        return srs;
+    }
+
+    public static SpatialReference createSpatialReferenceFromProj(String proj4Str) {
+        SpatialReference srs = new SpatialReference();
+        if (StringUtils.isBlank(proj4Str)) {
+            log.error("Invalid projection string");
+            throw new RuntimeException("Invalid projection string Must larger than 0");
+        }
+        srs.ImportFromProj4(proj4Str);
+        return srs;
+    }
 
     /**
      * get Universal Transverse Mercator (UTM) Zone
@@ -48,7 +106,7 @@ public class ProjectionUtils {
      * @param centralLat
      * @return
      */
-    public static SpatialReference getWGS84UTM(double centralLon, double centralLat) {
+    public static SpatialReference getWgs84Utm(double centralLon, double centralLat) {
         SpatialReference utm = new SpatialReference();
         //Set geographic coordinate system to handle lat/lon
         utm.SetWellKnownGeogCS("WGS84");
@@ -56,7 +114,7 @@ public class ProjectionUtils {
         return utm;
     }
 
-    public static double[] transformWGS84ToUTM(double lon, double lat) {
+    public static double[] transformWgs84ToUtm(double lon, double lat) {
         SpatialReference utm = new SpatialReference();
         //Set geographic coordinate system to handle lat/lon
         utm.SetWellKnownGeogCS("WGS84");
@@ -68,7 +126,7 @@ public class ProjectionUtils {
         return transformation.TransformPoint(lon, lat);
     }
 
-    public static double[] transformUTMToWGS84(double easting, double northing, int zone) {
+    public static double[] transformUtmToWgs84(double easting, double northing, int zone) {
         SpatialReference utm = new SpatialReference();
         //Set geographic coordinate system to handle lat/lon
         utm.SetWellKnownGeogCS("WGS84");
