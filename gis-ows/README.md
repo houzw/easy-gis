@@ -1,4 +1,9 @@
 
+
+
+suis4j 中的请求的格式为 xml， 不是 kvp。过程是：用户输入参数信息，转换为相应的Java对象，如`DescribeCoverage`，
+然后再使用 JAXBContext 的 marshal 转换为 xml，最后最为请求的 request body 发送, 获得数据之后再转换为java 对象，如 `CoverageDescription`
+
 服务的请求可参考使用 https://github.com/ZihengSun/suis4j 
 
 或者使用 https://github.com/houzw/egc-suis4j 

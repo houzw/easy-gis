@@ -1,27 +1,239 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>easy-gis</artifactId>
         <groupId>org.egc</groupId>
-        <version>1.1-SNAPSHOT</version>
+        <version>1.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <artifactId>gis-ows</artifactId>
 
     <name>gis-ows</name>
-    <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <geotools.version>23.0</geotools.version>
+        <geotools-wfs.version>16.5</geotools-wfs.version>
+        <jvnet.version>2.6.1</jvnet.version>
+        <n52.sensorweb.version>2.7.0</n52.sensorweb.version>
     </properties>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/wsdl4j/wsdl4j -->
+        <dependency>
+            <groupId>wsdl4j</groupId>
+            <artifactId>wsdl4j</artifactId>
+            <version>1.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.redfish4ktc.soapui</groupId>
+            <artifactId>soapui</artifactId>
+            <version>4.0.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>filter-v_1_1_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>filter-v_2_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>ows-v_1_1_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>ows-v_1_0_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>ows-v_2_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jvnet.ogc/wcs-v_1_1 -->
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>wcs-v_1_1</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>wcs-v_2_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jvnet.ogc/wcs-v_1_0_0 -->
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>wcs-v_1_0_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jvnet.ogc/sweCommon-v_2_0 -->
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>sweCommon-v_2_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>wfs-v_1_1_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>wfs-v_2_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>gmlcov-v_1_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>gml-v_3_2_1</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>gml-v_3_1_1</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>csw-v_2_0_2</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jvnet.ogc/waterml-v_2_0 -->
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>waterml-v_2_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jvnet.ogc/wcs-processing-v_2_0 -->
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>wcs-processing-v_2_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>wms-v_1_3_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>wps-v_1_0_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.ogc</groupId>
+            <artifactId>wps-v_2_0</artifactId>
+            <version>${jvnet.version}</version>
+        </dependency>
+        <!--
+                  An OGC Web Map Server client implementation that can be used directly or as through the GridCoverageExchange API.
+                  Direct usage is recommended, as the GridCoverageExchange access for WMS is not well tested and is complicated to use.
+                  It supports WMS versions 1.0.0, 1.1.0, 1.1.1, and 1.3.0.
+                  -->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-wms</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-wmts</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <!--   http://docs.geotools.org/stable/userguide/unsupported/wps.html     -->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-wps</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.n52.wps/52n-wps-client-lib -->
+        <!--        https://wiki.52north.org/Geoprocessing/TutorialClientAPI-->
+        <dependency>
+            <groupId>org.n52.wps</groupId>
+            <artifactId>52n-wps-client-lib</artifactId>
+            <version>3.6.3</version>
+        </dependency>
+        <!--
+                    Implementation of DataStore allowing geotools code to work with an OGC Web Feature Service.
+                    Offers client code for WFS 1.0 and WFS 1.1.
+                    -->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-wfs-ng</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.geotools.xsd</groupId>
+            <artifactId>gt-xsd-wcs</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.geotools.xsd</groupId>
+            <artifactId>gt-xsd-ows</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.geotools.xsd</groupId>
+            <artifactId>gt-xsd-wfs</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools.xsd</groupId>
+            <artifactId>gt-xsd-wps</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools.xsd</groupId>
+            <artifactId>gt-xsd-wms</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools.xsd</groupId>
+            <artifactId>gt-xsd-wmts</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-xml</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.n52.sensorweb/52n-xml-waterML-v20 -->
+        <dependency>
+            <groupId>org.n52.sensorweb</groupId>
+            <artifactId>52n-xml-waterML-v20</artifactId>
+            <version>${n52.sensorweb.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.n52.sensorweb/52n-xml-wcs-v11 -->
+        <dependency>
+            <groupId>org.n52.sensorweb</groupId>
+            <artifactId>52n-xml-wcs-v11</artifactId>
+            <version>${n52.sensorweb.version}</version>
+        </dependency>
 
     </dependencies>
 

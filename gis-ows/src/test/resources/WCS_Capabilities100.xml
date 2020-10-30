@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<WCS_Capabilities version="1.0.0" updateSequence="0" xmlns="http://www.opengis.net/wcs" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wcs http://schemas.opengis.net/wcs/1.0.0/wcsCapabilities.xsd">
+<Service>
+  <name>MapServer WCS</name>
+  <label>WCS Demo Server for MapServer</label>
+  <keywords>
+    <keyword>WCS</keyword>
+    <keyword>MODIS</keyword>
+    <keyword>NDVI</keyword>
+  </keywords>
+<responsibleParty>
+    <individualName>Steve Lime</individualName>
+    <organisationName>Minnesota DNR</organisationName>
+  <contactInfo>
+    <address>
+    <electronicMailAddress>Steve.Lime@state.mn.us</electronicMailAddress>
+    </address>
+  </contactInfo>
+</responsibleParty>
+  <fees>NONE</fees>
+  <accessConstraints>
+    NONE
+  </accessConstraints>
+</Service>
+<Capability>
+  <Request>
+    <GetCapabilities>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xlink:type="simple" xlink:href="https://demo.mapserver.org:8080/cgi-bin/wcs?"/></Get>
+        </HTTP>
+      </DCPType>
+      <DCPType>
+        <HTTP>
+          <Post><OnlineResource xlink:type="simple" xlink:href="https://demo.mapserver.org:8080/cgi-bin/wcs?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetCapabilities>
+    <DescribeCoverage>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xlink:type="simple" xlink:href="https://demo.mapserver.org:8080/cgi-bin/wcs?"/></Get>
+        </HTTP>
+      </DCPType>
+      <DCPType>
+        <HTTP>
+          <Post><OnlineResource xlink:type="simple" xlink:href="https://demo.mapserver.org:8080/cgi-bin/wcs?"/></Post>
+        </HTTP>
+      </DCPType>
+    </DescribeCoverage>
+    <GetCoverage>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xlink:type="simple" xlink:href="https://demo.mapserver.org:8080/cgi-bin/wcs?"/></Get>
+        </HTTP>
+      </DCPType>
+      <DCPType>
+        <HTTP>
+          <Post><OnlineResource xlink:type="simple" xlink:href="https://demo.mapserver.org:8080/cgi-bin/wcs?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetCoverage>
+  </Request>
+  <Exception>
+    <Format>application/vnd.ogc.se_xml</Format>
+  </Exception>
+</Capability>
+<ContentMetadata>
+  <CoverageOfferingBrief>
+  <metadataLink metadataType="TC211" xlink:type="simple" xlink:href="https://demo.mapserver.org:8080/cgi-bin/wcs?request=GetMetadata&amp;layer=ndvi"/>
+    <name>ndvi</name>
+    <label>North Central US MODIS-based NDVI Images for 2002</label>
+    <lonLatEnvelope srsName="urn:ogc:def:crs:OGC:1.3:CRS84">
+      <gml:pos>-97.7071758865421 41.0324719184183</gml:pos>
+      <gml:pos>-80.6778361148771 49.6650665681236</gml:pos>
+      <gml:timePosition>2002-001</gml:timePosition>
+      <gml:timePosition>2002-033</gml:timePosition>
+      <gml:timePosition>2002-049</gml:timePosition>
+      <gml:timePosition>2002-065</gml:timePosition>
+      <gml:timePosition>2002-081</gml:timePosition>
+      <gml:timePosition>2002-097</gml:timePosition>
+      <gml:timePosition>2002-113</gml:timePosition>
+      <gml:timePosition>2002-129</gml:timePosition>
+      <gml:timePosition>2002-145</gml:timePosition>
+      <gml:timePosition>2002-161</gml:timePosition>
+      <gml:timePosition>2002-177</gml:timePosition>
+      <gml:timePosition>2002-193</gml:timePosition>
+    </lonLatEnvelope>
+  </CoverageOfferingBrief>
+  <CoverageOfferingBrief>
+  <metadataLink metadataType="TC211" xlink:type="simple" xlink:href="https://demo.mapserver.org:8080/cgi-bin/wcs?request=GetMetadata&amp;layer=fpar"/>    <name>fpar</name>
+    <label>North Central US MODIS-based FPAR Images for 2002</label>
+    <lonLatEnvelope srsName="urn:ogc:def:crs:OGC:1.3:CRS84">
+      <gml:pos>-97.7071758865421 41.0324719184183</gml:pos>
+      <gml:pos>-80.6778361148771 49.6650665681236</gml:pos>
+      <gml:timePosition>2002-001</gml:timePosition>
+      <gml:timePosition>2002-033</gml:timePosition>
+      <gml:timePosition>2002-057</gml:timePosition>
+      <gml:timePosition>2002-073</gml:timePosition>
+      <gml:timePosition>2002-089</gml:timePosition>
+      <gml:timePosition>2002-097</gml:timePosition>
+      <gml:timePosition>2002-105</gml:timePosition>
+      <gml:timePosition>2002-121</gml:timePosition>
+      <gml:timePosition>2002-137</gml:timePosition>
+      <gml:timePosition>2002-153</gml:timePosition>
+      <gml:timePosition>2002-169</gml:timePosition>
+      <gml:timePosition>2002-185</gml:timePosition>
+      <gml:timePosition>2002-201</gml:timePosition>
+    </lonLatEnvelope>
+  </CoverageOfferingBrief>
+  <CoverageOfferingBrief>
+  <metadataLink metadataType="TC211" xlink:type="simple" xlink:href="https://demo.mapserver.org:8080/cgi-bin/wcs?request=GetMetadata&amp;layer=modis"/>
+    <name>modis</name>
+    <label>North Central US MODIS Images for 2002</label>
+    <lonLatEnvelope srsName="urn:ogc:def:crs:OGC:1.3:CRS84">
+      <gml:pos>-97.7071758865421 41.0324719184183</gml:pos>
+      <gml:pos>-80.6778361148771 49.6650665681236</gml:pos>
+      <gml:timePosition>2002-001</gml:timePosition>
+      <gml:timePosition>2002-057</gml:timePosition>
+      <gml:timePosition>2002-073</gml:timePosition>
+      <gml:timePosition>2002-089</gml:timePosition>
+      <gml:timePosition>2002-097</gml:timePosition>
+      <gml:timePosition>2002-105</gml:timePosition>
+      <gml:timePosition>2002-121</gml:timePosition>
+      <gml:timePosition>2002-153</gml:timePosition>
+      <gml:timePosition>2002-169</gml:timePosition>
+      <gml:timePosition>2002-185</gml:timePosition>
+    </lonLatEnvelope>
+  </CoverageOfferingBrief>
+  <CoverageOfferingBrief>
+  <metadataLink metadataType="TC211" xlink:type="simple" xlink:href="https://demo.mapserver.org:8080/cgi-bin/wcs?request=GetMetadata&amp;layer=modis-001"/>
+    <name>modis-001</name>
+    <label>North Central US MODIS Images for 2002-001</label>
+    <lonLatEnvelope srsName="urn:ogc:def:crs:OGC:1.3:CRS84">
+      <gml:pos>-97.7071758865421 41.0324719184183</gml:pos>
+      <gml:pos>-80.6778361148771 49.6650665681236</gml:pos>
+      <gml:timePosition>2002-001</gml:timePosition>
+    </lonLatEnvelope>
+  </CoverageOfferingBrief>
+</ContentMetadata>
+</WCS_Capabilities>
