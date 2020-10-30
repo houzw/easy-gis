@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.egc</groupId>
     <artifactId>easy-gis</artifactId>
     <packaging>pom</packaging>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <modules>
         <module>gis-taudem</module>
         <module>gis-db</module>
@@ -17,6 +18,9 @@
         <module>gis-data</module>
         <module>gis-proj</module>
         <module>gis-whitebox</module>
+        <module>gis-suis4j</module>
+        <module>gis-mapserver</module>
+        <module>gis-geoserver</module>
     </modules>
 
     <name>easy-gis</name>
@@ -37,7 +41,7 @@
         <psql.java8.version>9.4.1211</psql.java8.version>
         <geolatte.version>0.14</geolatte.version>
 
-        <httpclient.version>4.5.2</httpclient.version>
+        <httpclient.version>4.5.12</httpclient.version>
         <commonsHttp.version>3.0.1</commonsHttp.version>
         <geotools.version>22.0</geotools.version>
         <guava.version>28.2-jre</guava.version>
@@ -52,7 +56,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
         <!--slf4j-->
@@ -123,6 +127,23 @@
     </build>
     <dependencyManagement>
         <dependencies>
+            <!--     geoserver       -->
+            <dependency>
+                <groupId>it.geosolutions</groupId>
+                <artifactId>geoserver-manager</artifactId>
+                <version>1.7.0</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>jcl-over-slf4j</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+             <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>1.19</version>
+            </dependency>
             <dependency>
                 <groupId>org.geotools.jdbc</groupId>
                 <artifactId>gt-jdbc-postgis</artifactId>
@@ -142,11 +163,6 @@
                 <groupId>org.geotools</groupId>
                 <artifactId>gt-geojsondatastore</artifactId>
                 <version>${geotools.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>it.geosolutions</groupId>
-                <artifactId>geoserver-manager</artifactId>
-                <version>1.7.0</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/org.osgeo/proj4j -->
             <dependency>
@@ -175,11 +191,11 @@
                 <artifactId>httpclient</artifactId>
                 <version>${httpclient.version}</version>
             </dependency>
-            <dependency>
+            <!--<dependency>
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
                 <version>${commonsHttp.version}</version>
-            </dependency>
+            </dependency>-->
         </dependencies>
     </dependencyManagement>
     <!--构建部署配置-->
