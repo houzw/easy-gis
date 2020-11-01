@@ -1,11 +1,13 @@
 package org.egc.gis.gdal.raster;
 
+import com.google.common.primitives.Floats;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.egc.commons.util.PathUtil;
 import org.egc.commons.util.StringUtil;
 import org.egc.gis.gdal.IOFactory;
+import org.egc.gis.gdal.dto.Area;
 import org.egc.gis.gdal.dto.BoundingBox;
 import org.egc.gis.gdal.dto.Consts;
 import org.egc.gis.gdal.dto.RasterMetadata;
@@ -18,15 +20,18 @@ import org.gdal.osr.SpatialReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author houzhiwei
  * @date 2020/5/2 17:36
  */
 public class RasterInfo {
+
     /**
      * 利用gdal获取栅格数据元数据
      *
@@ -35,8 +40,12 @@ public class RasterInfo {
      */
     public static RasterMetadata getMetadata(String tif) {
         StringUtil.isNullOrEmptyPrecondition(tif, "Raster file must exists");
-        RasterMetadata metadata = new RasterMetadata();
         Dataset dataset = IOFactory.createRasterIO().read(tif);
+        return getMetadata(dataset);
+    }
+
+    public static RasterMetadata getMetadata(Dataset dataset) {
+        RasterMetadata metadata = new RasterMetadata();
         Driver driver = dataset.GetDriver();
         metadata.setFormat(driver.getShortName());
         SpatialReference sr = new SpatialReference(dataset.GetProjectionRef());
@@ -209,4 +218,105 @@ public class RasterInfo {
         return r;
     }
 
+    /**
+     * if want to get string: Joiner.on(" ").join(uniqueValues)
+     *
+     * @param dataset the raster dataset
+     * @return unique values
+     */
+    public static List<Float> getUniqueValues(Dataset dataset) {
+        Band band = dataset.GetRasterBand(1);
+        Double[] nodataVal = new Double[1];
+        band.GetNoDataValue(nodataVal);
+        Double nodata = nodataVal[0];
+        if (nodata == null) {
+            nodata = -9999d;
+        }
+        float[] dataBuf = readRasterBand(dataset, 1);
+
+        List<Float> dataBufList = Floats.asList(dataBuf);
+        Collections.sort(dataBufList);
+        List<Float> uniqueList = dataBufList.stream().distinct().collect(Collectors.toList());
+        if (uniqueList.indexOf(nodata.floatValue()) > -1) {
+            uniqueList.remove(uniqueList.indexOf(nodata.floatValue()));
+        }
+        return uniqueList;
+    }
+
+    /**
+     * Read raster band data as float array.
+     *
+     * @param dataset   the dataset
+     * @param bandIndex the band index
+     * @return the float [ ]
+     */
+    public static float[] readRasterBand(Dataset dataset, int bandIndex) {
+        Band band = dataset.GetRasterBand(bandIndex);
+        int xSize = dataset.GetRasterXSize();
+        int ySize = dataset.GetRasterYSize();
+        float[] dataBuf = new float[xSize * ySize];
+        band.ReadRaster(0, 0, xSize, ySize, dataBuf);
+        return dataBuf;
+    }
+
+    //分位数
+    public static String getQuantile(Dataset dataset, int numQuantile) {
+        Band band = dataset.GetRasterBand(1);
+        Double[] nodataVal = new Double[1];
+        band.GetNoDataValue(nodataVal);
+        Double nodata = nodataVal[0];
+        if (nodata == null) {
+            nodata = -9999d;
+        }
+        float[] dataBuf = readRasterBand(dataset, 1);
+
+        Double[] quantileBreaks = new Double[numQuantile - 1];
+        List<Float> dataBufList = Floats.asList(dataBuf);
+        Collections.sort(dataBufList);
+        //移除空值, 移除 nodata
+        Double finalNodata = nodata; // lambda 表达式需要
+        List<Float> removedList = dataBufList.stream().filter(x -> {
+            if (x != null) {
+                //为 true 的会被保留
+                return !x.equals(finalNodata.floatValue());
+            }
+            return false;
+        }).collect(Collectors.toList());
+        int size = removedList.size();
+        //分位数位置  (n+1)*p, 0<p<1, 如  0.25，0.5,0.75
+        int numDataInQuantile = ((size + 1) / numQuantile);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < numQuantile - 1; i++) {
+            quantileBreaks[i] = (double) (removedList.get((i + 1) * numDataInQuantile));
+            sb.append(" ");
+            sb.append(quantileBreaks[i].toString());
+        }
+        return sb.toString().substring(1);
+    }
+
+    public static Area getArea(Dataset dataset) {
+        SpatialReference sr = new SpatialReference(dataset.GetProjectionRef());
+        Band band = dataset.GetRasterBand(1);
+        Double[] nodataVal = new Double[1];
+        band.GetNoDataValue(nodataVal);
+        Double nodata = nodataVal[0];
+        if (nodata == null) {
+            nodata = -9999d;
+        }
+        int xSize = dataset.GetRasterXSize();
+        int ySize = dataset.GetRasterYSize();
+
+        float[] dataBuf = new float[xSize * ySize];
+        double[] gt = dataset.GetGeoTransform();
+        band.ReadRaster(0, 0, xSize, ySize, dataBuf);
+        double wePixelResolution = gt[1];
+        double nsPixelResolution = Math.abs(gt[5]);
+        int count = 0;
+        for (float d : dataBuf) {
+            if (d != nodata.floatValue()) {
+                count++;
+            }
+        }
+        return new Area(count * wePixelResolution * nsPixelResolution, sr.GetLinearUnitsName());
+    }
 }

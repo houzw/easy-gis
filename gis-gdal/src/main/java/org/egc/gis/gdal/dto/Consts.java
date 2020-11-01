@@ -28,4 +28,6 @@ public class Consts {
      * 中文
      */
     public static final String CP936 = "CP936";
+
+
 }

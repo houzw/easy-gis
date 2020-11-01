@@ -6,6 +6,7 @@ import org.egc.gis.gdal.IOFactory;
 import org.egc.gis.gdal.dto.BoundingBox;
 import org.egc.gis.gdal.dto.Consts;
 import org.gdal.gdal.Dataset;
+import org.gdal.gdal.TranslateOptions;
 import org.gdal.gdal.WarpOptions;
 import org.gdal.gdal.gdal;
 
@@ -20,8 +21,52 @@ import java.util.Vector;
 @Slf4j
 public class RasterClip implements Clip {
 
-    public boolean clipByRaster(String src, String ref){
+    /**
+     * gets part of the input_raster covering the reference_Raster
+     * TODO: Boundary check-> check if the bounding box of subset raster is within the input_raster's boundary
+     *
+     * @param src             input raster
+     * @param dst             output raster
+     * @param referenceRaster reference_raster
+     */
+    public void rasterSubset(String src, String dst, String referenceRaster) {
+        Dataset srcDs = IOFactory.createRasterIO().read(src);
+        Dataset ds = IOFactory.createRasterIO().read(referenceRaster);
+        // Boundary parameters extracted from reference_Raster
+        double[] geoTransform = ds.GetGeoTransform();
+        //use ulx uly lrx lry
+        double xmin = geoTransform[0];
+        double ymax = geoTransform[3];
+        double dx = geoTransform[1];
+        double dy = geoTransform[5];
+        double xmax = xmin + dx * ds.GetRasterXSize();
+        double ymin = ymax + dy * ds.GetRasterYSize();
+        Vector<String> optionsVector = new Vector<>();
+        optionsVector.add("-projwin");
+        optionsVector.add(String.valueOf(xmin));
+        optionsVector.add(String.valueOf(ymax));
+        optionsVector.add(String.valueOf(xmax));
+        optionsVector.add(String.valueOf(ymin));
+        TranslateOptions options = new TranslateOptions(optionsVector);
+        gdal.Translate(dst, srcDs, options);
+        ds.delete();
+        srcDs.delete();
+        gdal.GDALDestroyDriverManager();
+    }
 
+
+    public boolean rasterSubset(String src, String dst, double xmin, double ymax, double xmax, double ymin) {
+        Dataset ds = IOFactory.createRasterIO().read(src);
+        Vector<String> optionsVector = new Vector<>();
+        optionsVector.add("-projwin");
+        optionsVector.add(String.valueOf(xmin));
+        optionsVector.add(String.valueOf(ymax));
+        optionsVector.add(String.valueOf(xmax));
+        optionsVector.add(String.valueOf(ymin));
+        TranslateOptions options = new TranslateOptions(optionsVector);
+        gdal.Translate(dst, ds, options);
+        ds.delete();
+        gdal.GDALDestroyDriverManager();
         return false;
     }
 

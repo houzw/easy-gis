@@ -8,9 +8,9 @@ package org.egc.gis.gdal.dto;
  *  (upper_left_x, upper_left_y, lower_right_x, lower_right_y)
  *  (top_left_lon, top_left_lat, bottom_right_lon, bottom_right_lat)
  * </pre>
- *
+ * https://docs.geotools.org/stable/userguide/library/main/envelope.html
  * @author houzhiwei
- * @date 2019 /10/14 22:11 https://docs.geotools.org/stable/userguide/library/main/envelope.html
+ * @date 2019 /10/14 22:11
  */
 public class BoundingBox {
     private double minX;

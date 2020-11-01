@@ -10,6 +10,7 @@ GDAL 安装文件及 JAR 文件下载自 http://www.gisinternals.com/archive.php
 
 ---
 reference:
+- https://gdal.org/index.html
 - https://gdal.org/java/overview-summary.html
-- https://trac.osgeo.org/gdal/browser/trunk/gdal/swig/java/apps/
+- examples: https://trac.osgeo.org/gdal/browser/trunk/gdal/swig/java/apps/
 

@@ -61,4 +61,11 @@ public class CoordinateTransformer {
         CoordinateTransformation coordinateTransformation = new CoordinateTransformation(source, destination);
         return coordinateTransformation.TransformPoint(x, y);
     }
+
+    public static double[] transformExtent(int srcEpsg, int dstEpsg, double minX, double minY, double maxX, double maxY) {
+        double[] ll = transform(srcEpsg, dstEpsg, minX, minY);
+        double[] ur = transform(srcEpsg, dstEpsg, maxX, maxY);
+        return new double[]{ll[0], ll[1], ur[0], ur[1]};
+    }
+
 }

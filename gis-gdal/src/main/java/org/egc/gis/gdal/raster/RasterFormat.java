@@ -29,7 +29,7 @@ public class RasterFormat implements FormatConversion {
      */
     @Override
     public String formatConvert(String srcFile, String dstFile) throws IOException {
-        Dataset dataset = IOFactory.createRasterIO().read(srcFile);
+        //Dataset dataset = IOFactory.createRasterIO().read(srcFile);
         String ext = FilenameUtils.getExtension(dstFile);
         log.info("Convert from {} to {}", srcFile, dstFile);
         GDALDriversEnum driversEnum = GDALDriversEnum.lookupByExtension(ext);

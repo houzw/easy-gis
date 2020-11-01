@@ -4,9 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.egc.gis.gdal.IOFactory;
+import org.egc.gis.gdal.dto.Area;
 import org.egc.gis.gdal.dto.VectorMetadata;
+import org.gdal.gdal.gdal;
 import org.gdal.ogr.DataSource;
 import org.gdal.ogr.Driver;
+import org.gdal.ogr.Feature;
 import org.gdal.ogr.Layer;
 import org.gdal.osr.SpatialReference;
 
@@ -29,8 +32,8 @@ public class VectorUtils {
     /**
      * read shapefile and get metadata use OGR
      *
-     * @param shapefile
-     * @return Metadata
+     * @param shapefile the shapefile
+     * @return shapefile metadata
      */
     public static VectorMetadata getShapefileMetadata(String shapefile) {
 
@@ -38,12 +41,14 @@ public class VectorUtils {
         Driver driver = ds.GetDriver();
 
         VectorMetadata metadata = new VectorMetadata();
+        metadata.setShapeEncoding(gdal.GetConfigOption("SHAPE_ENCODING"));
         metadata.setName(FilenameUtils.getName(shapefile));
         metadata.setFormat(driver.GetName());
         metadata.setLayerCount(ds.GetLayerCount());
         Layer layer = ds.GetLayer(0);
         metadata.setGeomType(layer.GetGeomType());
         metadata.setFeatureCount(layer.GetFeatureCount());
+
         metadata.setGeometry(layer.GetNextFeature().GetGeometryRef().GetGeometryName());
 
         SpatialReference sr = layer.GetSpatialRef();
@@ -86,5 +91,21 @@ public class VectorUtils {
         ds.delete();
         driver.delete();
         return metadata;
+    }
+
+    public static Area calculateArea(String shapefile) {
+        DataSource ds = IOFactory.createVectorIO().read(shapefile);
+        SpatialReference sr = ds.GetLayer(0).GetSpatialRef();
+        String unit = sr.GetLinearUnitsName();
+        double area = 0;
+        for (int i = 0; i < ds.GetLayerCount(); i++) {
+            Layer layer = ds.GetLayer(i);
+            for (int j = 0; j < layer.GetFeatureCount(); j++) {
+                Feature feature = layer.GetNextFeature();
+                area += feature.GetGeometryRef().GetArea();
+            }
+        }
+        ds.delete();
+        return new Area(area, unit);
     }
 }

@@ -14,7 +14,6 @@ public class Projtest {
     String shp = "H:\\GIS data\\hydrology_data\\TaoXi_model data\\outlet\\outlet.shp";
     String shp2 = "H:\\GIS data\\hydrology_data\\meiChuangJiang 梅川江\\fenkeng_30m\\data\\basin.shp";
 
-
     @Test
     public void proj4() {
         System.out.println(ProjectionUtils.getProj4(shp));
@@ -24,5 +23,11 @@ public class Projtest {
     @Test
     public void reproject() {
         ReprojectVector.reproject(shp2, "H:\\gisdemo\\out\\project\\basin_4326.shp", 4326);
+    }
+
+    @Test
+    public void reproject2() {
+//        ReprojectVector.reprojectUseOgr(shp, "H:\\gisdemo\\out\\project\\outlet_4326.shp", 4326);
+        ReprojectVector.reprojectUseOgr(shp2, "H:\\gisdemo\\out\\project\\basin_4326.shp", 4326);
     }
 }

@@ -1,9 +1,13 @@
 package org.egc.gis.gdal.test;
 
 import org.egc.gis.gdal.IOFactory;
+import org.egc.gis.gdal.dto.Area;
 import org.egc.gis.gdal.dto.RasterMetadata;
+import org.egc.gis.gdal.dto.VectorMetadata;
 import org.egc.gis.gdal.raster.RasterInfo;
 import org.egc.gis.gdal.vector.VectorFormat;
+import org.egc.gis.gdal.vector.VectorUtils;
+import org.gdal.gdal.Dataset;
 import org.gdal.gdal.gdal;
 import org.gdal.ogr.DataSource;
 import org.junit.Test;
@@ -12,7 +16,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class Test1 {
-    String shp = "H:\\GIS data\\hydrology_data\\TaoXi_model data\\outlet\\outlet.shp";
+    String shp = "D:\\data\\WebSites\\egcDataFiles\\1\\50\\outlet_beijing1954.shp";
 
     /**
      * 测试GDAL是否安装配置正常，并输出版本
@@ -22,7 +26,7 @@ public class Test1 {
         System.out.println(gdal.VersionInfo());
     }
 
-    String dem = "H:/xcDEM.tif";
+    String dem = "J:/demos/raster/dem1.tif";
 
     @Test
     public void test() {
@@ -41,6 +45,14 @@ public class Test1 {
     }
 
     @Test
+    public void testVectorMeta() {
+        VectorMetadata metadata = VectorUtils.getShapefileMetadata(shp);
+        System.out.println(metadata.getSrid());
+        System.out.println(metadata.getCrs());
+        System.out.println(metadata.getMinY());
+    }
+
+    @Test
     public void testVector() throws IOException {
         String json = "H:\\GIS data\\hydrology_data\\TaoXi_model data\\outlet\\outlet.json";
 
@@ -49,7 +61,7 @@ public class Test1 {
         vectorFormat.toGeoJson(shp);
     }
 
-  
+
     @Test
     public void testExport() throws IOException {
         VectorFormat vectorFormat = new VectorFormat();
@@ -61,5 +73,19 @@ public class Test1 {
     public void write() throws IOException {
         DataSource ds = IOFactory.createVectorIO().read(shp);
         IOFactory.createVectorIO().write(ds, "H:\\gisdemo\\out\\outlet_new.shp");
+    }
+
+    @Test
+    public void area() {
+        String shp = "F:\\data\\黑河\\流域边界\\Heihe_Basin_Boundary_2010.shp";
+        Area area = VectorUtils.calculateArea(shp);
+        System.out.println(area);
+    }
+
+    @Test
+    public void rasterArea() {
+        Dataset r = IOFactory.createRasterIO().read(dem);
+        Area area = RasterInfo.getArea(r);
+        System.out.println(area);
     }
 }
