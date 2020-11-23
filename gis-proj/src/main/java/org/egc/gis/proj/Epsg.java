@@ -8,6 +8,8 @@ import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.egc.gis.proj.dto.EpsgInfo;
+import org.egc.gis.proj.dto.EpsgResponse;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -27,7 +29,7 @@ public class Epsg {
      * fetch epsg info from epsg.io
      *
      * @param epsg epsg code (without "EPSG:")
-     * @throws IOException
+     * @return the epsg info
      */
     public static EpsgInfo fetchEpsgInfo(int epsg) {
         HttpUriRequest request = RequestBuilder.get()
@@ -57,4 +59,5 @@ public class Epsg {
             return null;
         }
     }
+
 }

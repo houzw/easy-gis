@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 高斯克吕格
+ * https://www.bbsmax.com/A/A2dmRLoxze/
  *
  * @author houzhiwei
  * @date 2020/5/13 21:29
@@ -37,7 +38,13 @@ public class GaussKruger {
         return (int) (longitude + 1.5) / 3;
     }
 
+    public static double centralLongitude3(double longitude) {
+        return getCentralLongitude3(getZone3(longitude));
+    }
+
     public static int getZone6(double longitude) {
         return (int) (longitude + 6) / 6;
     }
+
+
 }

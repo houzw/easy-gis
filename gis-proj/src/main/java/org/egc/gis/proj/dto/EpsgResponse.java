@@ -1,4 +1,4 @@
-package org.egc.gis.proj;
+package org.egc.gis.proj.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
