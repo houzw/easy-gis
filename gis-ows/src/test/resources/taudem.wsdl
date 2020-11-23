@@ -1,0 +1,1249 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://taudem.hydro.ws.egc.org" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="TauDEMAnalysisService" targetNamespace="http://taudem.hydro.ws.egc.org">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://taudem.hydro.ws.egc.org" elementFormDefault="unqualified" targetNamespace="http://taudem.hydro.ws.egc.org" version="1.0">
+
+  <xs:element name="connectdown" type="tns:connectdown"/>
+
+  <xs:element name="connectdownResponse" type="tns:connectdownResponse"/>
+
+  <xs:element name="d8ContributingArea" type="tns:d8ContributingArea"/>
+
+  <xs:element name="d8ContributingAreaResponse" type="tns:d8ContributingAreaResponse"/>
+
+  <xs:element name="d8DistanceToStreams" type="tns:d8DistanceToStreams"/>
+
+  <xs:element name="d8DistanceToStreamsResponse" type="tns:d8DistanceToStreamsResponse"/>
+
+  <xs:element name="d8ExtremeUpslopeValue" type="tns:d8ExtremeUpslopeValue"/>
+
+  <xs:element name="d8ExtremeUpslopeValueResponse" type="tns:d8ExtremeUpslopeValueResponse"/>
+
+  <xs:element name="d8FlowDirections" type="tns:d8FlowDirections"/>
+
+  <xs:element name="d8FlowDirectionsResponse" type="tns:d8FlowDirectionsResponse"/>
+
+  <xs:element name="dInfinityAvalancheRunout" type="tns:dInfinityAvalancheRunout"/>
+
+  <xs:element name="dInfinityAvalancheRunoutResponse" type="tns:dInfinityAvalancheRunoutResponse"/>
+
+  <xs:element name="dInfinityConcentrationLimitedAcccumulation" type="tns:dInfinityConcentrationLimitedAcccumulation"/>
+
+  <xs:element name="dInfinityConcentrationLimitedAcccumulationResponse" type="tns:dInfinityConcentrationLimitedAcccumulationResponse"/>
+
+  <xs:element name="dInfinityContributingArea" type="tns:dInfinityContributingArea"/>
+
+  <xs:element name="dInfinityContributingAreaResponse" type="tns:dInfinityContributingAreaResponse"/>
+
+  <xs:element name="dInfinityDecayingAccumulation" type="tns:dInfinityDecayingAccumulation"/>
+
+  <xs:element name="dInfinityDecayingAccumulationResponse" type="tns:dInfinityDecayingAccumulationResponse"/>
+
+  <xs:element name="dInfinityDistanceDown" type="tns:dInfinityDistanceDown"/>
+
+  <xs:element name="dInfinityDistanceDownResponse" type="tns:dInfinityDistanceDownResponse"/>
+
+  <xs:element name="dInfinityDistanceUp" type="tns:dInfinityDistanceUp"/>
+
+  <xs:element name="dInfinityDistanceUpResponse" type="tns:dInfinityDistanceUpResponse"/>
+
+  <xs:element name="dInfinityFlowDirections" type="tns:dInfinityFlowDirections"/>
+
+  <xs:element name="dInfinityFlowDirectionsResponse" type="tns:dInfinityFlowDirectionsResponse"/>
+
+  <xs:element name="dInfinityReverseAccumulation" type="tns:dInfinityReverseAccumulation"/>
+
+  <xs:element name="dInfinityReverseAccumulationResponse" type="tns:dInfinityReverseAccumulationResponse"/>
+
+  <xs:element name="dInfinityTransportLimitedAccumulation" type="tns:dInfinityTransportLimitedAccumulation"/>
+
+  <xs:element name="dInfinityTransportLimitedAccumulationResponse" type="tns:dInfinityTransportLimitedAccumulationResponse"/>
+
+  <xs:element name="dInfinityUpslopeDependence" type="tns:dInfinityUpslopeDependence"/>
+
+  <xs:element name="dInfinityUpslopeDependenceResponse" type="tns:dInfinityUpslopeDependenceResponse"/>
+
+  <xs:element name="gagewatershed" type="tns:gagewatershed"/>
+
+  <xs:element name="gagewatershedResponse" type="tns:gagewatershedResponse"/>
+
+  <xs:element name="gridNetwork" type="tns:gridNetwork"/>
+
+  <xs:element name="gridNetworkResponse" type="tns:gridNetworkResponse"/>
+
+  <xs:element name="lengthAreaStreamSource" type="tns:lengthAreaStreamSource"/>
+
+  <xs:element name="lengthAreaStreamSourceResponse" type="tns:lengthAreaStreamSourceResponse"/>
+
+  <xs:element name="moveOutletsToStreams" type="tns:moveOutletsToStreams"/>
+
+  <xs:element name="moveOutletsToStreamsResponse" type="tns:moveOutletsToStreamsResponse"/>
+
+  <xs:element name="peukerDouglas" type="tns:peukerDouglas"/>
+
+  <xs:element name="peukerDouglasResponse" type="tns:peukerDouglasResponse"/>
+
+  <xs:element name="pitRemove" type="tns:pitRemove"/>
+
+  <xs:element name="pitRemoveResponse" type="tns:pitRemoveResponse"/>
+
+  <xs:element name="slopeAreaCombination" type="tns:slopeAreaCombination"/>
+
+  <xs:element name="slopeAreaCombinationResponse" type="tns:slopeAreaCombinationResponse"/>
+
+  <xs:element name="slopeAverageDown" type="tns:slopeAverageDown"/>
+
+  <xs:element name="slopeAverageDownResponse" type="tns:slopeAverageDownResponse"/>
+
+  <xs:element name="slopeOverAreaRatio" type="tns:slopeOverAreaRatio"/>
+
+  <xs:element name="slopeOverAreaRatioResponse" type="tns:slopeOverAreaRatioResponse"/>
+
+  <xs:element name="streamDefinitionByThreshold" type="tns:streamDefinitionByThreshold"/>
+
+  <xs:element name="streamDefinitionByThresholdResponse" type="tns:streamDefinitionByThresholdResponse"/>
+
+  <xs:element name="streamDropAnalysis" type="tns:streamDropAnalysis"/>
+
+  <xs:element name="streamDropAnalysisResponse" type="tns:streamDropAnalysisResponse"/>
+
+  <xs:element name="streamReachAndWatershed" type="tns:streamReachAndWatershed"/>
+
+  <xs:element name="streamReachAndWatershedResponse" type="tns:streamReachAndWatershedResponse"/>
+
+  <xs:element name="topographicWetnessIndex" type="tns:topographicWetnessIndex"/>
+
+  <xs:element name="topographicWetnessIndexResponse" type="tns:topographicWetnessIndexResponse"/>
+
+  <xs:complexType name="connectdown">
+    <xs:sequence>
+      <xs:element name="d8FlowDirection" type="xs:string"/>
+      <xs:element name="d8ContributingArea" type="xs:string"/>
+      <xs:element minOccurs="0" name="watershed" type="xs:string"/>
+      <xs:element minOccurs="0" name="numberOfGridCells" type="xs:long"/>
+      <xs:element minOccurs="0" name="outletsFile" type="xs:string"/>
+      <xs:element minOccurs="0" name="movedoutletsFile" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="connectdownResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="outletsFile" type="xs:string"/>
+      <xs:element minOccurs="0" name="movedoutletsFile" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="d8DistanceToStreams">
+    <xs:sequence>
+      <xs:element name="d8FlowDirection" type="xs:string"/>
+      <xs:element name="streamRaster" type="xs:string"/>
+      <xs:element minOccurs="0" name="threshold" type="xs:double"/>
+      <xs:element minOccurs="0" name="distanceToStreams" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="d8DistanceToStreamsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="distanceToStreams" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityDistanceUp">
+    <xs:sequence>
+      <xs:element name="dinfinityFlowDirection" type="xs:string"/>
+      <xs:element name="pitFilledElevation" type="xs:string"/>
+      <xs:element name="slope" type="xs:string"/>
+      <xs:element minOccurs="0" name="proportionThreshold" type="xs:double"/>
+      <xs:element minOccurs="0" name="statisticalMethod" type="xs:string"/>
+      <xs:element minOccurs="0" name="distanceMethod" type="xs:string"/>
+      <xs:element minOccurs="0" name="checkForEdgeContamination" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="dinfinityDistanceUp" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityDistanceUpResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="dinfinityDistanceUp" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityDecayingAccumulation">
+    <xs:sequence>
+      <xs:element name="dinfinityFlowDirection" type="xs:string"/>
+      <xs:element name="decayMultiplier" type="xs:string"/>
+      <xs:element minOccurs="0" name="weight" type="xs:string"/>
+      <xs:element minOccurs="0" name="outlets" type="xs:string"/>
+      <xs:element minOccurs="0" name="checkForEdgeContamination" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="decayedSpecificCatchmentArea" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityDecayingAccumulationResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="decayedSpecificCatchmentArea" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="streamReachAndWatershed">
+    <xs:sequence>
+      <xs:element name="pitFilledElevation" type="xs:string"/>
+      <xs:element name="d8FlowDirection" type="xs:string"/>
+      <xs:element name="d8DrainageArea" type="xs:string"/>
+      <xs:element name="streamRaster" type="xs:string"/>
+      <xs:element minOccurs="0" name="outlets" type="xs:string"/>
+      <xs:element minOccurs="0" name="delineateSingleWatershed" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="streamOrder" type="xs:string"/>
+      <xs:element minOccurs="0" name="networkConnectivityTree" type="xs:string"/>
+      <xs:element minOccurs="0" name="networkCoordinates" type="xs:string"/>
+      <xs:element minOccurs="0" name="streamReachFile" type="xs:string"/>
+      <xs:element minOccurs="0" name="watershed" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="streamReachAndWatershedResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="streamOrder" type="xs:string"/>
+      <xs:element minOccurs="0" name="networkConnectivityTree" type="xs:string"/>
+      <xs:element minOccurs="0" name="networkCoordinates" type="xs:string"/>
+      <xs:element minOccurs="0" name="streamReachFile" type="xs:string"/>
+      <xs:element minOccurs="0" name="watershed" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="gridNetwork">
+    <xs:sequence>
+      <xs:element name="d8FlowDirection" type="xs:string"/>
+      <xs:element minOccurs="0" name="outlets" type="xs:string"/>
+      <xs:element minOccurs="0" name="mask" type="xs:string"/>
+      <xs:element minOccurs="0" name="maskThresholdValue" type="xs:double"/>
+      <xs:element minOccurs="0" name="strahlerNetworkOrder" type="xs:string"/>
+      <xs:element minOccurs="0" name="longestUpslopeLength" type="xs:string"/>
+      <xs:element minOccurs="0" name="totalUpslopeLength" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="gridNetworkResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="strahlerNetworkOrder" type="xs:string"/>
+      <xs:element minOccurs="0" name="longestUpslopeLength" type="xs:string"/>
+      <xs:element minOccurs="0" name="totalUpslopeLength" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="peukerDouglas">
+    <xs:sequence>
+      <xs:element name="elevation" type="xs:string"/>
+      <xs:element minOccurs="0" name="centerSmoothingWeight" type="xs:double"/>
+      <xs:element minOccurs="0" name="sideSmoothingWeight" type="xs:double"/>
+      <xs:element minOccurs="0" name="diagonalSmoothingWeight" type="xs:double"/>
+      <xs:element minOccurs="0" name="streamSource" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="peukerDouglasResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="streamSource" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityContributingArea">
+    <xs:sequence>
+      <xs:element name="dinfinityFlowDirection" type="xs:string"/>
+      <xs:element minOccurs="0" name="outlets" type="xs:string"/>
+      <xs:element minOccurs="0" name="weight" type="xs:string"/>
+      <xs:element minOccurs="0" name="checkForEdgeContamination" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="dinfinitySpecificCatchmentArea" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityContributingAreaResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="dinfinitySpecificCatchmentArea" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityReverseAccumulation">
+    <xs:sequence>
+      <xs:element name="dinfinityFlowDirection" type="xs:string"/>
+      <xs:element name="weight" type="xs:string"/>
+      <xs:element minOccurs="0" name="reverseAccumulation" type="xs:string"/>
+      <xs:element minOccurs="0" name="maximumDownslope" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityReverseAccumulationResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="reverseAccumulation" type="xs:string"/>
+      <xs:element minOccurs="0" name="maximumDownslope" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityConcentrationLimitedAcccumulation">
+    <xs:sequence>
+      <xs:element name="dinfinityFlowDirection" type="xs:string"/>
+      <xs:element name="effectiveRunoffWeight" type="xs:string"/>
+      <xs:element name="disturbanceIndicator" type="xs:string"/>
+      <xs:element name="decayMultiplier" type="xs:string"/>
+      <xs:element minOccurs="0" name="outlets" type="xs:string"/>
+      <xs:element minOccurs="0" name="concentrationThreshold" type="xs:double"/>
+      <xs:element minOccurs="0" name="checkForEdgeContamination" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="overlandFlowSpecificDischarge" type="xs:string"/>
+      <xs:element minOccurs="0" name="concentration" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityConcentrationLimitedAcccumulationResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="overlandFlowSpecificDischarge" type="xs:string"/>
+      <xs:element minOccurs="0" name="concentration" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityFlowDirections">
+    <xs:sequence>
+      <xs:element name="pitFilledElevation" type="xs:string"/>
+      <xs:element minOccurs="0" name="dinfinityFlowDirection" type="xs:string"/>
+      <xs:element minOccurs="0" name="dinfinitySlope" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityFlowDirectionsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="dinfinityFlowDirection" type="xs:string"/>
+      <xs:element minOccurs="0" name="dinfinitySlope" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityDistanceDown">
+    <xs:sequence>
+      <xs:element name="dinfinityFlowDirection" type="xs:string"/>
+      <xs:element name="pitFilledElevation" type="xs:string"/>
+      <xs:element name="streamRaster" type="xs:string"/>
+      <xs:element minOccurs="0" name="weightPath" type="xs:string"/>
+      <xs:element name="statisticalMethod" type="xs:string"/>
+      <xs:element name="distanceMethod" type="xs:string"/>
+      <xs:element minOccurs="0" name="checkForEdgeContamination" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="dinfinityDropToStream" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityDistanceDownResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="dinfinityDropToStream" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="gagewatershed">
+    <xs:sequence>
+      <xs:element name="d8FlowDirection" type="xs:string"/>
+      <xs:element name="gagesFile" type="xs:string"/>
+      <xs:element minOccurs="0" name="gagewatershed" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="gagewatershedResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="gagewatershed" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="d8ExtremeUpslopeValue">
+    <xs:sequence>
+      <xs:element name="d8FlowDirection" type="xs:string"/>
+      <xs:element name="value" type="xs:string"/>
+      <xs:element minOccurs="0" name="outlets" type="xs:string"/>
+      <xs:element minOccurs="0" name="useMaximumUpslopeValue" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="checkForEdgeContamination" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="extremeValue" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="d8ExtremeUpslopeValueResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="extremeValue" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="topographicWetnessIndex">
+    <xs:sequence>
+      <xs:element name="specificCatchmentArea" type="xs:string"/>
+      <xs:element name="slope" type="xs:string"/>
+      <xs:element minOccurs="0" name="wetnessIndex" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="topographicWetnessIndexResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="wetnessIndex" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityTransportLimitedAccumulation">
+    <xs:sequence>
+      <xs:element name="dinfinityFlowDirection" type="xs:string"/>
+      <xs:element name="supply" type="xs:string"/>
+      <xs:element name="transportCapacity" type="xs:string"/>
+      <xs:element minOccurs="0" name="concentration" type="xs:string"/>
+      <xs:element minOccurs="0" name="outlets" type="xs:string"/>
+      <xs:element minOccurs="0" name="checkForEdgeContamination" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="transportLimitedAccumulation" type="xs:string"/>
+      <xs:element minOccurs="0" name="deposition" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityTransportLimitedAccumulationResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="transportLimitedAccumulation" type="xs:string"/>
+      <xs:element minOccurs="0" name="deposition" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityUpslopeDependence">
+    <xs:sequence>
+      <xs:element name="dinfinityFlowDirection" type="xs:string"/>
+      <xs:element name="destination" type="xs:string"/>
+      <xs:element minOccurs="0" name="upslopeDependence" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityUpslopeDependenceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="upslopeDependence" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="d8ContributingArea">
+    <xs:sequence>
+      <xs:element name="d8FlowDirection" type="xs:string"/>
+      <xs:element minOccurs="0" name="outlets" type="xs:string"/>
+      <xs:element minOccurs="0" name="weight" type="xs:string"/>
+      <xs:element minOccurs="0" name="checkForEdgeContamination" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="d8ContributingArea" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="d8ContributingAreaResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="d8ContributingArea" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="streamDefinitionByThreshold">
+    <xs:sequence>
+      <xs:element name="accumulatedStreamSource" type="xs:string"/>
+      <xs:element minOccurs="0" name="mask" type="xs:string"/>
+      <xs:element minOccurs="0" name="threshold" type="xs:double"/>
+      <xs:element minOccurs="0" name="streamRaster" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="streamDefinitionByThresholdResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="streamRaster" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="pitRemove">
+    <xs:sequence>
+      <xs:element name="elevation" type="xs:string"/>
+      <xs:element minOccurs="0" name="depressionMask" type="xs:string"/>
+      <xs:element minOccurs="0" name="fillConsideringOnly4WayNeighbors" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="pitFilledElevation" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="pitRemoveResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="pitFilledElevation" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lengthAreaStreamSource">
+    <xs:sequence>
+      <xs:element name="length" type="xs:string"/>
+      <xs:element name="contributingArea" type="xs:string"/>
+      <xs:element name="thresholdM" type="xs:double"/>
+      <xs:element name="exponentY" type="xs:double"/>
+      <xs:element minOccurs="0" name="streamSource" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lengthAreaStreamSourceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="streamSource" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="moveOutletsToStreams">
+    <xs:sequence>
+      <xs:element name="d8FlowDirection" type="xs:string"/>
+      <xs:element name="streamRaster" type="xs:string"/>
+      <xs:element name="outlets" type="xs:string"/>
+      <xs:element minOccurs="0" name="maximumDistance" type="xs:double"/>
+      <xs:element minOccurs="0" name="outletsFile" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="moveOutletsToStreamsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="outletsFile" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="d8FlowDirections">
+    <xs:sequence>
+      <xs:element name="pitFilledElevation" type="xs:string"/>
+      <xs:element minOccurs="0" name="d8FlowDirection" type="xs:string"/>
+      <xs:element minOccurs="0" name="d8Slope" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="d8FlowDirectionsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="d8FlowDirection" type="xs:string"/>
+      <xs:element minOccurs="0" name="d8Slope" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="slopeAreaCombination">
+    <xs:sequence>
+      <xs:element name="slope" type="xs:string"/>
+      <xs:element name="area" type="xs:string"/>
+      <xs:element minOccurs="0" name="slopeExponentM" type="xs:double"/>
+      <xs:element minOccurs="0" name="areaExponentN" type="xs:double"/>
+      <xs:element minOccurs="0" name="slopeArea" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="slopeAreaCombinationResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="slopeArea" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="slopeAverageDown">
+    <xs:sequence>
+      <xs:element name="d8FlowDirection" type="xs:string"/>
+      <xs:element name="pitFilledElevation" type="xs:string"/>
+      <xs:element minOccurs="0" name="distance" type="xs:double"/>
+      <xs:element minOccurs="0" name="slopeAverageDown" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="slopeAverageDownResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="slopeAverageDown" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="streamDropAnalysis">
+    <xs:sequence>
+      <xs:element name="pitFilledElevation" type="xs:string"/>
+      <xs:element name="d8FlowDirection" type="xs:string"/>
+      <xs:element name="d8ContributingArea" type="xs:string"/>
+      <xs:element name="accumulatedStreamSource" type="xs:string"/>
+      <xs:element minOccurs="0" name="outlets" type="xs:string"/>
+      <xs:element name="minimumThresholdValue" type="xs:double"/>
+      <xs:element name="maximumThresholdValue" type="xs:double"/>
+      <xs:element name="numberOfThresholdValues" type="xs:double"/>
+      <xs:element name="useLogarithmicSpacingForThresholdValues" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="dropAnalysisTextFile" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="streamDropAnalysisResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="dropAnalysisTextFile" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityAvalancheRunout">
+    <xs:sequence>
+      <xs:element name="pitFilledElevation" type="xs:string"/>
+      <xs:element name="dinfinityFlowDirection" type="xs:string"/>
+      <xs:element name="avalancheSourceSite" type="xs:string"/>
+      <xs:element minOccurs="0" name="proportionThreshold" type="xs:double"/>
+      <xs:element minOccurs="0" name="alphaAngleThreshold" type="xs:double"/>
+      <xs:element minOccurs="0" name="pathDistanceMethod" type="xs:string"/>
+      <xs:element minOccurs="0" name="runoutZone" type="xs:string"/>
+      <xs:element minOccurs="0" name="pathDistance" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dInfinityAvalancheRunoutResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="runoutZone" type="xs:string"/>
+      <xs:element minOccurs="0" name="pathDistance" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="slopeOverAreaRatio">
+    <xs:sequence>
+      <xs:element name="slope" type="xs:string"/>
+      <xs:element name="specificCatchmentArea" type="xs:string"/>
+      <xs:element minOccurs="0" name="slopeDividedByAreaRatio" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="slopeOverAreaRatioResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="slopeDividedByAreaRatio" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="gagewatershedResponse">
+    <wsdl:part element="tns:gagewatershedResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="d8DistanceToStreams">
+    <wsdl:part element="tns:d8DistanceToStreams" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityDistanceUp">
+    <wsdl:part element="tns:dInfinityDistanceUp" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityDecayingAccumulation">
+    <wsdl:part element="tns:dInfinityDecayingAccumulation" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="d8FlowDirectionsResponse">
+    <wsdl:part element="tns:d8FlowDirectionsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityConcentrationLimitedAcccumulation">
+    <wsdl:part element="tns:dInfinityConcentrationLimitedAcccumulation" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="slopeOverAreaRatioResponse">
+    <wsdl:part element="tns:slopeOverAreaRatioResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="streamDefinitionByThresholdResponse">
+    <wsdl:part element="tns:streamDefinitionByThresholdResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityFlowDirectionsResponse">
+    <wsdl:part element="tns:dInfinityFlowDirectionsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="d8ExtremeUpslopeValue">
+    <wsdl:part element="tns:d8ExtremeUpslopeValue" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="d8ExtremeUpslopeValueResponse">
+    <wsdl:part element="tns:d8ExtremeUpslopeValueResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="topographicWetnessIndex">
+    <wsdl:part element="tns:topographicWetnessIndex" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityUpslopeDependenceResponse">
+    <wsdl:part element="tns:dInfinityUpslopeDependenceResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="peukerDouglasResponse">
+    <wsdl:part element="tns:peukerDouglasResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityDistanceDownResponse">
+    <wsdl:part element="tns:dInfinityDistanceDownResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="topographicWetnessIndexResponse">
+    <wsdl:part element="tns:topographicWetnessIndexResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="streamDropAnalysisResponse">
+    <wsdl:part element="tns:streamDropAnalysisResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="streamDefinitionByThreshold">
+    <wsdl:part element="tns:streamDefinitionByThreshold" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="pitRemove">
+    <wsdl:part element="tns:pitRemove" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityDecayingAccumulationResponse">
+    <wsdl:part element="tns:dInfinityDecayingAccumulationResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="d8DistanceToStreamsResponse">
+    <wsdl:part element="tns:d8DistanceToStreamsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="slopeAreaCombination">
+    <wsdl:part element="tns:slopeAreaCombination" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="slopeAverageDown">
+    <wsdl:part element="tns:slopeAverageDown" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityAvalancheRunout">
+    <wsdl:part element="tns:dInfinityAvalancheRunout" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="connectdownResponse">
+    <wsdl:part element="tns:connectdownResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="connectdown">
+    <wsdl:part element="tns:connectdown" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityReverseAccumulationResponse">
+    <wsdl:part element="tns:dInfinityReverseAccumulationResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="streamReachAndWatershed">
+    <wsdl:part element="tns:streamReachAndWatershed" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="slopeAreaCombinationResponse">
+    <wsdl:part element="tns:slopeAreaCombinationResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="gridNetwork">
+    <wsdl:part element="tns:gridNetwork" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="peukerDouglas">
+    <wsdl:part element="tns:peukerDouglas" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityContributingArea">
+    <wsdl:part element="tns:dInfinityContributingArea" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityReverseAccumulation">
+    <wsdl:part element="tns:dInfinityReverseAccumulation" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityAvalancheRunoutResponse">
+    <wsdl:part element="tns:dInfinityAvalancheRunoutResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityConcentrationLimitedAcccumulationResponse">
+    <wsdl:part element="tns:dInfinityConcentrationLimitedAcccumulationResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityFlowDirections">
+    <wsdl:part element="tns:dInfinityFlowDirections" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityDistanceDown">
+    <wsdl:part element="tns:dInfinityDistanceDown" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="gagewatershed">
+    <wsdl:part element="tns:gagewatershed" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityContributingAreaResponse">
+    <wsdl:part element="tns:dInfinityContributingAreaResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="pitRemoveResponse">
+    <wsdl:part element="tns:pitRemoveResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="lengthAreaStreamSourceResponse">
+    <wsdl:part element="tns:lengthAreaStreamSourceResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="gridNetworkResponse">
+    <wsdl:part element="tns:gridNetworkResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityTransportLimitedAccumulation">
+    <wsdl:part element="tns:dInfinityTransportLimitedAccumulation" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="streamReachAndWatershedResponse">
+    <wsdl:part element="tns:streamReachAndWatershedResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityUpslopeDependence">
+    <wsdl:part element="tns:dInfinityUpslopeDependence" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityDistanceUpResponse">
+    <wsdl:part element="tns:dInfinityDistanceUpResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="d8ContributingArea">
+    <wsdl:part element="tns:d8ContributingArea" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="dInfinityTransportLimitedAccumulationResponse">
+    <wsdl:part element="tns:dInfinityTransportLimitedAccumulationResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="moveOutletsToStreamsResponse">
+    <wsdl:part element="tns:moveOutletsToStreamsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="slopeAverageDownResponse">
+    <wsdl:part element="tns:slopeAverageDownResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="d8ContributingAreaResponse">
+    <wsdl:part element="tns:d8ContributingAreaResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="lengthAreaStreamSource">
+    <wsdl:part element="tns:lengthAreaStreamSource" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="moveOutletsToStreams">
+    <wsdl:part element="tns:moveOutletsToStreams" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="d8FlowDirections">
+    <wsdl:part element="tns:d8FlowDirections" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="streamDropAnalysis">
+    <wsdl:part element="tns:streamDropAnalysis" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="slopeOverAreaRatio">
+    <wsdl:part element="tns:slopeOverAreaRatio" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="TauDEMAnalysisService">
+    <wsdl:operation name="connectdown">
+      <wsdl:input message="tns:connectdown" name="connectdown">
+    </wsdl:input>
+      <wsdl:output message="tns:connectdownResponse" name="connectdownResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="d8DistanceToStreams">
+      <wsdl:input message="tns:d8DistanceToStreams" name="d8DistanceToStreams">
+    </wsdl:input>
+      <wsdl:output message="tns:d8DistanceToStreamsResponse" name="d8DistanceToStreamsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityDistanceUp">
+      <wsdl:input message="tns:dInfinityDistanceUp" name="dInfinityDistanceUp">
+    </wsdl:input>
+      <wsdl:output message="tns:dInfinityDistanceUpResponse" name="dInfinityDistanceUpResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityDecayingAccumulation">
+      <wsdl:input message="tns:dInfinityDecayingAccumulation" name="dInfinityDecayingAccumulation">
+    </wsdl:input>
+      <wsdl:output message="tns:dInfinityDecayingAccumulationResponse" name="dInfinityDecayingAccumulationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="streamReachAndWatershed">
+      <wsdl:input message="tns:streamReachAndWatershed" name="streamReachAndWatershed">
+    </wsdl:input>
+      <wsdl:output message="tns:streamReachAndWatershedResponse" name="streamReachAndWatershedResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="gridNetwork">
+      <wsdl:input message="tns:gridNetwork" name="gridNetwork">
+    </wsdl:input>
+      <wsdl:output message="tns:gridNetworkResponse" name="gridNetworkResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="peukerDouglas">
+      <wsdl:input message="tns:peukerDouglas" name="peukerDouglas">
+    </wsdl:input>
+      <wsdl:output message="tns:peukerDouglasResponse" name="peukerDouglasResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityContributingArea">
+      <wsdl:input message="tns:dInfinityContributingArea" name="dInfinityContributingArea">
+    </wsdl:input>
+      <wsdl:output message="tns:dInfinityContributingAreaResponse" name="dInfinityContributingAreaResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityReverseAccumulation">
+      <wsdl:input message="tns:dInfinityReverseAccumulation" name="dInfinityReverseAccumulation">
+    </wsdl:input>
+      <wsdl:output message="tns:dInfinityReverseAccumulationResponse" name="dInfinityReverseAccumulationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityConcentrationLimitedAcccumulation">
+      <wsdl:input message="tns:dInfinityConcentrationLimitedAcccumulation" name="dInfinityConcentrationLimitedAcccumulation">
+    </wsdl:input>
+      <wsdl:output message="tns:dInfinityConcentrationLimitedAcccumulationResponse" name="dInfinityConcentrationLimitedAcccumulationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityFlowDirections">
+      <wsdl:input message="tns:dInfinityFlowDirections" name="dInfinityFlowDirections">
+    </wsdl:input>
+      <wsdl:output message="tns:dInfinityFlowDirectionsResponse" name="dInfinityFlowDirectionsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityDistanceDown">
+      <wsdl:input message="tns:dInfinityDistanceDown" name="dInfinityDistanceDown">
+    </wsdl:input>
+      <wsdl:output message="tns:dInfinityDistanceDownResponse" name="dInfinityDistanceDownResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="gagewatershed">
+      <wsdl:input message="tns:gagewatershed" name="gagewatershed">
+    </wsdl:input>
+      <wsdl:output message="tns:gagewatershedResponse" name="gagewatershedResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="d8ExtremeUpslopeValue">
+      <wsdl:input message="tns:d8ExtremeUpslopeValue" name="d8ExtremeUpslopeValue">
+    </wsdl:input>
+      <wsdl:output message="tns:d8ExtremeUpslopeValueResponse" name="d8ExtremeUpslopeValueResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="topographicWetnessIndex">
+      <wsdl:input message="tns:topographicWetnessIndex" name="topographicWetnessIndex">
+    </wsdl:input>
+      <wsdl:output message="tns:topographicWetnessIndexResponse" name="topographicWetnessIndexResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityTransportLimitedAccumulation">
+      <wsdl:input message="tns:dInfinityTransportLimitedAccumulation" name="dInfinityTransportLimitedAccumulation">
+    </wsdl:input>
+      <wsdl:output message="tns:dInfinityTransportLimitedAccumulationResponse" name="dInfinityTransportLimitedAccumulationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityUpslopeDependence">
+      <wsdl:input message="tns:dInfinityUpslopeDependence" name="dInfinityUpslopeDependence">
+    </wsdl:input>
+      <wsdl:output message="tns:dInfinityUpslopeDependenceResponse" name="dInfinityUpslopeDependenceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="d8ContributingArea">
+      <wsdl:input message="tns:d8ContributingArea" name="d8ContributingArea">
+    </wsdl:input>
+      <wsdl:output message="tns:d8ContributingAreaResponse" name="d8ContributingAreaResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="streamDefinitionByThreshold">
+      <wsdl:input message="tns:streamDefinitionByThreshold" name="streamDefinitionByThreshold">
+    </wsdl:input>
+      <wsdl:output message="tns:streamDefinitionByThresholdResponse" name="streamDefinitionByThresholdResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="pitRemove">
+      <wsdl:input message="tns:pitRemove" name="pitRemove">
+    </wsdl:input>
+      <wsdl:output message="tns:pitRemoveResponse" name="pitRemoveResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="lengthAreaStreamSource">
+      <wsdl:input message="tns:lengthAreaStreamSource" name="lengthAreaStreamSource">
+    </wsdl:input>
+      <wsdl:output message="tns:lengthAreaStreamSourceResponse" name="lengthAreaStreamSourceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="moveOutletsToStreams">
+      <wsdl:input message="tns:moveOutletsToStreams" name="moveOutletsToStreams">
+    </wsdl:input>
+      <wsdl:output message="tns:moveOutletsToStreamsResponse" name="moveOutletsToStreamsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="d8FlowDirections">
+      <wsdl:input message="tns:d8FlowDirections" name="d8FlowDirections">
+    </wsdl:input>
+      <wsdl:output message="tns:d8FlowDirectionsResponse" name="d8FlowDirectionsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="slopeAreaCombination">
+      <wsdl:input message="tns:slopeAreaCombination" name="slopeAreaCombination">
+    </wsdl:input>
+      <wsdl:output message="tns:slopeAreaCombinationResponse" name="slopeAreaCombinationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="slopeAverageDown">
+      <wsdl:input message="tns:slopeAverageDown" name="slopeAverageDown">
+    </wsdl:input>
+      <wsdl:output message="tns:slopeAverageDownResponse" name="slopeAverageDownResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="streamDropAnalysis">
+      <wsdl:input message="tns:streamDropAnalysis" name="streamDropAnalysis">
+    </wsdl:input>
+      <wsdl:output message="tns:streamDropAnalysisResponse" name="streamDropAnalysisResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityAvalancheRunout">
+      <wsdl:input message="tns:dInfinityAvalancheRunout" name="dInfinityAvalancheRunout">
+    </wsdl:input>
+      <wsdl:output message="tns:dInfinityAvalancheRunoutResponse" name="dInfinityAvalancheRunoutResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="slopeOverAreaRatio">
+      <wsdl:input message="tns:slopeOverAreaRatio" name="slopeOverAreaRatio">
+    </wsdl:input>
+      <wsdl:output message="tns:slopeOverAreaRatioResponse" name="slopeOverAreaRatioResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TauDEMAnalysisServiceSoapBinding" type="tns:TauDEMAnalysisService">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="connectdown">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="connectdown">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="connectdownResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="d8DistanceToStreams">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="d8DistanceToStreams">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="d8DistanceToStreamsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityDecayingAccumulation">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="dInfinityDecayingAccumulation">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="dInfinityDecayingAccumulationResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityDistanceUp">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="dInfinityDistanceUp">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="dInfinityDistanceUpResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="streamReachAndWatershed">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="streamReachAndWatershed">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="streamReachAndWatershedResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="gridNetwork">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="gridNetwork">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="gridNetworkResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="peukerDouglas">
+      <soap12:operation soapAction="http://taudem.hydro.ws.egc.org/peukerDouglas" style="document"/>
+      <wsdl:input name="peukerDouglas">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="peukerDouglasResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityContributingArea">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="dInfinityContributingArea">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="dInfinityContributingAreaResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityReverseAccumulation">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="dInfinityReverseAccumulation">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="dInfinityReverseAccumulationResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityConcentrationLimitedAcccumulation">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="dInfinityConcentrationLimitedAcccumulation">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="dInfinityConcentrationLimitedAcccumulationResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityFlowDirections">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="dInfinityFlowDirections">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="dInfinityFlowDirectionsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityDistanceDown">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="dInfinityDistanceDown">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="dInfinityDistanceDownResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="gagewatershed">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="gagewatershed">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="gagewatershedResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="d8ExtremeUpslopeValue">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="d8ExtremeUpslopeValue">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="d8ExtremeUpslopeValueResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="topographicWetnessIndex">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="topographicWetnessIndex">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="topographicWetnessIndexResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityTransportLimitedAccumulation">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="dInfinityTransportLimitedAccumulation">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="dInfinityTransportLimitedAccumulationResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityUpslopeDependence">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="dInfinityUpslopeDependence">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="dInfinityUpslopeDependenceResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="d8ContributingArea">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="d8ContributingArea">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="d8ContributingAreaResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="streamDefinitionByThreshold">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="streamDefinitionByThreshold">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="streamDefinitionByThresholdResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="pitRemove">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="pitRemove">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="pitRemoveResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="lengthAreaStreamSource">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="lengthAreaStreamSource">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="lengthAreaStreamSourceResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="moveOutletsToStreams">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="moveOutletsToStreams">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="moveOutletsToStreamsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="d8FlowDirections">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="d8FlowDirections">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="d8FlowDirectionsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="slopeAreaCombination">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="slopeAreaCombination">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="slopeAreaCombinationResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="slopeAverageDown">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="slopeAverageDown">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="slopeAverageDownResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="streamDropAnalysis">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="streamDropAnalysis">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="streamDropAnalysisResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="dInfinityAvalancheRunout">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="dInfinityAvalancheRunout">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="dInfinityAvalancheRunoutResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="slopeOverAreaRatio">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="slopeOverAreaRatio">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="slopeOverAreaRatioResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TauDEMAnalysisService">
+    <wsdl:port binding="tns:TauDEMAnalysisServiceSoapBinding" name="TauDEMAnalysisServiceImplPort">
+      <soap12:address location="http://localhost:8008/ws/services/TauDEMAnalysisService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

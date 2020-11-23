@@ -31,4 +31,5 @@ public class Consts {
     public static final String GET_CAPABILITIES = "GetCapabilities";
     public static final String STYLES = "STYLES";
     public static final String MEDIATYPE = "MEDIATYPE";
+
 }

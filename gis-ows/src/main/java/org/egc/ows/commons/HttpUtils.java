@@ -1,6 +1,11 @@
 package org.egc.ows.commons;
 
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.ResponseBody;
+import okio.Buffer;
+import okio.BufferedSink;
+import okio.BufferedSource;
+import okio.Okio;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -27,6 +32,7 @@ import org.egc.commons.exception.BusinessException;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import javax.validation.constraints.NotNull;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -351,6 +357,39 @@ public class HttpUtils {
         return filename;
     }
 
+
+    /**
+     * Write response to file.<br/>
+     * https://stackoverflow.com/questions/25893030/download-binary-file-from-okhttp
+     * <br/> based on OkHttp
+     * @param body       the body
+     * @param outputFile the output file
+     * @throws IOException the io exception
+     */
+    public static void writeResponse2File(@NotNull ResponseBody body, File outputFile) throws IOException {
+        BufferedSource source = body.source();
+        BufferedSink sink = Okio.buffer(Okio.sink(outputFile));
+
+        Buffer sinkBuffer = sink.getBuffer();
+        long contentLength = body.contentLength();
+        long totalBytesRead = 0;
+        int bufferSize = 8 * 1024;
+        int progress = 0;
+        for (long bytesRead; (bytesRead = source.read(sinkBuffer, bufferSize)) != -1; ) {
+            sink.emit();
+            totalBytesRead += bytesRead;
+            progress = (int) ((totalBytesRead * 100) / contentLength);
+            log.info("Write percent: {} %", progress);
+        }
+
+        sink.flush();
+        sink.close();
+        source.close();
+    }
+
+
+    private static final String TEMP_DIR = "java.io.tmpdir";
+
     /**
      * @param filename            user input filename
      * @param originalName        filename from response
@@ -363,12 +402,12 @@ public class HttpUtils {
             return filename;
         }
         if (StringUtils.isBlank(filename) && StringUtils.isBlank(originalName)) {
-            String tempfile = FilenameUtils.normalize(System.getProperty("java.io.tmpdir") + File.separator + UUID.randomUUID().toString());
+            String tempfile = FilenameUtils.normalize(System.getProperty(TEMP_DIR) + File.separator + UUID.randomUUID().toString());
             log.error("No valid filename! File saved to {}", tempfile);
             return tempfile;
         }
         if (StringUtils.isBlank(filename) && StringUtils.isNotBlank(originalName)) {
-            String s = FilenameUtils.normalize(System.getProperty("user.home") + File.separator + originalName);
+            String s = FilenameUtils.normalize(System.getProperty(TEMP_DIR) + File.separator + originalName);
             log.warn("Use original filename. File saved to {}", s);
             return s;
         }

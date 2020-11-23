@@ -279,8 +279,19 @@ public class GetCoverageRequest20 {
             return this;
         }
 
+        /**
+         * Output crs builder.
+         *
+         * @param val the val, e.g., http://www.opengis.net/def/crs/EPSG/0/32611
+         * @return the builder
+         */
         public Builder outputCrs(String val) {
             this.outputCrs = val;
+            return this;
+        }
+
+        public Builder outputEpsg(int epsg) {
+            this.outputCrs = "http://www.opengis.net/def/crs/EPSG/0/" + epsg;
             return this;
         }
 

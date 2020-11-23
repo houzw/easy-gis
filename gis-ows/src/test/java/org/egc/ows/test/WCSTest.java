@@ -15,7 +15,7 @@ import net.opengis.wcs20.GetCapabilitiesType;
 import org.egc.ows.client.OWSClient;
 import org.egc.ows.client.WCSClient;
 import org.egc.ows.request.wcs.GetCoverageRequest20;
-import org.egc.ows.request.wcs.WCSUtils;
+import org.egc.ows.commons.WCSUtils;
 import org.geotools.wcs.WCSConfiguration;
 import org.geotools.xsd.Parser;
 import org.junit.Test;

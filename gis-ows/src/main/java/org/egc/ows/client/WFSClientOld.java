@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
  * @date 2020/8/25 19:40
  */
 @Slf4j
+@Deprecated
 public class WFSClientOld implements OWSClientOld {
 
     @Override

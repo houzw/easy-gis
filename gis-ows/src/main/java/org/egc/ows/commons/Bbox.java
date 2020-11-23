@@ -46,6 +46,11 @@ public class Bbox {
 
     @Override
     public String toString() {
-        return minx + "," + miny + "," + maxx + "," + maxy;
+        return "Bbox{" +
+                "minx=" + minx +
+                ", miny=" + miny +
+                ", maxx=" + maxx +
+                ", maxy=" + maxy +
+                '}';
     }
 }

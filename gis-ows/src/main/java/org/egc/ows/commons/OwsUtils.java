@@ -1,6 +1,8 @@
 package org.egc.ows.commons;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -17,6 +19,8 @@ import java.util.Date;
  * @date 2020/9/26 14:23
  */
 public class OwsUtils {
+
+    private static final Logger log = LoggerFactory.getLogger(OwsUtils.class);
 
     /**
      * CRS in URN format.
@@ -44,7 +48,7 @@ public class OwsUtils {
                 .format(date.toInstant());
     }
 
-  /**
+    /**
      * Java POJO 2 xml string.
      *
      * @param <T>   the type parameter, for {@code JAXBElement<T>}

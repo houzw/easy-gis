@@ -17,10 +17,12 @@ import java.util.List;
  * https://www.javatips.net/api/com.eviware.soapui.impl.wsdl.wsdlrequest
  * https://stackoverflow.com/questions/26046052/updating-a-wsdlrequest-value-via-soapui-pro
  * 另可参考 https://github.com/hiwepy/soapui-template
+ *
  * @author houzhiwei
  * @date 2020/10/9 15:25
  */
 @Slf4j
+@Deprecated
 public class SoapUtils {
 
     public static String buildRequest(Definition wsdl, Operation operation) {
@@ -77,6 +79,7 @@ xmlns:seim="http://seims.hydro.ws.egc.org">
     /**
      * Wsdl.
      * https://www.soapui.org/developers-corner/integrating-with-soapui/
+     *
      * @param wsdlUrl the wsdl url or filepath
      * @throws Exception the exception
      */
@@ -113,6 +116,8 @@ xmlns:seim="http://seims.hydro.ws.egc.org">
         log.debug(service.getQName().getLocalPart());
         return service;
     }
+
+
 
     public static void getOperations(Service service, String portTypeName) {
         Port port = service.getPort(portTypeName);
