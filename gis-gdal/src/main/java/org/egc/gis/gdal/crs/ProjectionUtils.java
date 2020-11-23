@@ -89,6 +89,12 @@ public class ProjectionUtils {
         return (int) Math.ceil((centralLongitude + 180) / 6);
     }
 
+    public static int utmZone(double minLon, double maxLon) {
+        // Math.round() 四舍五入
+        // Math.ceil() 向上取整
+        return (int) Math.ceil(((maxLon-minLon)/2 + 180) / 6);
+    }
+
     /**
      * Determines if given latitude is northern for UTM
      *
@@ -102,9 +108,9 @@ public class ProjectionUtils {
     /**
      * TODO test
      *
-     * @param centralLon
-     * @param centralLat
-     * @return
+     * @param centralLon the central lon
+     * @param centralLat the central lat
+     * @return wgs 84 utm
      */
     public static SpatialReference getWgs84Utm(double centralLon, double centralLat) {
         SpatialReference utm = new SpatialReference();
@@ -126,16 +132,24 @@ public class ProjectionUtils {
         return transformation.TransformPoint(lon, lat);
     }
 
-    public static double[] transformUtmToWgs84(double easting, double northing, int zone) {
+    /**
+     * Transform utm to wgs 84 double [ ].
+     *
+     * @param lon  the lon
+     * @param lat the lat
+     * @param zone     the zone
+     * @return the double [ ]
+     */
+    public static double[] transformUtmToWgs84(double lon, double lat, int zone) {
         SpatialReference utm = new SpatialReference();
         //Set geographic coordinate system to handle lat/lon
         utm.SetWellKnownGeogCS("WGS84");
-        utm.SetUTM(zone, northing > 0 ? 1 : 0);
+        utm.SetUTM(zone, lat > 0 ? 1 : 0);
         // Clone ONLY the geographic coordinate system
         SpatialReference wgs84 = utm.CloneGeogCS();
         //wgs84.SetDataAxisToSRSAxisMapping(gdalconst.OAMS_TRADITIONAL_GIS_ORDER);
         CoordinateTransformation transformation = CoordinateTransformation.CreateCoordinateTransformation(utm, wgs84);
         // returns lon,lat, altitude
-        return transformation.TransformPoint(easting, northing, 0);
+        return transformation.TransformPoint(lon, lat, 0);
     }
 }

@@ -77,6 +77,18 @@ public class RasterUtils {
     }
 
     /**
+     * Resample.
+     *
+     * @param inputRaster  the input raster
+     * @param outputRaster the output raster
+     * @param resolution   the resolution
+     * @param resample     the resample
+     */
+    public static void resample(String inputRaster, String outputRaster, double resolution, String resample) {
+        resample(inputRaster, outputRaster, resolution, resolution, resample);
+    }
+
+    /**
      * @param inputRaster  inputRaster
      * @param outputRaster outputRaster
      * @param dx           user selected resolution x
@@ -84,34 +96,38 @@ public class RasterUtils {
      * @param resample     regridding/interpolation method, set to "near" if blank.
      *                     use {@link org.egc.gis.gdal.dto.ResamplingMethods}
      */
-    public static void resample(String inputRaster, String outputRaster, int dx, int dy, String resample) {
+    public static void resample(String inputRaster, String outputRaster, double dx, double dy, String resample) {
         if (StringUtils.isBlank(resample)) {
             resample = "near";
         }
         Dataset ds = IOFactory.createRasterIO().read(inputRaster);
         Band inband = ds.GetRasterBand(1);
+        SpatialReference srs = new SpatialReference(ds.GetProjectionRef());
         Double[] nodata = new Double[1];
         inband.GetNoDataValue(nodata);
         // ref_data = None
-        Vector<String> optionsVector = new Vector<>();
-        optionsVector.add("-tr");
-        optionsVector.add(String.valueOf(dx));
-        optionsVector.add(String.valueOf(dy));
-        optionsVector.add("-r");
-        optionsVector.add(resample);
-        optionsVector.add("-overwrite");
-        optionsVector.add("-srcnodata");
-        optionsVector.add(String.valueOf(nodata[0]));
-        optionsVector.add("-dstnodata");
-        optionsVector.add(String.valueOf(nodata[0]));
-        WarpOptions options = new WarpOptions(optionsVector);
-        gdal.Warp(outputRaster, new Dataset[]{ds}, options);
+        Vector<String> options = new Vector<>();
+        options.add("-t_srs");
+        options.add(srs.ExportToProj4());
+        options.add("-tr");
+        options.add(String.valueOf(dx));
+        options.add(String.valueOf(dy));
+        options.add("-r");
+        options.add(resample);
+        options.add("-overwrite");
+        options.add("-srcnodata");
+        options.add(String.valueOf(nodata[0]));
+        options.add("-dstnodata");
+        options.add(String.valueOf(nodata[0]));
+        WarpOptions warpOptions = new WarpOptions(options);
+        gdal.Warp(outputRaster, new Dataset[]{ds}, warpOptions);
         ds.delete();
         gdal.GDALDestroyDriverManager();
+        log.info("DONE");
     }
 
 
-    /**
+    /** TODO 测试
      * <pre>
      * Polygonize.
      * 每个不同像素值都会成为独立的多边形
@@ -150,11 +166,16 @@ public class RasterUtils {
 
     }
 
+    public static void binarize(String src, String dst) {
+        binarize(src, dst, null, 1);
+    }
+
     /**
      * TODO 测试
      * Binarize.
      * 依据选定的阈值对指定的波段进行二值化
      * https://gis.stackexchange.com/questions/69062/gdal-polygonize-how-to-filter-pixels-above-a-given-value-elevation
+     *
      * @param src       the src
      * @param dst       the dst (tif)
      * @param threshold the threshold, can be null (use nodata)
@@ -188,7 +209,7 @@ public class RasterUtils {
 
         //Vector<String> option = new Vector<>();
         //option.add("INTERLEAVE");
-       // option.add("PIXEL");
+        // option.add("PIXEL");
         //Dataset outputDs = driver.Create(dst, xSize, ySize, 1, GDT_Float32, option);
         Dataset outputDs = driver.Create(dst, xSize, ySize, 1, GDT_Float32);
         outputDs.SetGeoTransform(ds.GetGeoTransform());
@@ -206,8 +227,7 @@ public class RasterUtils {
             floatBuffer.put(i, data[i] >= threshold ? 1L : 0L);
         }
 
-        outBand.WriteRaster_Direct(0, 0, xSize, ySize,
-                xSize, ySize, gdalconstConstants.GDT_UInt16, byteBuffer);
+        outBand.WriteRaster_Direct(0, 0, xSize, ySize, xSize, ySize, gdalconstConstants.GDT_Float32, byteBuffer);
 
         outputDs.delete();
         ds.delete();

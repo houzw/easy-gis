@@ -22,7 +22,6 @@ import org.gdal.gdalconst.gdalconst;
 @Slf4j
 public class RasterIO {
 
-
     public Dataset read(String file) {
         gdal.SetConfigOption(Consts.GDAL_FILENAME_IS_UTF8, Consts.YES);
         gdal.AllRegister();

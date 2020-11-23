@@ -62,10 +62,6 @@ public interface Clip {
      * @return the bounding box
      */
     default BoundingBox expandBoundingBox(BoundingBox boundingBox, double expand) {
-        if (Math.abs(expand) > 0) {
-            return boundingBox.expand(expand);
-        } else {
-            return boundingBox;
-        }
+        return boundingBox.expand(expand);
     }
 }

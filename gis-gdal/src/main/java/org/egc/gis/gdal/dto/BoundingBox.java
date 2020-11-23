@@ -2,13 +2,15 @@ package org.egc.gis.gdal.dto;
 
 /**
  * Description:
+ * 左下右上
  * <pre>
  * BoundingBox:
- *  (min_x, max_y, max_x, min_y)
- *  (upper_left_x, upper_left_y, lower_right_x, lower_right_y)
- *  (top_left_lon, top_left_lat, bottom_right_lon, bottom_right_lat)
+ *  (min_x, min_y, max_x, max_y)
+ *  (lower_left_x, lower_left_y, upper_right_x, upper_right_y)
+ *  (bottom_left_lon,bottom_left_lat,top_right_lon, top_right_lat)
  * </pre>
  * https://docs.geotools.org/stable/userguide/library/main/envelope.html
+ *
  * @author houzhiwei
  * @date 2019 /10/14 22:11
  */
@@ -18,25 +20,27 @@ public class BoundingBox {
     private double maxX;
     private double maxY;
 
-    private double upperLeftX;
-    private double upperLeftY;
-    private double lowerRightX;
-    private double lowerRightY;
+    private double lowerLeftX;
+    private double lowerLeftY;
+    private double upperRightX;
+    private double upperRightY;
 
-    private double topLeftLon;
-    private double topLeftLat;
-    private double bottomRightLon;
-    private double bottomRightLat;
+    private double bottomLeftLon;
+    private double bottomLeftLat;
+    private double topRightLon;
+    private double topRightLat;
 
     // private int epsg = 4326;
 
     /**
-     * @param minX min_x, upper_left_x, top_left_lon
-     * @param maxY max_y, upper_left_y, top_left_lat
-     * @param maxX max_x, lower_right_x, bottom_right_lon
-     * @param minY min_y, lower_right_y, bottom_right_lat
+     * Instantiates a new Bounding box.
+     *
+     * @param minX min_x, lower_left_x, bottom_left_lon
+     * @param minY min_y, lower_left_y, bottom_left_lat
+     * @param maxX max_x, upper_right_x, top_right_lon
+     * @param maxY max_y, upper_right_y, top_right_lat
      */
-    public BoundingBox(double minX, double maxY, double maxX, double minY) {
+    public BoundingBox(double minX, double minY, double maxX, double maxY) {
         this.setMinX(minX);
         this.setMinY(minY);
         this.setMaxX(maxX);
@@ -55,14 +59,14 @@ public class BoundingBox {
     }
 
     /**
-     * minX/upperLeftX/topLeftLon
+     * minX/lowerLeftX/bottomLeftLon
      *
-     * @param minX
+     * @param minX the min x
      */
     public void setMinX(double minX) {
         this.minX = minX;
-        this.upperLeftX = minX;
-        this.topLeftLon = minX;
+        this.lowerLeftX = minX;
+        this.bottomLeftLon = minX;
     }
 
     public double getMinY() {
@@ -77,8 +81,8 @@ public class BoundingBox {
      */
     public void setMinY(double minY) {
         this.minY = minY;
-        this.lowerRightY = minY;
-        this.bottomRightLat = minY;
+        this.upperRightY = minY;
+        this.topRightLat = minY;
     }
 
     public double getMaxX() {
@@ -92,8 +96,8 @@ public class BoundingBox {
      */
     public void setMaxX(double maxX) {
         this.maxX = maxX;
-        this.lowerRightX = maxX;
-        this.bottomRightLon = maxX;
+        this.upperRightX = maxX;
+        this.topRightLon = maxX;
     }
 
     public double getMaxY() {
@@ -107,113 +111,113 @@ public class BoundingBox {
      */
     public void setMaxY(double maxY) {
         this.maxY = maxY;
-        this.topLeftLat = maxY;
-        this.upperLeftY = maxY;
+        this.bottomLeftLat = maxY;
+        this.lowerLeftY = maxY;
     }
 
-    public double getUpperLeftX() {
-        return upperLeftX;
+    public double getLowerLeftX() {
+        return lowerLeftX;
     }
 
     /**
      * minX/upperLeftX/topLeftLon
      *
-     * @param upperLeftX
+     * @param lowerLeftX the lower left x
      */
-    public void setUpperLeftX(double upperLeftX) {
-        this.minX = upperLeftX;
-        this.upperLeftX = upperLeftX;
-        this.topLeftLon = upperLeftX;
+    public void setLowerLeftX(double lowerLeftX) {
+        this.minX = lowerLeftX;
+        this.lowerLeftX = lowerLeftX;
+        this.bottomLeftLon = lowerLeftX;
     }
 
-    public double getUpperLeftY() {
-        return upperLeftY;
+    public double getLowerLeftY() {
+        return lowerLeftY;
     }
 
     /**
      * Sets upper left y.
      *
-     * @param upperLeftY the upper left y
+     * @param lowerLeftY the upper left y
      */
-    public void setUpperLeftY(double upperLeftY) {
-        this.maxY = upperLeftY;
-        this.topLeftLat = upperLeftY;
-        this.upperLeftY = upperLeftY;
+    public void setLowerLeftY(double lowerLeftY) {
+        this.maxY = lowerLeftY;
+        this.bottomLeftLat = lowerLeftY;
+        this.lowerLeftY = lowerLeftY;
     }
 
-    public double getLowerRightX() {
-        return lowerRightX;
+    public double getUpperRightX() {
+        return upperRightX;
     }
 
     /**
      * Sets lower right x.
      *
-     * @param lowerRightX the lower right x
+     * @param upperRightX the lower right x
      */
-    public void setLowerRightX(double lowerRightX) {
-        this.lowerRightX = lowerRightX;
-        this.maxX = lowerRightX;
-        this.bottomRightLon = lowerRightX;
+    public void setUpperRightX(double upperRightX) {
+        this.upperRightX = upperRightX;
+        this.maxX = upperRightX;
+        this.topRightLon = upperRightX;
     }
 
-    public double getLowerRightY() {
-        return lowerRightY;
+    public double getUpperRightY() {
+        return upperRightY;
     }
 
     /**
      * Sets lower right y.
      *
-     * @param lowerRightY the lower right y
+     * @param upperRightY the lower right y
      */
-    public void setLowerRightY(double lowerRightY) {
-        this.minY = lowerRightY;
-        this.lowerRightY = lowerRightY;
-        this.bottomRightLat = lowerRightY;
+    public void setUpperRightY(double upperRightY) {
+        this.minY = upperRightY;
+        this.upperRightY = upperRightY;
+        this.topRightLat = upperRightY;
     }
 
-    public double getTopLeftLon() {
-        return topLeftLon;
+    public double getBottomLeftLon() {
+        return bottomLeftLon;
     }
 
     /**
-     * minX/upperLeftX/topLeftLon
+     * minX/lowerLeftX/bottomLeftLon
      *
-     * @param topLeftLon
+     * @param bottomLeftLon the bottom left lon
      */
-    public void setTopLeftLon(double topLeftLon) {
-        this.minX = topLeftLon;
-        this.upperLeftX = topLeftLon;
-        this.topLeftLon = topLeftLon;
+    public void setBottomLeftLon(double bottomLeftLon) {
+        this.minX = bottomLeftLon;
+        this.lowerLeftX = bottomLeftLon;
+        this.bottomLeftLon = bottomLeftLon;
     }
 
-    public double getTopLeftLat() {
-        return topLeftLat;
+    public double getBottomLeftLat() {
+        return bottomLeftLat;
     }
 
     /**
      * Sets top left lat.
      *
-     * @param topLeftLat the top left lat
+     * @param bottomLeftLat the top left lat
      */
-    public void setTopLeftLat(double topLeftLat) {
-        this.maxY = topLeftLat;
-        this.topLeftLat = topLeftLat;
-        this.upperLeftY = topLeftLat;
+    public void setBottomLeftLat(double bottomLeftLat) {
+        this.maxY = bottomLeftLat;
+        this.bottomLeftLat = bottomLeftLat;
+        this.lowerLeftY = bottomLeftLat;
     }
 
-    public double getBottomRightLon() {
-        return bottomRightLon;
+    public double getTopRightLon() {
+        return topRightLon;
     }
 
     /**
      * Sets bottom right lon.
      *
-     * @param bottomRightLon the bottom right lon
+     * @param topRightLon the bottom right lon
      */
-    public void setBottomRightLon(double bottomRightLon) {
-        this.bottomRightLon = bottomRightLon;
-        this.lowerRightX = bottomRightLon;
-        this.maxX = bottomRightLon;
+    public void setTopRightLon(double topRightLon) {
+        this.topRightLon = topRightLon;
+        this.upperRightX = topRightLon;
+        this.maxX = topRightLon;
     }
 
     /**
@@ -221,19 +225,19 @@ public class BoundingBox {
      *
      * @return the bottom right lat
      */
-    public double getBottomRightLat() {
-        return bottomRightLat;
+    public double getTopRightLat() {
+        return topRightLat;
     }
 
     /**
      * Sets bottom right lat.
      *
-     * @param bottomRightLat the bottom right lat
+     * @param topRightLat the bottom right lat
      */
-    public void setBottomRightLat(double bottomRightLat) {
-        this.minY = bottomRightLat;
-        this.lowerRightY = bottomRightLat;
-        this.bottomRightLat = bottomRightLat;
+    public void setTopRightLat(double topRightLat) {
+        this.minY = topRightLat;
+        this.upperRightY = topRightLat;
+        this.topRightLat = topRightLat;
     }
 
     /**
@@ -241,26 +245,35 @@ public class BoundingBox {
      * on) by 0.2° or other values. Make sure you round outwards from your area rather than into it.
      *
      * @param val 0.2 or other values
-     * @return
+     * @return bounding box
      */
     public BoundingBox expand(double val) {
-        val = Math.abs(val);
-        double newTopLeftLon = topLeftLon - val;
-        double newTopLeftLat = topLeftLat + val;
-        double newBottomRightLon = bottomRightLon + val;
-        double newBottomRightLat = bottomRightLat - val;
-        return new BoundingBox(newTopLeftLon, newTopLeftLat, newBottomRightLon, newBottomRightLat);
+        double minx = minX - val;
+        double miny = minY - val;
+        double maxx = maxX + val;
+        double maxy = maxY + val;
+        return new BoundingBox(minx, miny, maxx, maxy);
     }
 
     /**
+     * 左上右下
+     * Upper-left lower-right
      * <pre>
      * "ulx uly lrx lry"<br/>
      * "upperLeftX upperLeftY lowerRightX lowerRightY"<br/>
      * "minX maxY maxX minY"
      * @return "ulx uly lrx lry"
      */
-    public String toXYString() {
-        return this.upperLeftX + " " + this.upperLeftY + " " + this.lowerRightX + " " + this.lowerRightY;
+    public String toUllrString() {
+        return this.minX + " " + this.maxY + " " + this.maxX + " " + this.minY;
     }
 
+    /**
+     * 左下右上
+     * lower-left upper-right
+     * @return string
+     */
+    public String toLlurString() {
+        return this.minX + " " + this.minY + " " + this.maxX + " " + this.maxY;
+    }
 }

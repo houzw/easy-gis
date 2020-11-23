@@ -1,5 +1,8 @@
 package org.egc.gis.gdal.dto;
 
+/**
+ * @author houzhiwei
+ */
 public class ResamplingMethods {
     /**
      * nearest neighbour resampling (default, fastest algorithm, worst interpolation quality).

@@ -3,8 +3,10 @@ package org.egc.gis.gdal.test;
 import org.egc.gis.gdal.IOFactory;
 import org.egc.gis.gdal.dto.Area;
 import org.egc.gis.gdal.dto.RasterMetadata;
+import org.egc.gis.gdal.dto.ResamplingMethods;
 import org.egc.gis.gdal.dto.VectorMetadata;
 import org.egc.gis.gdal.raster.RasterInfo;
+import org.egc.gis.gdal.raster.RasterUtils;
 import org.egc.gis.gdal.vector.VectorFormat;
 import org.egc.gis.gdal.vector.VectorUtils;
 import org.gdal.gdal.Dataset;
@@ -26,7 +28,12 @@ public class Test1 {
         System.out.println(gdal.VersionInfo());
     }
 
-    String dem = "J:/demos/raster/dem1.tif";
+    String dem = "J:/demos/xcdem.tif";
+
+    @Test
+    public void testResample() {
+        RasterUtils.resample(dem, "J:/demos/xcdem_200.tif", 200, ResamplingMethods.NEAR);
+    }
 
     @Test
     public void test() {
@@ -87,5 +94,10 @@ public class Test1 {
         Dataset r = IOFactory.createRasterIO().read(dem);
         Area area = RasterInfo.getArea(r);
         System.out.println(area);
+    }
+
+    @Test
+    public void testDis() {
+        System.out.println(RasterInfo.degree2meters(1));
     }
 }

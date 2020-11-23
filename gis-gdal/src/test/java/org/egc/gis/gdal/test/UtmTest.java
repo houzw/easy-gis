@@ -14,7 +14,8 @@ public class UtmTest {
     public void utm() {
         //49
         System.out.println(UtmUtilities.utmZone(113));
-        System.out.println(Math.ceil(113 / 6) + 31);
+        //https://epsg.io/?q=UTM+zone+49N
+        System.out.println(UtmUtilities.getUtmEpsg(113,20));
     }
 
     @Test
