@@ -128,7 +128,7 @@ public enum GDALDriversEnum {
     KRO("KRO", "raster", "read, write and update, supporting virtual IO", "KOLOR Raw", "kro"),
     ROI_PAC("ROI_PAC", "raster", "read, write and update, supporting virtual IO", "ROI_PAC raster", ""),
     ENVI("ENVI", "raster", "read, write and update, supporting virtual IO", "ENVI .hdr Labelled", "bsq/bil/bip"),
-    EHdr("EHdr", "raster", "read, write and update, supporting virtual IO", "ESRI .hdr Labelled", ""),
+    EHdr("EHdr", "raster", "read, write and update, supporting virtual IO", "ESRI .hdr Labelled", "bil"),
     ISCE("ISCE", "raster", "read, write and update, supporting virtual IO", "ISCE raster", ""),
     ARG("ARG", "raster", "rwv", "Azavea Raster Grid format", ""),
     RIK("RIK", "raster", " read-only and virtual IO", "Swedish Grid RIK", "rik"),

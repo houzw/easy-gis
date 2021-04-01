@@ -8,6 +8,11 @@ import org.gdal.gdal.Dataset;
 import org.gdal.gdal.Driver;
 import org.gdal.gdal.gdal;
 import org.gdal.gdalconst.gdalconst;
+import org.gdal.osr.SpatialReference;
+
+import java.io.File;
+
+import static org.gdal.gdalconst.gdalconstConstants.GDT_Float32;
 
 /**
  * Description:
@@ -38,9 +43,9 @@ public class RasterIO {
     /**
      * TODO 测试
      *
-     * @param data
-     * @param dstFile
-     * @return
+     * @param data    the data
+     * @param dstFile the dst file
+     * @return boolean
      */
     public boolean write(Dataset data, String dstFile) {
         String ext = FilenameUtils.getExtension(dstFile);
@@ -53,5 +58,57 @@ public class RasterIO {
         ds.FlushCache();
         ds.delete();
         return true;
+    }
+
+    /**
+     * Closes the given {@link Dataset}.
+     *
+     * @param ds {@link Dataset} to close.
+     */
+    public static void closeDataSet(Dataset ds) {
+        if (ds == null) {
+            throw new NullPointerException("The provided dataset is null");
+        }
+        try {
+            ds.delete();
+        } catch (Exception e) {
+            log.error(e.getLocalizedMessage(), e);
+        }
+    }
+
+
+    /**
+     * Write geotiff file. <br/>
+     * <b>only one band</b>
+     *
+     * @param filepath     the output file name
+     * @param nRows        the number of rows, ySize
+     * @param nCols        the number of columns, xSize
+     * @param data         the data to write
+     * @param geotransform the geographic transformation
+     * @param srs          the srs Spatial Reference
+     * @param nodataValue  the nodata value
+     * @param gdalDataType the gdal data type, set to {@link org.gdal.gdalconst.gdalconstConstants#GDT_Float32} if is null
+     */
+    public void writeGeotiffFile(String filepath, int nRows, int nCols, float[] data, double[] geotransform, SpatialReference srs, double nodataValue, Integer gdalDataType) {
+        File dstFile = new File(filepath);
+        if (!dstFile.getParentFile().exists()) {
+            dstFile.getParentFile().mkdirs();
+        }
+        if (gdalDataType == null) {
+            gdalDataType = GDT_Float32;
+        }
+        //must call AllRegister() otherwise GetDriverByName() is null
+        gdal.AllRegister();
+        Driver tiff = gdal.GetDriverByName("GTiff");
+
+        //new write out dataset
+        Dataset ds = tiff.Create(filepath, nCols, nRows, 1, gdalDataType);
+        ds.SetGeoTransform(geotransform);
+        ds.SetProjection(srs.ExportToWkt());
+        ds.GetRasterBand(1).SetNoDataValue(nodataValue);
+        ds.GetRasterBand(1).WriteRaster(0, 0, nCols, nRows, gdalDataType, data);
+        ds.FlushCache();
+        RasterIO.closeDataSet(ds);
     }
 }

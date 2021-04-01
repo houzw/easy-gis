@@ -1,6 +1,7 @@
 package org.egc.gis.gdal.test;
 
 import org.egc.gis.gdal.IOFactory;
+import org.egc.gis.gdal.crs.CoordinateTransformer;
 import org.egc.gis.gdal.dto.Area;
 import org.egc.gis.gdal.dto.RasterMetadata;
 import org.egc.gis.gdal.dto.ResamplingMethods;
@@ -45,10 +46,15 @@ public class Test1 {
 
     @Test
     public void testMeta() {
-        RasterMetadata metadata = RasterInfo.getMetadata(dem);
-        System.out.println(metadata.getSrid());
+        String s = "F:/workspace/SEIMS/data/youwuzhen/data_prepare/spatial/ywzdem30m.tif";
+        RasterMetadata metadata = RasterInfo.getMetadata(s);
+        System.out.println(metadata.getEpsg());
         System.out.println(metadata.getCrs());
         System.out.println(metadata.getMinY());
+        System.out.println(metadata.getExtent());
+        double[] extent = CoordinateTransformer.transformExtent(2415, 4326, 39444018.9, 2840045.8, 39447828.9, 2842985.8);
+        System.out.println(extent[0]+" "+extent[1]+" "+extent[2]+" "+extent[3]);
+        //youwuzheng:116.44297141848418 25.666323798766907 116.4808037526092 25.693001173347675
     }
 
     @Test
@@ -57,10 +63,11 @@ public class Test1 {
         System.out.println(metadata.getSrid());
         System.out.println(metadata.getCrs());
         System.out.println(metadata.getMinY());
+        System.out.println(metadata.getExtent());
     }
 
     @Test
-    public void testVector() throws IOException {
+    public void testVector() {
         String json = "H:\\GIS data\\hydrology_data\\TaoXi_model data\\outlet\\outlet.json";
 
         VectorFormat vectorFormat = new VectorFormat();
@@ -77,7 +84,7 @@ public class Test1 {
     }
 
     @Test
-    public void write() throws IOException {
+    public void write() {
         DataSource ds = IOFactory.createVectorIO().read(shp);
         IOFactory.createVectorIO().write(ds, "H:\\gisdemo\\out\\outlet_new.shp");
     }
@@ -91,13 +98,9 @@ public class Test1 {
 
     @Test
     public void rasterArea() {
-        Dataset r = IOFactory.createRasterIO().read(dem);
+        Dataset r = IOFactory.createRasterIO().read("F:/data/meiChuangJiang 梅川江/meichuanjiang/data_prepare/spatial/dem.img");
         Area area = RasterInfo.getArea(r);
         System.out.println(area);
     }
 
-    @Test
-    public void testDis() {
-        System.out.println(RasterInfo.degree2meters(1));
-    }
 }

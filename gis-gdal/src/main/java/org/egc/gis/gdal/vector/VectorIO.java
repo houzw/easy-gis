@@ -40,9 +40,9 @@ public class VectorIO {
     /**
      * write data to shapefile
      *
-     * @param ds
-     * @param dstFile
-     * @return
+     * @param ds      the DataSource
+     * @param dstFile the dst file
+     * @return boolean
      */
     public boolean write(DataSource ds, String dstFile) {
         Driver driver = ogr.GetDriverByName(GDALDriversEnum.ESRI_Shapefile.getName());
@@ -58,5 +58,21 @@ public class VectorIO {
         dstSrc.delete();
         System.out.println(i);
         return i == 0;
+    }
+
+    /**
+     * Closes the given {@link DataSource}.
+     *
+     * @param ds {@link DataSource} to close.
+     */
+    public static void closeDataSource(DataSource ds) {
+        if (ds == null) {
+            throw new NullPointerException("The provided data source is null");
+        }
+        try {
+            ds.delete();
+        } catch (Exception e) {
+            log.error(e.getLocalizedMessage(), e);
+        }
     }
 }

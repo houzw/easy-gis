@@ -14,6 +14,10 @@ import org.gdal.osr.SpatialReference;
 @Slf4j
 public class UtmUtilities {
     static final String WGS84 = "WGS84";
+    static final String NAD27 = "NAD27";
+    static final String NAD83 = "NAD83";
+    static final String WGS72 = "WGS72";
+
 
     public static int getCenteralLongitude(int zone) {
         return (6 * zone - 3) - 180;
@@ -33,13 +37,14 @@ public class UtmUtilities {
     /**
      * Utm zone int. <br/>
      * NOTE: not for large area
+     *
      * @param minLon the min lon
      * @param maxLon the max lon
      * @return the int
      */
     public static int utmZone(double minLon, double maxLon) {
-        double centeral = (maxLon-minLon)/2;
-        return (int) Math.floor((centeral / 6) + 31);
+        double central = (maxLon - minLon) / 2;
+        return (int) Math.floor((central / 6) + 31);
     }
 
     /**
@@ -52,20 +57,26 @@ public class UtmUtilities {
         return latitude > 0 ? 1 : 0;
     }
 
-    /**
-     * TODO test
-     * WGS 84 datum UTM Zone
-     *
-     * @param lon the central lon
-     * @param lat the central lat
-     * @return wgs 84 utm
-     */
-    public static SpatialReference getWgs84Utm(double lon, double lat) {
+
+   /* public static SpatialReference getWgs84UtmSRS(double lon, double lat) {
         SpatialReference utm = new SpatialReference();
         //Set geographic coordinate system to handle lat/lon
         utm.SetWellKnownGeogCS(WGS84);
         utm.SetUTM(utmZone(lon), isNorthern(lat));
-        utm.GetAuthorityCode(null);
+        return utm;
+    }*/
+
+    /**
+     * TODO test
+     * WGS 84 datum UTM Zone
+     *
+     * @param lon the wgs84 central lon
+     * @param lat the wgs84 central lat
+     * @return wgs 84 utm
+     */
+    public static SpatialReference getWgs84Utm(double lon, double lat) {
+        SpatialReference utm = new SpatialReference();
+        utm.ImportFromEPSG(getUtmEpsg(lon, lat));
         return utm;
     }
 
@@ -73,14 +84,14 @@ public class UtmUtilities {
      * Gets utm epsg.
      * https://gis.stackexchange.com/questions/365584/convert-utm-zone-into-epsg-code
      *
-     * @param lon the lon
-     * @param lat the lat
+     * @param centralLon the centralLon
+     * @param centralLat the centralLat
      * @return the utm epsg
      */
-    public static int getUtmEpsg(double lon, double lat) {
+    public static int getUtmEpsg(double centralLon, double centralLat) {
         int epsgCode = 32600;
-        epsgCode += utmZone(lon);
-        if (lat < 0) {
+        epsgCode += utmZone(centralLon);
+        if (centralLat < 0) {
             epsgCode += 100;
         }
         return epsgCode;
@@ -89,8 +100,8 @@ public class UtmUtilities {
     /**
      * Transform wgs 84 to utm double [ ].
      *
-     * @param lon the lon
-     * @param lat the lat
+     * @param lon the wgs84 lon
+     * @param lat the wgs84 lat
      * @return easting, northing, altitude
      */
     public static double[] transformWgs84ToUtm(double lon, double lat) {

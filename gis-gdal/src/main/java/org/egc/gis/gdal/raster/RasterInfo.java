@@ -1,5 +1,6 @@
 package org.egc.gis.gdal.raster;
 
+import com.google.common.base.Joiner;
 import com.google.common.primitives.Floats;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -17,10 +18,11 @@ import org.gdal.gdal.Driver;
 import org.gdal.gdal.gdal;
 import org.gdal.gdalconst.gdalconst;
 import org.gdal.osr.SpatialReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +34,12 @@ import java.util.stream.Collectors;
  */
 public class RasterInfo {
 
+    private static final Logger log = LoggerFactory.getLogger(RasterInfo.class);
+
     /**
      * 利用gdal获取栅格数据元数据
+     * <br/>
+     * <b>NOTE: dataset has been closed!</b>
      *
      * @param tif the tif
      * @return metadata
@@ -44,12 +50,36 @@ public class RasterInfo {
         return getMetadata(dataset);
     }
 
+    /**
+     * Gets metadata. <br/>
+     * <b>NOTE: dataset has been closed!</b>
+     *
+     * @param dataset the dataset
+     * @return the metadata
+     */
     public static RasterMetadata getMetadata(Dataset dataset) {
+        return getMetadata(dataset, false, false, true);
+    }
+
+    public static RasterMetadata getMetadata(Dataset dataset, boolean closeDataset) {
+        return getMetadata(dataset, false, false, closeDataset);
+    }
+
+    /**
+     * Gets metadata. <br/>
+     *
+     * @param dataset         the dataset
+     * @param getUniqueValues the get unique values 获取唯一值列表（空格分隔），写入元数据中
+     * @param getQuantile     the get quantile 获取分位数，写入元数据中。当前默认 4 分位
+     * @param closeDataset    whether dataset should be closed . 当 dataset 不需要再使用时，应当关闭
+     * @return the metadata
+     */
+    public static RasterMetadata getMetadata(Dataset dataset, boolean getUniqueValues, boolean getQuantile, boolean closeDataset) {
         RasterMetadata metadata = new RasterMetadata();
         Driver driver = dataset.GetDriver();
         metadata.setFormat(driver.getShortName());
         SpatialReference sr = new SpatialReference(dataset.GetProjectionRef());
-
+        metadata.setSrs(sr);
         metadata.setCrsProj4(sr.ExportToProj4());
         metadata.setCrsWkt(sr.ExportToWkt());
         String authorityCode = sr.GetAuthorityCode(null);
@@ -57,15 +87,20 @@ public class RasterInfo {
         if (authorityCode != null) {
             Integer srid = Integer.parseInt(authorityCode);
             metadata.setSrid(srid);
+            metadata.setEpsg(srid);
+        } else {
+            log.warn("Authority Code is null!");
         }
         if (sr.IsProjected() > 0) {
             String projcs = sr.GetAttrValue(Consts.ATTR_PROJCS);
             metadata.setCrs(projcs);
+            metadata.setProjected(true);
         } else if (sr.IsGeographic() > 0) {
             String geogcs = sr.GetAttrValue(Consts.ATTR_GEOGCS);
             metadata.setCrs(geogcs);
         }
-        metadata.setUnit(sr.GetLinearUnitsName());
+        metadata.setUnit(sr.GetAttrValue("UNIT"));
+        metadata.setBands(dataset.GetRasterCount());
         Band band = dataset.GetRasterBand(1);
         Double[] nodataVal = new Double[1];
         band.GetNoDataValue(nodataVal);
@@ -103,7 +138,15 @@ public class RasterInfo {
         metadata.setSizeHeight(dataset.GetRasterYSize());
         metadata.setSizeWidth(dataset.GetRasterXSize());
 
-        dataset.delete();
+        if (getUniqueValues) {
+            metadata.setUniqueValues(Joiner.on(" ").join(getUniqueValues(dataset)));
+        }
+        if (getQuantile) {
+            metadata.setQuantileBreaks(getQuantile(dataset, 4));
+        }
+        if (closeDataset) {
+            RasterIO.closeDataSet(dataset);
+        }
         gdal.GDALDestroyDriverManager();
         return metadata;
     }
@@ -154,7 +197,7 @@ public class RasterInfo {
         String prjName = null;
         Map<String, Object> result = new HashMap<>(3);
         try {
-            String path = FilenameUtils.normalize(PathUtil.resourcesFilePath("wkt_lookup.uesv"));
+            String path = FilenameUtils.normalize(PathUtil.resourcesFilePath(RasterInfo.class, "wkt_lookup.uesv"));
             List<String> listOfWkt = FileUtils.readLines(new File(path), "UTF-8");
             Dataset ds = IOFactory.createRasterIO().read(raster);
             String wktInfo = ds.GetProjection();
@@ -193,7 +236,7 @@ public class RasterInfo {
             result.put("auth", "4326");
             result.put("srs_id", "3452");
             result.put("prj_name", prjName);
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage());
             return result;
         }
     }
@@ -235,8 +278,10 @@ public class RasterInfo {
         float[] dataBuf = readRasterBand(dataset, 1);
 
         List<Float> dataBufList = Floats.asList(dataBuf);
-        Collections.sort(dataBufList);
-        List<Float> uniqueList = dataBufList.stream().distinct().collect(Collectors.toList());
+        dataBuf = null;
+        // 只是增加了运行垃圾回收的可能，不保证JVM一定执行
+        System.gc();
+        List<Float> uniqueList = dataBufList.stream().sorted().distinct().collect(Collectors.toList());
         if (uniqueList.indexOf(nodata.floatValue()) > -1) {
             uniqueList.remove(uniqueList.indexOf(nodata.floatValue()));
         }
@@ -255,11 +300,32 @@ public class RasterInfo {
         int xSize = dataset.GetRasterXSize();
         int ySize = dataset.GetRasterYSize();
         float[] dataBuf = new float[xSize * ySize];
+
         band.ReadRaster(0, 0, xSize, ySize, dataBuf);
         return dataBuf;
     }
 
-    //分位数
+    /**
+     * Read raster band buffer float [ ].
+     *
+     * @param dataset   the dataset
+     * @param bandIndex the band index
+     * @return float [ ]
+     * @see <a href="https://trac.osgeo.org/gdal/browser/trunk/gdal/swig/java/apps/GDALTestIO.java">GDALTestIO</a>
+     */
+    public static float[] readRasterBandBuffer(Dataset dataset, int bandIndex) {
+        Band band = dataset.GetRasterBand(bandIndex);
+        int xSize = dataset.GetRasterXSize();
+        int ySize = dataset.GetRasterYSize();
+        float[] dataBuf = new float[xSize * ySize];
+        band.ReadRaster(0, 0, xSize, ySize, dataBuf);
+        return dataBuf;
+    }
+
+    /**
+     * 分位数
+     * <b>注意</b>: 该方法目前对内存空间占用较大，不适用于大文件
+     */
     public static String getQuantile(Dataset dataset, int numQuantile) {
         Band band = dataset.GetRasterBand(1);
         Double[] nodataVal = new Double[1];
@@ -272,7 +338,8 @@ public class RasterInfo {
 
         Double[] quantileBreaks = new Double[numQuantile - 1];
         List<Float> dataBufList = Floats.asList(dataBuf);
-        Collections.sort(dataBufList);
+        dataBuf = null;
+        System.gc();
         //移除空值, 移除 nodata
         Double finalNodata = nodata; // lambda 表达式需要
         List<Float> removedList = dataBufList.stream().filter(x -> {
@@ -281,9 +348,10 @@ public class RasterInfo {
                 return !x.equals(finalNodata.floatValue());
             }
             return false;
-        }).collect(Collectors.toList());
+        }).sorted().collect(Collectors.toList());
+        dataBufList = null;
         int size = removedList.size();
-        //分位数位置  (n+1)*p, 0<p<1, 如  0.25，0.5,0.75
+        //分位数位置  (n+1)*p, 0<p<1, 如  0.25, 0.5, 0.75
         int numDataInQuantile = ((size + 1) / numQuantile);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < numQuantile - 1; i++) {

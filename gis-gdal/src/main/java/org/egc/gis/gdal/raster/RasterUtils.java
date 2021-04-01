@@ -82,13 +82,15 @@ public class RasterUtils {
      * @param inputRaster  the input raster
      * @param outputRaster the output raster
      * @param resolution   the resolution
-     * @param resample     the resample
+     * @param resample     regridding/interpolation method, set to "near" if blank.
+     *                     use {@link org.egc.gis.gdal.dto.ResamplingMethods}
      */
     public static void resample(String inputRaster, String outputRaster, double resolution, String resample) {
         resample(inputRaster, outputRaster, resolution, resolution, resample);
     }
 
     /**
+     * TODO resample 改成枚举
      * @param inputRaster  inputRaster
      * @param outputRaster outputRaster
      * @param dx           user selected resolution x
@@ -127,7 +129,8 @@ public class RasterUtils {
     }
 
 
-    /** TODO 测试
+    /**
+     * TODO 测试
      * <pre>
      * Polygonize.
      * 每个不同像素值都会成为独立的多边形
@@ -178,8 +181,8 @@ public class RasterUtils {
      *
      * @param src       the src
      * @param dst       the dst (tif)
-     * @param threshold the threshold, can be null (use nodata)
-     * @param band      the band， 0或1 都取第一个波段
+     * @param threshold the threshold, set to nodata if null
+     * @param band      the band， 0 或 1 都取第一个波段
      */
     public static void binarize(String src, String dst, Double threshold, int band) {
         Dataset ds = IOFactory.createRasterIO().read(src);

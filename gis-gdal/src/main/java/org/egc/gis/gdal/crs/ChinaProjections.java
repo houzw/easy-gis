@@ -8,7 +8,7 @@ import org.gdal.osr.SpatialReference;
  * @date 2020/7/15 12:35
  */
 @Slf4j
-public class ProjectionsInChina {
+public class ChinaProjections {
     String ITRF2000;
 
     public static void wgs842ITRF2000() {
@@ -64,4 +64,39 @@ public class ProjectionsInChina {
         cgcs.ImportFromEPSG(4490);
         return cgcs;
     }
+
+    public static SpatialReference krasovsky1940Albers() {
+        SpatialReference albers = new SpatialReference();
+        // 阿尔伯斯投影，正轴等积割圆锥投影
+       /* String pszGeogName, 地理坐标系名称
+         String pszDatumName, 基准面
+         String pszEllipsoidName, 椭球体
+         double dfSemiMajor, 半长轴
+         double dfInvFlattening, 扁率
+         String pszPMName, 本初子午线名称
+         double dfPMOffset,
+         String pszUnits,单位
+         double dfConvertToRadians*/
+        albers.SetGeogCS("GCS_Krasovsky_1940", "D_Krasovsky_1940", "Krasovsky_1940",
+                6378245, 298.3,
+                "Greenwich", 0,
+                "degree", 0.0174532925199433);
+        albers.SetAuthority("SPHEROID", "EPSG", 7024);
+        albers.SetAuthority("DATUM", "EPSG", 6024);
+        albers.SetProjCS("Krasovsky_1940_Albers");
+        albers.SetProjection("Albers_Conic_Equal_Area");
+        //标准纬线
+        albers.SetProjParm("standard_parallel_1", 25);
+        albers.SetProjParm("standard_parallel_2", 47);
+        // latitude of origin
+        albers.SetProjParm("latitude_of_center", 0);
+        // central meridian
+        albers.SetProjParm("longitude_of_center", 105);
+        albers.SetProjParm("false_easting", 0);
+        albers.SetProjParm("false_northing", 0);
+        albers.SetLinearUnits("metre", 1);
+        albers.SetAuthority("UNIT", "EPSG", 9001);
+        return albers;
+    }
+
 }

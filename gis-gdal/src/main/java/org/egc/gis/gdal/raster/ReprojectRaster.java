@@ -113,7 +113,7 @@ public class ReprojectRaster {
     }
 
     /**
-     * Reproject 2 utm.
+     * Reproject to utm.
      *
      * @param srcFile the src file
      * @param dstFile the dst file

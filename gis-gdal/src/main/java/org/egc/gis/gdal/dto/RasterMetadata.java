@@ -2,6 +2,7 @@ package org.egc.gis.gdal.dto;
 
 import lombok.Data;
 import org.egc.commons.util.Formatter;
+import org.gdal.osr.SpatialReference;
 
 import java.io.Serializable;
 
@@ -19,6 +20,7 @@ public class RasterMetadata implements Serializable {
      * Coordinate Reference System Identify
      */
     private String crs;
+    private SpatialReference srs;
     /**
      * Coordinate Reference System string in PROJ.4 format
      */
@@ -34,6 +36,7 @@ public class RasterMetadata implements Serializable {
      */
     private Integer srid;
     private Integer epsg;
+    private int bands;
     private double nodata;
     private String format;
     private String semantic;
