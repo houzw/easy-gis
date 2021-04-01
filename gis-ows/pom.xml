@@ -16,13 +16,13 @@
     <url>http://www.example.com</url>
 
     <properties>
+        <maven.deploy.skip>false</maven.deploy.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <geotools.version>23.0</geotools.version>
         <geotools-wfs.version>16.5</geotools-wfs.version>
         <jvnet.version>2.6.1</jvnet.version>
-        <n52.sensorweb.version>2.7.0</n52.sensorweb.version>
         <analytics.version>5.5.1</analytics.version>
     </properties>
 
@@ -49,11 +49,7 @@
             <artifactId>soapui</artifactId>
             <version>5.6.0</version>
         </dependency>
-        <!--<dependency>
-            <groupId>org.apache.xmlbeans</groupId>
-            <artifactId>xmlbeans</artifactId>
-            <version>3.1.0</version>
-        </dependency>-->
+
         <dependency>
             <groupId>org.apache.xmlbeans</groupId>
             <artifactId>xmlbeans-xpath</artifactId>
@@ -108,15 +104,13 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy</artifactId>
-            <version>3.0.6</version>
+            <version>3.0.7</version>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
             <version>1.67</version>
         </dependency>
-
-
         <dependency>
             <groupId>org.jvnet.ogc</groupId>
             <artifactId>filter-v_1_1_0</artifactId>
@@ -227,7 +221,7 @@
                   An OGC Web Map Server client implementation that can be used directly or as through the GridCoverageExchange API.
                   Direct usage is recommended, as the GridCoverageExchange access for WMS is not well tested and is complicated to use.
                   It supports WMS versions 1.0.0, 1.1.0, 1.1.1, and 1.3.0.
-                  -->
+        -->
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-wms</artifactId>
@@ -239,22 +233,34 @@
             <version>${geotools.version}</version>
         </dependency>
         <!--   http://docs.geotools.org/stable/userguide/unsupported/wps.html     -->
+        <!--  for wps 1.0.0     -->
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-wps</artifactId>
             <version>${geotools.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.n52.wps/52n-wps-client-lib -->
-        <!--        https://wiki.52north.org/Geoprocessing/TutorialClientAPI-->
+
+        <!-- https://mvnrepository.com/artifact/org.n52.geoprocessing/wps-client-lib -->
         <dependency>
-            <groupId>org.n52.wps</groupId>
-            <artifactId>52n-wps-client-lib</artifactId>
-            <version>3.6.3</version>
+            <groupId>org.n52.geoprocessing</groupId>
+            <artifactId>wps-client-lib</artifactId>
+            <version>1.0.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
         <!--
-                    Implementation of DataStore allowing geotools code to work with an OGC Web Feature Service.
-                    Offers client code for WFS 1.0 and WFS 1.1.
-                    -->
+            Implementation of DataStore allowing geotools code to work with an OGC Web Feature Service.
+            Offers client code for WFS 1.0 and WFS 1.1.
+        -->
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-wfs-ng</artifactId>
@@ -264,6 +270,11 @@
         <dependency>
             <groupId>org.geotools.xsd</groupId>
             <artifactId>gt-xsd-wcs</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools.xsd</groupId>
+            <artifactId>gt-xsd-core</artifactId>
             <version>${geotools.version}</version>
         </dependency>
 
@@ -293,40 +304,27 @@
             <artifactId>gt-xsd-wmts</artifactId>
             <version>${geotools.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-xml</artifactId>
-            <version>${geotools.version}</version>
-        </dependency>
+        <!-- <dependency>
+             <groupId>org.geotools</groupId>
+             <artifactId>gt-xml</artifactId>
+             <version>${geotools.version}</version>
+         </dependency>-->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.n52.sensorweb/52n-xml-waterML-v20 -->
-        <dependency>
-            <groupId>org.n52.sensorweb</groupId>
-            <artifactId>52n-xml-waterML-v20</artifactId>
-            <version>${n52.sensorweb.version}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.n52.sensorweb/52n-xml-wcs-v11 -->
-        <dependency>
-            <groupId>org.n52.sensorweb</groupId>
-            <artifactId>52n-xml-wcs-v11</artifactId>
-            <version>${n52.sensorweb.version}</version>
-        </dependency>
-       <!-- <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>3.0.6</version>
-            <scope>test</scope>
-        </dependency>-->
         <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>4.9.0</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/org.geotools.xsd/gt-xsd-gml3 -->
+        <dependency>
+            <groupId>org.geotools.xsd</groupId>
+            <artifactId>gt-xsd-gml3</artifactId>
+            <version>23.0</version>
+        </dependency>
     </dependencies>
 
     <build>

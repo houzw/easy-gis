@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The type Wcs client.
+ * The Wcs client.
  *
  * @author houzhiwei
  * @date 2020 /8/25 19:28
@@ -34,6 +34,7 @@ public class WCSClient {
 
     /*
      * 因为请求参数为 kvp （key-value-pair），因此请求参数方式应当是 Get
+     * 还可以参考 suis4j 的方式创建 xml 请求数据，使用 POST
      * */
 
     private String serviceEndpoint;
@@ -82,7 +83,7 @@ public class WCSClient {
 
 
     /**
-     * Describe coverage 10 coverage description.
+     * Describe coverage 1.0 coverage description.
      *
      * @param coverages the coverages, could use Lists.newArrayList(coverage)
      * @return the coverage description
@@ -166,14 +167,17 @@ public class WCSClient {
      * Gets coverage 20.
      *
      * @param request      the request
-     * @param saveFilePath the save filepath
+     * @param saveFilePath the save filepath, directory or filepath
      * @return the coverage 20
      */
     public String getCoverage20(GetCoverageRequest20 request, String saveFilePath) {
         File saveFile = new File(saveFilePath);
+        if (!saveFile.getParentFile().exists()) {
+            saveFile.getParentFile().mkdirs();
+        }
         try {
             URI url = this.requestBuilder.getCoverage20(request);
-            System.out.println(url.toString());
+            log.debug("request url is {}",url.toString());
             if (saveFile.isDirectory()) {
                 return HttpUtils.doGetFile(url, saveFilePath, true);
             } else {

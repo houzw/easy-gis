@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The type Soap client.
+ * The Soap client.
  *
  * @author houzhiwei
  * @date 2020 /11/2 16:21

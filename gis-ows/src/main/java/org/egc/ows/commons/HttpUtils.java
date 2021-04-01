@@ -326,6 +326,7 @@ public class HttpUtils {
                 InputStream inputStream = entity.getContent();
                 if (inputStream != null) {
                     FileUtils.copyToFile(inputStream, new File(filename));
+                    log.debug("download filename is {}",filename);
                 }
                 //  ensure it is fully consumed
                 EntityUtils.consume(entity);

@@ -47,9 +47,11 @@ public class WCSUtils {
         for (CoverageSummaryType cst : csts) {
             CoverageInfo coverageInfo = new CoverageInfo();
             coverageInfo.setCoverageId(cst.getCoverageId());
-            coverageInfo.setTitle(cst.getTitle().get(0).getValue());
-            List<LanguageStringType> keywords = cst.getKeywords().get(0).getKeyword();
-            coverageInfo.setKeyworks(keywords.stream().map(LanguageStringType::getValue).collect(Collectors.toList()));
+            coverageInfo.setTitle(cst.getTitle().size() == 0 ? "" : cst.getTitle().get(0).getValue());
+            List<LanguageStringType> keywords = cst.getKeywords().size() > 0 ? cst.getKeywords().get(0).getKeyword() : null;
+            if (keywords != null) {
+                coverageInfo.setKeywords(keywords.stream().map(LanguageStringType::getValue).collect(Collectors.toList()));
+            }
             BoundingBoxType bbox = (BoundingBoxType) cst.getBoundingBox().get(0).getValue();
             coverageInfo.setSrsName(bbox.getCrs());
             /*List<String> timePositions = lonLatEnvelope.getTimePosition()

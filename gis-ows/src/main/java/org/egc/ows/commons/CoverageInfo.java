@@ -1,6 +1,7 @@
 package org.egc.ows.commons;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -8,8 +9,23 @@ import java.util.List;
  * @date 2020/10/18 16:44
  */
 public class CoverageInfo implements Serializable {
+    @Override
+    public String toString() {
+        return "CoverageInfo{" +
+                "keywords=" + keywords +
+                ", coverageId='" + coverageId + '\'' +
+                ", title='" + title + '\'' +
+                ", srsName='" + srsName + '\'' +
+                ", srsNameShort='" + srsNameShort + '\'' +
+                ", wgs84LowerCorner=" + Arrays.toString(wgs84LowerCorner) +
+                ", lowerCorner=" + Arrays.toString(lowerCorner) +
+                ", upperCorner=" + Arrays.toString(upperCorner) +
+                ", wgs84UpperCorner=" + Arrays.toString(wgs84UpperCorner) +
+                ", timePositions=" + timePositions +
+                '}';
+    }
 
-    private List<String> keyworks;
+    private List<String> keywords;
 
     public String getCoverageId() {
         return coverageId;
@@ -98,11 +114,11 @@ public class CoverageInfo implements Serializable {
     private double[] wgs84UpperCorner;
     private List<String> timePositions;
 
-    public List<String> getKeyworks() {
-        return keyworks;
+    public List<String> getKeywords() {
+        return keywords;
     }
 
-    public void setKeyworks(List<String> keyworks) {
-        this.keyworks = keyworks;
+    public void setKeywords(List<String> keywords) {
+        this.keywords = keywords;
     }
 }

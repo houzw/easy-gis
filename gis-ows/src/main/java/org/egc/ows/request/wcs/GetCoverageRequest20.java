@@ -327,7 +327,7 @@ public class GetCoverageRequest20 {
         public Builder subsetXY(double minx, double miny, double maxx, double maxy, int subSettingEpsg) {
             this.subsetX = "x(" + minx + "," + maxx + ")";
             this.subsetY = "y(" + miny + "," + maxy + ")";
-            this.subSettingCrs = "EPSG:" + subSettingEpsg;
+            this.subSettingCrs = "http://www.opengis.net/def/crs/EPSG/0/" + subSettingEpsg;
             return this;
         }
 
@@ -369,7 +369,7 @@ public class GetCoverageRequest20 {
         public Builder subsetLatLong(double minLat, double minLon, double maxLat, double maxLon, int epsg) {
             this.subsetX = "Lat(" + minLat + "," + maxLat + ")";
             this.subsetY = "Long(" + minLon + "," + maxLon + ")";
-            this.subSettingCrs = "EPSG:" + epsg;
+            this.subSettingCrs = "http://www.opengis.net/def/crs/EPSG/0/" + epsg;
             return this;
         }
 

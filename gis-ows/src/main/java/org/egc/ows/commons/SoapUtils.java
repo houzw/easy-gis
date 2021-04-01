@@ -118,7 +118,6 @@ xmlns:seim="http://seims.hydro.ws.egc.org">
     }
 
 
-
     public static void getOperations(Service service, String portTypeName) {
         Port port = service.getPort(portTypeName);
         Binding binding = port.getBinding();
