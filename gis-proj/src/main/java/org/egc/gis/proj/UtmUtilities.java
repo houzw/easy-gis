@@ -1,6 +1,8 @@
 package org.egc.gis.proj;
 
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.proj4j.CRSFactory;
+import org.locationtech.proj4j.CoordinateReferenceSystem;
 
 /**
  * <pre>
@@ -38,22 +40,39 @@ public class UtmUtilities {
         return latitude > 0 ? 1 : 0;
     }
 
+    /**
+     * Utm zone int. <br/>
+     * NOTE: not for large area
+     *
+     * @param minLon the min lon
+     * @param maxLon the max lon
+     * @return the int
+     */
+    public static int utmZone(double minLon, double maxLon) {
+        double central = (maxLon - minLon) / 2;
+        return (int) Math.floor((central / 6) + 31);
+    }
 
     /**
      * Gets utm epsg.
      * https://gis.stackexchange.com/questions/365584/convert-utm-zone-into-epsg-code
      *
-     * @param lon the lon
-     * @param lat the lat
+     * @param centralLon the central Longitude
+     * @param centralLat the central Latitude
      * @return the utm epsg
      */
-    public static int getUtmEpsg(double lon, double lat) {
+    public static int getUtmEpsg(double centralLon, double centralLat) {
         int epsgCode = 32600;
-        epsgCode += utmZone(lon);
-        if (lat < 0) {
+        epsgCode += utmZone(centralLon);
+        if (centralLat < 0) {
             epsgCode += 100;
         }
         return epsgCode;
+    }
+
+    public static CoordinateReferenceSystem getUtmCRS(double centralLon, double centralLat) {
+        CRSFactory factory = new CRSFactory();
+        return factory.createFromName("EPSG:" + getUtmEpsg(centralLon, centralLat));
     }
 
 }

@@ -7,8 +7,6 @@ import org.junit.Test;
 import org.locationtech.proj4j.CRSFactory;
 import org.locationtech.proj4j.CoordinateReferenceSystem;
 
-import java.io.IOException;
-
 /**
  * @author houzhiwei
  * @date 2020/5/17 15:56
@@ -16,7 +14,7 @@ import java.io.IOException;
 @Slf4j
 public class EpsgTest {
     @Test
-    public void epsg() throws IOException {
+    public void epsg() {
         EpsgInfo response = Epsg.fetchEpsgInfo(4326);
         System.out.println(response.getProj4());
     }
@@ -25,6 +23,15 @@ public class EpsgTest {
     public void testEpsg() {
         CRSFactory factory = new CRSFactory();
         CoordinateReferenceSystem fromParameters = factory.createFromParameters(null, "+proj=utm +zone=36 +south");
+        System.out.println(fromParameters.getProjection().getEPSGCode());
+    }
+
+    @Test
+    public void testEpsg2() {
+        CRSFactory factory = new CRSFactory();
+        String s = "+proj=utm +zone=50 +datum=WGS84 +units=m +no_defs";
+        CoordinateReferenceSystem fromParameters = factory.createFromParameters(null, s);
+        //0
         System.out.println(fromParameters.getProjection().getEPSGCode());
     }
 }
