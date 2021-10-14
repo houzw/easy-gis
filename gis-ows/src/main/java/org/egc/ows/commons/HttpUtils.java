@@ -132,14 +132,14 @@ public class HttpUtils {
 
 
     /**
-     * Do post string string.
+     * Do post string.
      *
      * @param url the url
      * @return the string
      */
     public static String doPostString(URI url) {
-        HttpPost httpPost = new HttpPost(url);
-        CloseableHttpClient client = postHttpClient(httpPost, 1000 * 60);
+        CloseableHttpClient client = postHttpClient();
+        HttpPost httpPost = httpPostRequest(url, 1000 * 60);
         try (CloseableHttpResponse response = client.execute(httpPost)) {
             StatusLine status = response.getStatusLine();
             int statusCode = status.getStatusCode();
@@ -167,8 +167,8 @@ public class HttpUtils {
      * @return the filename (could be null)
      */
     public static String doPostFile(URI url, String filename, boolean useOriginalFilename) {
-        HttpPost httpPost = new HttpPost(url);
-        CloseableHttpClient client = postHttpClient(httpPost, 1000 * 120);
+        CloseableHttpClient client = postHttpClient();
+        HttpPost httpPost = httpPostRequest(url, 1000 * 120);
         try (CloseableHttpResponse response = client.execute(httpPost)) {
             StatusLine status = response.getStatusLine();
             int statusCode = status.getStatusCode();
@@ -197,8 +197,8 @@ public class HttpUtils {
 
     public static InputStream doPostStream(URI url) {
         int timeout = 60000;
-        HttpPost httpPost = new HttpPost(url);
-        CloseableHttpClient client = postHttpClient(httpPost, timeout);
+        CloseableHttpClient client = postHttpClient();
+        HttpPost httpPost = httpPostRequest(url, timeout);
         try (CloseableHttpResponse response = client.execute(httpPost)) {
             StatusLine status = response.getStatusLine();
             int statusCode = status.getStatusCode();
@@ -215,47 +215,53 @@ public class HttpUtils {
         return null;
     }
 
-    public static CloseableHttpClient getHttpClient(HttpGet request, int timeout) {
+    public static HttpGet httpGetRequest(URI url, int timeout, boolean gzip) {
         RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(timeout)
                 .setConnectTimeout(timeout).setConnectionRequestTimeout(30000)
                 .build();
+        HttpGet request = new HttpGet(url);
         request.setConfig(requestConfig);
         request.addHeader(HttpHeaders.USER_AGENT, USER_AGENT);
-        request.addHeader(HttpHeaders.ACCEPT_ENCODING, "gzip,deflate");
-        PoolingHttpClientConnectionManager connMgr = HttpUtils.getPoolingConnMgr();
-        return HttpClients.custom().setConnectionManager(connMgr).build();
+        if (gzip) {
+            request.addHeader(HttpHeaders.ACCEPT_ENCODING, "gzip,deflate");
+        }
+        return request;
     }
 
-    public static CloseableHttpClient postHttpClient(HttpPost request, int timeout) {
+    public static HttpGet httpGetRequest(URI url, int timeout) {
+        return httpGetRequest(url, timeout, false);
+    }
+
+    public static HttpPost httpPostRequest(URI url, int timeout) {
+        return httpPostRequest(url, timeout, false);
+    }
+
+    public static HttpPost httpPostRequest(URI url, int timeout, boolean gzip) {
         RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(timeout)
                 .setConnectTimeout(timeout).setConnectionRequestTimeout(30000)
                 .build();
+        HttpPost request = new HttpPost(url);
         request.setConfig(requestConfig);
         request.addHeader(HttpHeaders.USER_AGENT, USER_AGENT);
-        request.addHeader(HttpHeaders.ACCEPT_ENCODING, "gzip,deflate");
+        if (gzip) {
+            request.addHeader(HttpHeaders.ACCEPT_ENCODING, "gzip,deflate");
+        }
+        return request;
+    }
+
+    public static CloseableHttpClient getHttpClient() {
         PoolingHttpClientConnectionManager connMgr = HttpUtils.getPoolingConnMgr();
         return HttpClients.custom().setConnectionManager(connMgr).build();
     }
 
-    public static CloseableHttpClient getHttpClient(HttpGet request) {
-        request.addHeader(HttpHeaders.USER_AGENT, USER_AGENT);
-        request.addHeader(HttpHeaders.ACCEPT_ENCODING, "gzip,deflate");
-        PoolingHttpClientConnectionManager connMgr = HttpUtils.getPoolingConnMgr();
-        return HttpClients.custom().setConnectionManager(connMgr).build();
-    }
-
-    public static CloseableHttpClient postHttpClient(HttpPost request) {
-        request.addHeader(HttpHeaders.USER_AGENT, USER_AGENT);
-        request.addHeader(HttpHeaders.ACCEPT_ENCODING, "gzip,deflate");
+    public static CloseableHttpClient postHttpClient() {
         PoolingHttpClientConnectionManager connMgr = HttpUtils.getPoolingConnMgr();
         return HttpClients.custom().setConnectionManager(connMgr).build();
     }
 
     public static InputStream doGetStream(URI url) {
-//        CloseableHttpResponse response = doGet(url);
-        int timeout = 60000;
-        HttpGet httpGet = new HttpGet(url);
-        CloseableHttpClient client = getHttpClient(httpGet, timeout);
+        CloseableHttpClient client = getHttpClient();
+        HttpGet httpGet = httpGetRequest(url, 60000);
         try (CloseableHttpResponse response = client.execute(httpGet)) {
             StatusLine status = response.getStatusLine();
             int statusCode = status.getStatusCode();
@@ -264,8 +270,10 @@ public class HttpUtils {
                 throw new BusinessException("Failed with HTTP error code : " + statusCode);
             }
             HttpEntity entity = response.getEntity();
+            BufferedInputStream inputStream = new BufferedInputStream(entity.getContent());
+            EntityUtils.consume(entity);
             client.close();
-            return new BufferedInputStream(entity.getContent());
+            return inputStream;
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
         }
@@ -280,8 +288,8 @@ public class HttpUtils {
      */
     public static String doGetString(URI url) {
         int timeout = 60000;
-        HttpGet httpGet = new HttpGet(url);
-        CloseableHttpClient client = getHttpClient(httpGet, timeout);
+        HttpGet httpGet = httpGetRequest(url, timeout);
+        CloseableHttpClient client = getHttpClient();
         try (CloseableHttpResponse response = client.execute(httpGet)) {
             StatusLine status = response.getStatusLine();
             int statusCode = status.getStatusCode();
@@ -309,8 +317,8 @@ public class HttpUtils {
      * @return the filename (could be null)
      */
     public static String doGetFile(URI url, String filename, boolean useOriginalFilename) {
-        HttpGet httpGet = new HttpGet(url);
-        CloseableHttpClient client = getHttpClient(httpGet, 1000 * 120);
+        CloseableHttpClient client = getHttpClient();
+        HttpGet httpGet = httpGetRequest(url, 1000 * 120);
         try (CloseableHttpResponse response = client.execute(httpGet)) {
             StatusLine status = response.getStatusLine();
             int statusCode = status.getStatusCode();
@@ -326,7 +334,7 @@ public class HttpUtils {
                 InputStream inputStream = entity.getContent();
                 if (inputStream != null) {
                     FileUtils.copyToFile(inputStream, new File(filename));
-                    log.debug("download filename is {}",filename);
+                    log.debug("download filename is {}", filename);
                 }
                 //  ensure it is fully consumed
                 EntityUtils.consume(entity);
@@ -363,6 +371,7 @@ public class HttpUtils {
      * Write response to file.<br/>
      * https://stackoverflow.com/questions/25893030/download-binary-file-from-okhttp
      * <br/> based on OkHttp
+     *
      * @param body       the body
      * @param outputFile the output file
      * @throws IOException the io exception

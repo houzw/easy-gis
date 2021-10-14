@@ -14,8 +14,8 @@ import net.opengis.wcs.v_2_0.CoverageSummaryType;
 import net.opengis.wcs20.GetCapabilitiesType;
 import org.egc.ows.client.OWSClient;
 import org.egc.ows.client.WCSClient;
-import org.egc.ows.request.wcs.GetCoverageRequest20;
 import org.egc.ows.commons.WCSUtils;
+import org.egc.ows.request.wcs.GetCoverageRequest20;
 import org.geotools.wcs.WCSConfiguration;
 import org.geotools.xsd.Parser;
 import org.junit.Test;
@@ -79,6 +79,7 @@ public class WCSTest {
         CoverageDescription coverageDescription = client.describeCoverage10(Lists.newArrayList(name));
         System.out.println(JSON.toJSONString(coverageDescription.getCoverageOffering(), true));
     }
+
     @Test
     public void testDescribe20() {
         String name = "OneGDev__GreaterNorthSea-MCol";
@@ -101,7 +102,7 @@ public class WCSTest {
         GetCoverageRequest20 getCoverageRequest20 = new GetCoverageRequest20.Builder(name)
                 .format("image/png")
                 .subsetLatLong(49.70253, 8.99089, 54.44863, 13.56120).build();
-        client.getCoverage20(getCoverageRequest20,"I:/download/test.png");
+        client.getCoverage20(getCoverageRequest20, "I:/download/test.png");
     }
 
     @Test

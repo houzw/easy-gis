@@ -21,11 +21,15 @@ OGC 服务请求一般有两种方式
     ```
    此时使用 HTTP POST 请求方式发送 XML 数据
    
+   目前基于 kvp 方式，后期再测试 xml 方式
 ---
-suis4j 中的请求的格式为 xml， 不是 kvp。过程是：用户输入参数信息，转换为相应的Java对象，如`DescribeCoverage`，
-然后再使用 JAXBContext 的 marshal 转换为 xml，最后最为请求的 request body 发送, 获得数据之后再转换为java 对象，如 `CoverageDescription`
 
 服务的请求可参考使用 https://github.com/ZihengSun/suis4j 
 
 或者使用 https://github.com/houzw/egc-suis4j 
 （相同的内容，只是整理了一下项目结构和 maven 引用）
+
+suis4j 中的请求的格式为 xml， 不是 kvp。过程是：用户输入参数信息，转换为相应的Java对象，如`DescribeCoverage`，
+然后再使用 JAXBContext 的 marshal 转换为 xml，最后最为请求的 request body 发送, 获得数据之后再转换为java 对象，如 `CoverageDescription`
+
+具体如何使用暂时没有弄明白，例子太少

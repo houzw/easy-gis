@@ -24,6 +24,7 @@ import java.util.Map;
  */
 public class WpsTest {
     private static final String MIME_TYPE_TEXT_CSV = "text/csv";
+    private static final String BASE64 = "base64";
     private static final String MIME_TYPE_TEXT_XML = "text/xml";
     private static final String MIME_TYPE_IMAGE_TIFF = "image/tiff";
     private static final String schema = "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd";
@@ -32,7 +33,7 @@ public class WpsTest {
     String processID = "org.n52.wps.server.algorithm.test.DummyTestClass";
 
     @Test
-    public void test1() throws WPSClientException, IOException {
+    public void test1() throws WPSClientException {
         JavaPSClient client = new JavaPSClient(wpsURL, version);
         WPSCapabilities cpbDoc = client.requestGetCapabilities();
 //        System.out.println(cpbDoc);
@@ -204,8 +205,8 @@ public class WpsTest {
         //文本类型设置为 text/xml，包含逗号的设置为 text/csv
         //为什么必须要有literal即使minOccur为0？
         builder.addLiteralData("only4", "false", null, null, MIME_TYPE_TEXT_XML);
-        builder.addComplexData("dem", dataStr, null, "base64", MIME_TYPE_IMAGE_TIFF);
-        builder.setResponseDocument("pit_removed_dem", null, "base64", MIME_TYPE_IMAGE_TIFF);
+        builder.addComplexData("dem", dataStr, null, BASE64, MIME_TYPE_IMAGE_TIFF);
+        builder.setResponseDocument("pit_removed_dem", null, BASE64, MIME_TYPE_IMAGE_TIFF);
         builder.setAsynchronousExecute();
         client.execute(builder.getExecute());
     }

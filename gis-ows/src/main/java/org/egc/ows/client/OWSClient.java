@@ -20,6 +20,10 @@ public abstract class OWSClient {
         return new WFSClient(serviceRoot);
     }
 
+    public static CSWClient createCSWClient(String serviceRoot) {
+        return new CSWClient(serviceRoot);
+    }
+
     public static JavaPSClient createJavaPSClient(String serviceRoot, String version) throws WPSClientException {
         return new JavaPSClient(serviceRoot, version);
     }
