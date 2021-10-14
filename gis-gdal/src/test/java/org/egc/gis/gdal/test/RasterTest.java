@@ -5,9 +5,8 @@ import org.egc.gis.gdal.IOFactory;
 import org.egc.gis.gdal.dto.RasterMetadata;
 import org.egc.gis.gdal.raster.RasterIO;
 import org.egc.gis.gdal.raster.RasterInfo;
+import org.egc.gis.gdal.raster.RasterUtils;
 import org.gdal.gdal.Dataset;
-import org.gdal.gdal.Driver;
-import org.gdal.gdal.gdal;
 import org.gdal.gdalconst.gdalconst;
 import org.junit.Test;
 
@@ -24,11 +23,11 @@ public class RasterTest extends TestCase {
         return resource.getPath().substring(1);
     }
 
-    @Test
-    public void testDriver() {
-        gdal.AllRegister();
-        Driver tiff = gdal.GetDriverByName("GTiff");
-        System.out.println(tiff);
+     @Test
+    public void testFillNodata() {
+        String tif = "F:/data/global_seims/spatial/meichuangjiang_aw3d30_2415-test.tif";
+         RasterUtils.fillNodata(tif,1,"F:/data/global_seims/spatial/meichuangjiang_aw3d30_2415-test2.tif");
+//         System.out.println(RasterInfo.getMetadata(tif));
     }
 
     public void testWrite() {

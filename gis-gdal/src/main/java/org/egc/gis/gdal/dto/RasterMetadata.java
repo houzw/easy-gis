@@ -38,6 +38,7 @@ public class RasterMetadata implements Serializable {
     private Integer epsg;
     private int bands;
     private double nodata;
+    private int nodataCount;
     private String format;
     private String semantic;
     private double maxValue;

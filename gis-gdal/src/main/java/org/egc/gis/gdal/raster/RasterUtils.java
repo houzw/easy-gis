@@ -18,6 +18,7 @@ import java.nio.FloatBuffer;
 import java.util.Vector;
 
 import static org.gdal.gdalconst.gdalconstConstants.GDT_Float32;
+import static org.gdal.gdalconst.gdalconstConstants.GMF_NODATA;
 
 /**
  * Description:
@@ -91,6 +92,7 @@ public class RasterUtils {
 
     /**
      * TODO resample 改成枚举
+     *
      * @param inputRaster  inputRaster
      * @param outputRaster outputRaster
      * @param dx           user selected resolution x
@@ -212,7 +214,7 @@ public class RasterUtils {
 
         //Vector<String> option = new Vector<>();
         //option.add("INTERLEAVE");
-        // option.add("PIXEL");
+        //option.add("PIXEL");
         //Dataset outputDs = driver.Create(dst, xSize, ySize, 1, GDT_Float32, option);
         Dataset outputDs = driver.Create(dst, xSize, ySize, 1, GDT_Float32);
         outputDs.SetGeoTransform(ds.GetGeoTransform());
@@ -232,8 +234,30 @@ public class RasterUtils {
 
         outBand.WriteRaster_Direct(0, 0, xSize, ySize, xSize, ySize, gdalconstConstants.GDT_Float32, byteBuffer);
 
-        outputDs.delete();
-        ds.delete();
+        RasterIO.closeDataSet(outputDs);
+        RasterIO.closeDataSet(ds);
         driver.delete();
+    }
+
+    /**
+     * TODO 暂未成功
+     * Fill raster regions by interpolation from edges.
+     *
+     * @param src the src
+     * @param band the target band, e.g., 1
+     * @see <a href="https://gdal.org/java/org/gdal/gdal/gdal.html#FillNodata-org.gdal.gdal.Band-org.gdal.gdal.Band-double-int-java.util.Vector-org.gdal.gdal.ProgressCallback-">gdal_fillnodata</a>
+     */
+    public static void fillNodata(String src, int band,String dst) {
+        Dataset ds = IOFactory.createRasterIO().read4Update(src);
+        if (band <= 0) {
+            band = 1;
+        }
+        Band targetBand = ds.GetRasterBand(band);
+        int i = ds.CreateMaskBand(GMF_NODATA);
+        gdal.FillNodata(targetBand, targetBand.GetMaskBand(), 100, 0);
+        targetBand.FlushCache();
+        ds.FlushCache();
+        //原始数据未更新
+        RasterIO.closeDataSet(ds);
     }
 }

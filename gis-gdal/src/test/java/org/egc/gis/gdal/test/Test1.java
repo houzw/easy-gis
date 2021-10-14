@@ -56,6 +56,14 @@ public class Test1 {
         System.out.println(extent[0]+" "+extent[1]+" "+extent[2]+" "+extent[3]);
         //youwuzheng:116.44297141848418 25.666323798766907 116.4808037526092 25.693001173347675
     }
+    @Test
+    public void testMeta2() {
+        String s = "F:\\data\\global_seims\\spatial\\meichuangjiang_aw3d30_2415.tif";
+        Dataset dataset = IOFactory.createRasterIO().read(s);
+
+        RasterMetadata metadata = RasterInfo.getMetadata(dataset,false,false,true,true);
+        System.out.println(metadata.getNodataCount());
+    }
 
     @Test
     public void testVectorMeta() {

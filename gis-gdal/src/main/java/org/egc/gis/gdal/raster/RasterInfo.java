@@ -75,6 +75,10 @@ public class RasterInfo {
      * @return the metadata
      */
     public static RasterMetadata getMetadata(Dataset dataset, boolean getUniqueValues, boolean getQuantile, boolean closeDataset) {
+        return getMetadata(dataset, getUniqueValues, getQuantile, false, closeDataset);
+    }
+
+    public static RasterMetadata getMetadata(Dataset dataset, boolean getUniqueValues, boolean getQuantile, boolean countNodata, boolean closeDataset) {
         RasterMetadata metadata = new RasterMetadata();
         Driver driver = dataset.GetDriver();
         metadata.setFormat(driver.getShortName());
@@ -108,6 +112,7 @@ public class RasterInfo {
             metadata.setNodata(nodataVal[0]);
         } else {
             metadata.setNodata(-9999d);
+            nodataVal[0]=-9999d;
         }
         double[] min = new double[1], max = new double[1], mean = new double[1], stddev = new double[1];
         band.GetStatistics(true, true, min, max, mean, stddev);
@@ -137,12 +142,23 @@ public class RasterInfo {
         metadata.setHeight(dataset.GetRasterYSize() * gt[5]);
         metadata.setSizeHeight(dataset.GetRasterYSize());
         metadata.setSizeWidth(dataset.GetRasterXSize());
-
+        float[] dataBuf = null;
+        Double nodata = nodataVal[0];
         if (getUniqueValues) {
-            metadata.setUniqueValues(Joiner.on(" ").join(getUniqueValues(dataset)));
+            dataBuf = readRasterBandBuffer(dataset, 1);
+            metadata.setUniqueValues(Joiner.on(" ").join(getUniqueValues(dataBuf, nodata)));
         }
         if (getQuantile) {
-            metadata.setQuantileBreaks(getQuantile(dataset, 4));
+            if (dataBuf == null) {
+                dataBuf = readRasterBandBuffer(dataset, 1);
+            }
+            metadata.setQuantileBreaks(getQuantile(dataBuf, nodata, 4));
+        }
+        if (countNodata) {
+            if (dataBuf == null) {
+                dataBuf = readRasterBandBuffer(dataset, 1);
+            }
+            metadata.setNodataCount(countNodata(dataBuf, nodata));
         }
         if (closeDataset) {
             RasterIO.closeDataSet(dataset);
@@ -276,9 +292,11 @@ public class RasterInfo {
             nodata = -9999d;
         }
         float[] dataBuf = readRasterBand(dataset, 1);
+        return getUniqueValues(dataBuf, nodata);
+    }
 
+    public static List<Float> getUniqueValues(float[] dataBuf, Double nodata) {
         List<Float> dataBufList = Floats.asList(dataBuf);
-        dataBuf = null;
         // 只是增加了运行垃圾回收的可能，不保证JVM一定执行
         System.gc();
         List<Float> uniqueList = dataBufList.stream().sorted().distinct().collect(Collectors.toList());
@@ -307,6 +325,7 @@ public class RasterInfo {
 
     /**
      * Read raster band buffer float [ ].
+     * TODO
      *
      * @param dataset   the dataset
      * @param bandIndex the band index
@@ -322,6 +341,21 @@ public class RasterInfo {
         return dataBuf;
     }
 
+    public static int countNodata(Dataset dataset, int bandIndex, Double nodata) {
+        float[] data = readRasterBandBuffer(dataset, bandIndex);
+        return countNodata(data, nodata);
+    }
+
+    public static int countNodata(float[] data, Double nodata) {
+        int count = 0;
+        for (float datum : data) {
+            if (Math.abs(datum - nodata) < 0.001) {
+                count += 1;
+            }
+        }
+        return count;
+    }
+
     /**
      * 分位数
      * <b>注意</b>: 该方法目前对内存空间占用较大，不适用于大文件
@@ -335,10 +369,15 @@ public class RasterInfo {
             nodata = -9999d;
         }
         float[] dataBuf = readRasterBand(dataset, 1);
+        return getQuantile(dataBuf, nodata, numQuantile);
+    }
 
+    public static String getQuantile(float[] dataBuf, Double nodata, int numQuantile) {
+        if (nodata == null) {
+            nodata = -9999d;
+        }
         Double[] quantileBreaks = new Double[numQuantile - 1];
         List<Float> dataBufList = Floats.asList(dataBuf);
-        dataBuf = null;
         System.gc();
         //移除空值, 移除 nodata
         Double finalNodata = nodata; // lambda 表达式需要
@@ -349,7 +388,6 @@ public class RasterInfo {
             }
             return false;
         }).sorted().collect(Collectors.toList());
-        dataBufList = null;
         int size = removedList.size();
         //分位数位置  (n+1)*p, 0<p<1, 如  0.25, 0.5, 0.75
         int numDataInQuantile = ((size + 1) / numQuantile);
