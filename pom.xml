@@ -45,7 +45,7 @@
         <psql.java8.version>9.4.1211</psql.java8.version>
         <geolatte.version>0.14</geolatte.version>
 
-        <httpclient.version>4.5.12</httpclient.version>
+        <httpclient.version>4.5.13</httpclient.version>
         <commonsHttp.version>3.0.1</commonsHttp.version>
         <geotools.version>22.0</geotools.version>
         <guava.version>30.0-jre</guava.version>
@@ -171,7 +171,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
-                <version>1.19</version>
+                <version>1.21</version>
             </dependency>
             <dependency>
                 <groupId>org.geotools.jdbc</groupId>
