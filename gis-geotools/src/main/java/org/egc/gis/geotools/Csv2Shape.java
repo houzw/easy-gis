@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * TODO test
  * https://docs.geotools.org/latest/userguide/tutorial/feature/csv2shp.html
  */
 @Slf4j
@@ -57,7 +58,7 @@ public class Csv2Shape {
 
     /**
      * 从csv文件生成featureType
-     *
+     * 默认 4326
      * @param file
      * @throws SchemaException
      */

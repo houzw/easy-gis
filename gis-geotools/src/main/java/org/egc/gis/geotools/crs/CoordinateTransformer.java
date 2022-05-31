@@ -50,8 +50,7 @@ public class CoordinateTransformer {
             p.parameter("central_meridian").setValue(ORIGIN.y);
             p.parameter("latitude_of_origin").setValue(ORIGIN.x);
             //false_easting/false_northing/standard_parallel_1/standard_parallel_2
-            MathTransform tr = factory.createParameterizedTransform(p).inverse();
-            return tr;
+            return factory.createParameterizedTransform(p).inverse();
         } catch (NoninvertibleTransformException | FactoryException e) {
             e.printStackTrace();
         }
@@ -145,7 +144,8 @@ public class CoordinateTransformer {
     }
 
     /**
-     * From beijing 54 to wgs 84 coordinate.
+     * TODO 有问题
+     * From (GCS) beijing 54 to wgs 84 coordinate.
      * https://blog.csdn.net/breaker892902/article/details/9069609
      *
      * @param lon 经度
@@ -154,7 +154,7 @@ public class CoordinateTransformer {
      * @throws TransformException the transform exception
      * @throws FactoryException   the factory exception
      */
-    public static Coordinate fromBeijing54ToWgs84(double lon, double lat) throws TransformException, FactoryException {
+    public static Coordinate gcsBeijing54ToWgs84(double lon, double lat) throws TransformException, FactoryException {
         return transformEpsgCoordinate(4214, 4326, lat, lon);
     }
 
