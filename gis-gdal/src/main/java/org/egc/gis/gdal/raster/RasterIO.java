@@ -12,7 +12,7 @@ import org.gdal.osr.SpatialReference;
 
 import java.io.File;
 
-import static org.gdal.gdalconst.gdalconstConstants.GDT_Float32;
+import static org.gdal.gdalconst.gdalconstConstants.GDT_Byte;
 
 /**
  * Description:
@@ -31,7 +31,12 @@ public class RasterIO {
         gdal.SetConfigOption(Consts.GDAL_FILENAME_IS_UTF8, Consts.YES);
         gdal.AllRegister();
         // 默认 gdalconst.GA_ReadOnly
-        return gdal.Open(file);
+        Dataset dataset = gdal.Open(file);
+        if (dataset == null) {
+            throw new RuntimeException(gdal.GetLastErrorMsg());
+        } else {
+            return dataset;
+        }
     }
 
     public Dataset read4Update(String raster) {
@@ -42,7 +47,7 @@ public class RasterIO {
 
     /**
      * TODO 测试
-     *
+     * https://www.gislite.com/tutorial/k8024
      * @param data    the data
      * @param dstFile the dst file
      * @return boolean
@@ -57,8 +62,16 @@ public class RasterIO {
         Dataset ds = driver.CreateCopy(dstFile, data);
         ds.FlushCache();
         ds.delete();
+        data.delete();
         return true;
     }
+
+    /*double[]data = new double[nXSize];
+    for(int i = 0; i < nYSize; i++)
+    {
+        band.ReadRaster(0, i, nXsize, 1, data);
+        //do something with your data
+    }*/
 
     /**
      * Closes the given {@link Dataset}.
@@ -96,7 +109,7 @@ public class RasterIO {
             dstFile.getParentFile().mkdirs();
         }
         if (gdalDataType == null) {
-            gdalDataType = GDT_Float32;
+            gdalDataType = GDT_Byte;
         }
         //must call AllRegister() otherwise GetDriverByName() is null
         gdal.AllRegister();
@@ -111,4 +124,5 @@ public class RasterIO {
         ds.FlushCache();
         RasterIO.closeDataSet(ds);
     }
+
 }

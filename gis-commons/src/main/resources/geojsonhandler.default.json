@@ -1,0 +1,5 @@
+{
+  "formats" : [ {
+    "mimeType" : "application/vnd.geo+json"
+  } ]
+}

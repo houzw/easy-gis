@@ -1,0 +1,6 @@
+{
+  "formats" : [ {
+    "mimeType" : "application/x-zipped-wkt",
+    "encoding" : "base64"
+  } ]
+}

@@ -18,17 +18,14 @@ import java.io.File;
  * Wrapper of parameters of d8FlowDirections
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class D8FlowDirectionsParams implements Params {
-    private static final long serialVersionUID = 217831615039893479L;
-
     /**
-     * <pre>
-     * pitFilledElevation
+     * <pre>     * pitFilledElevation
      *  </pre>
      *
      * @see Builder#Builder(String)
@@ -61,26 +58,26 @@ public class D8FlowDirectionsParams implements Params {
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getD8FlowDirection() {
+        // if no output filename provided
         if (StringUtils.isBlank(d8FlowDirection)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "d8FlowDirection", "Raster Dataset", "tif"));
         }
-        return d8FlowDirection;
+        return this.d8FlowDirection;
     }
 
-    // if no output filename provided
     public String getD8Slope() {
+        // if no output filename provided
         if (StringUtils.isBlank(d8Slope)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "d8Slope", "Raster Dataset", "tif"));
         }
-        return d8Slope;
+        return this.d8Slope;
     }
 
     private D8FlowDirectionsParams(Builder builder) {
-        pitFilledElevation = builder.pitFilledElevation;
-        d8FlowDirection = builder.d8FlowDirection;
-        d8Slope = builder.d8Slope;
+        this.pitFilledElevation = builder.pitFilledElevation;
+        this.d8FlowDirection = builder.d8FlowDirection;
+        this.d8Slope = builder.d8Slope;
     }
 
     @XmlRootElement
@@ -97,18 +94,37 @@ public class D8FlowDirectionsParams implements Params {
             this.pitFilledElevation = pitFilledElevation;
         }
 
+        /**
+         * @param val A grid of elevation values.
+         */
         public Builder pitFilledElevation(String val) {
-            pitFilledElevation = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.pitFilledElevation = val;
+            }
             return this;
         }
 
+        /**
+         * default value is flowDirection
+         *
+         * @param val A grid of D8 flow directions which are defined, for each cell, as the direction of the one of its eight adjacent or diagonal neighbors with the steepest downward slope.
+         */
         public Builder d8FlowDirection(String val) {
-            d8FlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.d8FlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * default value is slope
+         *
+         * @param val A grid giving slope in the D8 flow direction.
+         */
         public Builder d8Slope(String val) {
-            d8Slope = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.d8Slope = val;
+            }
             return this;
         }
 

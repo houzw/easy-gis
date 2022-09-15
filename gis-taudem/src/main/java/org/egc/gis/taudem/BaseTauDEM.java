@@ -21,14 +21,13 @@ public abstract class BaseTauDEM extends AbstractRunCommand {
     public void init(String userWorkspace) {
         if (StringUtils.isBlank(userWorkspace)) {
             workspace = System.getProperty("java.io.tmpdir");
+        } else {
+            workspace = userWorkspace;
         }
-        workspace = userWorkspace;
     }
 
     /**
      * 初始化命令行
-     *
-     * @return
      */
     @Override
     public CommandLine initCmd() {

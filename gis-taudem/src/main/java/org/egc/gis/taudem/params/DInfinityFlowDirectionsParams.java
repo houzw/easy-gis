@@ -18,17 +18,14 @@ import java.io.File;
  * Wrapper of parameters of dInfinityFlowDirections
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class DInfinityFlowDirectionsParams implements Params {
-    private static final long serialVersionUID = -7496107106353065598L;
-
     /**
-     * <pre>
-     * pitFilledElevation
+     * <pre>     * pitFilledElevation
      *  </pre>
      *
      * @see Builder#Builder(String)
@@ -45,37 +42,39 @@ public class DInfinityFlowDirectionsParams implements Params {
     /**
      * A grid of flow directions based on the D-infinity flow method using the steepest slope of a triangular facet (Tarboton, 1997, "A New Method for the Determination of Flow Directions and Contributing Areas in Grid Digital Elevation Models," Water Resources Research, 33(2): 309-319).
      */
+    @NotNull
     private String dinfinityFlowDirection;
 
     /**
      * A grid of slope evaluated using the D-infinity method described in Tarboton, D.
      */
+    @NotNull
     private String dinfinitySlope;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getDinfinityFlowDirection() {
+        // if no output filename provided
         if (StringUtils.isBlank(dinfinityFlowDirection)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "dinfinityFlowDirection", "Raster Dataset", "tif"));
         }
-        return dinfinityFlowDirection;
+        return this.dinfinityFlowDirection;
     }
 
-    // if no output filename provided
     public String getDinfinitySlope() {
+        // if no output filename provided
         if (StringUtils.isBlank(dinfinitySlope)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "dinfinitySlope", "Raster Dataset", "tif"));
         }
-        return dinfinitySlope;
+        return this.dinfinitySlope;
     }
 
     private DInfinityFlowDirectionsParams(Builder builder) {
-        pitFilledElevation = builder.pitFilledElevation;
-        dinfinityFlowDirection = builder.dinfinityFlowDirection;
-        dinfinitySlope = builder.dinfinitySlope;
+        this.pitFilledElevation = builder.pitFilledElevation;
+        this.dinfinityFlowDirection = builder.dinfinityFlowDirection;
+        this.dinfinitySlope = builder.dinfinitySlope;
     }
 
     @XmlRootElement
@@ -92,18 +91,33 @@ public class DInfinityFlowDirectionsParams implements Params {
             this.pitFilledElevation = pitFilledElevation;
         }
 
+        /**
+         * @param val A grid of elevation values.
+         */
         public Builder pitFilledElevation(String val) {
-            pitFilledElevation = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.pitFilledElevation = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid of flow directions based on the D-infinity flow method using the steepest slope of a triangular facet (Tarboton, 1997, "A New Method for the Determination of Flow Directions and Contributing Areas in Grid Digital Elevation Models," Water Resources Research, 33(2): 309-319).
+         */
         public Builder dinfinityFlowDirection(String val) {
-            dinfinityFlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.dinfinityFlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid of slope evaluated using the D-infinity method described in Tarboton, D.
+         */
         public Builder dinfinitySlope(String val) {
-            dinfinitySlope = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.dinfinitySlope = val;
+            }
             return this;
         }
 

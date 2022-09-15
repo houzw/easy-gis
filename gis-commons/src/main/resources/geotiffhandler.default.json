@@ -1,0 +1,13 @@
+{
+  "formats" : [ {
+    "mimeType" : "image/tiff",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "image/geotiff",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "image/tiff"
+  }, {
+    "mimeType" : "image/geotiff"
+  } ]
+}

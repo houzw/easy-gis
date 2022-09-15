@@ -49,6 +49,7 @@
         <commonsHttp.version>3.0.1</commonsHttp.version>
         <geotools.version>22.0</geotools.version>
         <guava.version>30.0-jre</guava.version>
+        <hutool.version>4.5.15</hutool.version>
         <commons-lang3.version>3.5</commons-lang3.version>
         <commons-io.version>2.5</commons-io.version>
         <lombok.version>1.16.16</lombok.version>
@@ -101,6 +102,7 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
+
         <!-- 帮助开发人员消除Java的冗长代码 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -220,6 +222,11 @@
                 <artifactId>httpclient</artifactId>
                 <version>${httpclient.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-core</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
             <!--<dependency>
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
@@ -227,17 +234,5 @@
             </dependency>-->
         </dependencies>
     </dependencyManagement>
-    <!--构建部署配置-->
-    <distributionManagement>
-        <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <name>Private Nexus Snapshots Repository</name>
-            <url>http://59.110.220.142:8081/repository/nexus/</url>
-        </snapshotRepository>
-        <repository>
-            <id>nexus-releases</id>
-            <name>Private Nexus Releases Repository</name>
-            <url>http://59.110.220.142:8081/repository/nexus/</url>
-        </repository>
-    </distributionManagement>
+    
 </project>

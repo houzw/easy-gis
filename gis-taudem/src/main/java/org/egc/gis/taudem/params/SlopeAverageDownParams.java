@@ -18,18 +18,14 @@ import java.io.File;
  * Wrapper of parameters of slopeAverageDown
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class SlopeAverageDownParams implements Params {
-    private static final long serialVersionUID = 1429319817434254351L;
-
     /**
-     * <pre>
-     * d8FlowDirection
-     * pitFilledElevation
+     * <pre>     * d8FlowDirection     * pitFilledElevation
      *  </pre>
      *
      * @see Builder#Builder(String, String)
@@ -61,25 +57,26 @@ public class SlopeAverageDownParams implements Params {
     /**
      * A grid of the ratio of  specific catchment area (contributing area) to slope.
      */
+    @NotNull
     private String slopeAverageDown;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getSlopeAverageDown() {
+        // if no output filename provided
         if (StringUtils.isBlank(slopeAverageDown)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(d8FlowDirection, "slopeAverageDown", "Raster Dataset", "tif"));
         }
-        return slopeAverageDown;
+        return this.slopeAverageDown;
     }
 
     private SlopeAverageDownParams(Builder builder) {
-        d8FlowDirection = builder.d8FlowDirection;
-        pitFilledElevation = builder.pitFilledElevation;
-        distance = builder.distance;
-        slopeAverageDown = builder.slopeAverageDown;
+        this.d8FlowDirection = builder.d8FlowDirection;
+        this.pitFilledElevation = builder.pitFilledElevation;
+        this.distance = builder.distance;
+        this.slopeAverageDown = builder.slopeAverageDown;
     }
 
     @XmlRootElement
@@ -99,23 +96,46 @@ public class SlopeAverageDownParams implements Params {
             this.pitFilledElevation = pitFilledElevation;
         }
 
+        /**
+         * @param val This input is a grid of flow directions that are encoded using the D8 method where all flow from a cells goes to a single neighboring cell in the direction of steepest descent.
+         */
         public Builder d8FlowDirection(String val) {
-            d8FlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.d8FlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid of elevation values.
+         */
         public Builder pitFilledElevation(String val) {
-            pitFilledElevation = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.pitFilledElevation = val;
+            }
             return this;
         }
 
+        /**
+         * default value is 50d
+         *
+         * @param val Input parameter of downslope distance over which to calculate the slope (in horizontal map units).
+         */
         public Builder distance(Double val) {
-            distance = val;
+
+            if (val != null) {
+                this.distance = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid of the ratio of  specific catchment area (contributing area) to slope.
+         */
         public Builder slopeAverageDown(String val) {
-            slopeAverageDown = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.slopeAverageDown = val;
+            }
             return this;
         }
 

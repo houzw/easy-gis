@@ -18,18 +18,14 @@ import java.io.File;
  * Wrapper of parameters of slopeOverAreaRatio
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class SlopeOverAreaRatioParams implements Params {
-    private static final long serialVersionUID = 6043820173424244273L;
-
     /**
-     * <pre>
-     * slope
-     * specificCatchmentArea
+     * <pre>     * slope     * specificCatchmentArea
      *  </pre>
      *
      * @see Builder#Builder(String, String)
@@ -52,24 +48,25 @@ public class SlopeOverAreaRatioParams implements Params {
     /**
      * A grid of the ratio of slope to specific catchment area (contributing area).
      */
+    @NotNull
     private String slopeDividedByAreaRatio;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getSlopeDividedByAreaRatio() {
+        // if no output filename provided
         if (StringUtils.isBlank(slopeDividedByAreaRatio)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(slope, "slopeDividedByAreaRatio", "Raster Dataset", "tif"));
         }
-        return slopeDividedByAreaRatio;
+        return this.slopeDividedByAreaRatio;
     }
 
     private SlopeOverAreaRatioParams(Builder builder) {
-        slope = builder.slope;
-        specificCatchmentArea = builder.specificCatchmentArea;
-        slopeDividedByAreaRatio = builder.slopeDividedByAreaRatio;
+        this.slope = builder.slope;
+        this.specificCatchmentArea = builder.specificCatchmentArea;
+        this.slopeDividedByAreaRatio = builder.slopeDividedByAreaRatio;
     }
 
     @XmlRootElement
@@ -88,18 +85,33 @@ public class SlopeOverAreaRatioParams implements Params {
             this.specificCatchmentArea = specificCatchmentArea;
         }
 
+        /**
+         * @param val A grid of slope.
+         */
         public Builder slope(String val) {
-            slope = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.slope = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid giving the contributing area value for each cell taken as its own contribution plus the contribution from upslope neighbors that drain in to it.
+         */
         public Builder specificCatchmentArea(String val) {
-            specificCatchmentArea = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.specificCatchmentArea = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid of the ratio of slope to specific catchment area (contributing area).
+         */
         public Builder slopeDividedByAreaRatio(String val) {
-            slopeDividedByAreaRatio = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.slopeDividedByAreaRatio = val;
+            }
             return this;
         }
 

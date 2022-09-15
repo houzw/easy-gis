@@ -1,0 +1,111 @@
+{
+  "formats" : [ {
+    "mimeType" : "application/x-zipped-shp",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/shp",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/img",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "image/tiff",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "image/geotiff",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/geotiff",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/dbase",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/remap",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/x-erdas-hfa",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/x-netcdf",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/dgn",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "image/jpeg",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "image/png",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/x-geotiff",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "text/plain",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/x-zipped-shp",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/rData",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/rData+Spatial",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/rData+SpatialPoints",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/rData+SpatialPolygons",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/rData"
+  }, {
+    "mimeType" : "application/rData+Spatial"
+  }, {
+    "mimeType" : "application/rData+SpatialPoints"
+  }, {
+    "mimeType" : "application/rData+SpatialPolygons"
+  }, {
+    "mimeType" : "application/x-zipped-shp"
+  }, {
+    "mimeType" : "application/shp"
+  }, {
+    "mimeType" : "application/img"
+  }, {
+    "mimeType" : "image/tiff"
+  }, {
+    "mimeType" : "image/geotiff"
+  }, {
+    "mimeType" : "application/geotiff"
+  }, {
+    "mimeType" : "application/dbase"
+  }, {
+    "mimeType" : "application/remap"
+  }, {
+    "mimeType" : "application/x-erdas-hfa"
+  }, {
+    "mimeType" : "application/x-netcdf"
+  }, {
+    "mimeType" : "application/dgn"
+  }, {
+    "mimeType" : "image/jpeg"
+  }, {
+    "mimeType" : "image/png"
+  }, {
+    "mimeType" : "application/x-geotiff"
+  }, {
+    "mimeType" : "text/plain"
+  }, {
+    "mimeType" : "application/pdf"
+  }, {
+    "mimeType" : "application/zip"
+  }, {
+    "mimeType" : "text/html"
+  }, {
+    "mimeType" : "application/json"
+  }, {
+    "mimeType" : "text/csv"
+  } ]
+}

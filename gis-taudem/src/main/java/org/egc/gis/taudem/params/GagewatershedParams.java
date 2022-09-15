@@ -18,18 +18,14 @@ import java.io.File;
  * Wrapper of parameters of gagewatershed
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class GagewatershedParams implements Params {
-    private static final long serialVersionUID = -5007322902209961644L;
-
     /**
-     * <pre>
-     * d8FlowDirection
-     * gagesFile
+     * <pre>     * d8FlowDirection     * gagesFile
      *  </pre>
      *
      * @see Builder#Builder(String, String)
@@ -52,6 +48,7 @@ public class GagewatershedParams implements Params {
     /**
      * This output grid identifies each gage watershed.
      */
+    @NotNull
     private String gagewatershed;
 
     /**
@@ -63,27 +60,27 @@ public class GagewatershedParams implements Params {
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getGagewatershed() {
+        // if no output filename provided
         if (StringUtils.isBlank(gagewatershed)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(d8FlowDirection, "gagewatershed", "Raster Dataset", "tif"));
         }
-        return gagewatershed;
+        return this.gagewatershed;
     }
 
-    // if no output filename provided
     public String getDownstreamIdentefier() {
+        // if no output filename provided
         if (StringUtils.isBlank(downstreamIdentefier)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(d8FlowDirection, "downstreamIdentefier", "File", "txt"));
         }
-        return downstreamIdentefier;
+        return this.downstreamIdentefier;
     }
 
     private GagewatershedParams(Builder builder) {
-        d8FlowDirection = builder.d8FlowDirection;
-        gagesFile = builder.gagesFile;
-        gagewatershed = builder.gagewatershed;
-        downstreamIdentefier = builder.downstreamIdentefier;
+        this.d8FlowDirection = builder.d8FlowDirection;
+        this.gagesFile = builder.gagesFile;
+        this.gagewatershed = builder.gagewatershed;
+        this.downstreamIdentefier = builder.downstreamIdentefier;
     }
 
     @XmlRootElement
@@ -103,23 +100,43 @@ public class GagewatershedParams implements Params {
             this.gagesFile = gagesFile;
         }
 
+        /**
+         * @param val A grid of D8 flow directions which are defined, for each cell, as the direction of the one of its eight adjacent or diagonal neighbors with the steepest downward slope.
+         */
         public Builder d8FlowDirection(String val) {
-            d8FlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.d8FlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A point feature defining the gages(outlets) to which watersheds will be delineated.
+         */
         public Builder gagesFile(String val) {
-            gagesFile = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.gagesFile = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This output grid identifies each gage watershed.
+         */
         public Builder gagewatershed(String val) {
-            gagewatershed = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.gagewatershed = val;
+            }
             return this;
         }
 
+        /**
+         * @param val
+         */
         public Builder downstreamIdentefier(String val) {
-            downstreamIdentefier = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.downstreamIdentefier = val;
+            }
             return this;
         }
 

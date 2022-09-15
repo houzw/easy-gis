@@ -1,0 +1,8 @@
+{
+  "formats" : [ {
+    "mimeType" : "application/x-zipped-shp",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/x-zipped-shp"
+  }]
+}

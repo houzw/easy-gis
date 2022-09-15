@@ -1,4 +1,4 @@
-package org.egc.gis.db;
+package org.egc.gis.db.cmd;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;

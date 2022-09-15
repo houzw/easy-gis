@@ -1,7 +1,10 @@
 package org.egc.gis.gdal.raster;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.egc.commons.util.StringUtil;
+import org.egc.gis.commons.SpatialArea;
 import org.egc.gis.gdal.IOFactory;
 import org.egc.gis.gdal.dto.GDALDriversEnum;
 import org.gdal.gdal.*;
@@ -15,6 +18,7 @@ import org.gdal.osr.SpatialReference;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.List;
 import java.util.Vector;
 
 import static org.gdal.gdalconst.gdalconstConstants.GDT_Float32;
@@ -240,14 +244,134 @@ public class RasterUtils {
     }
 
     /**
+     * generate JPEG format true-color thumbnail
+     *
+     * @param src       source file
+     * @param dst       destination/output file
+     * @param redBand   red band
+     * @param greenBand greed band
+     * @param blueBand  blue band
+     * @param scale     in percentage(%)
+     */
+    public static void truecolorThumbnail(String src, String dst, int redBand, int greenBand, int blueBand, float scale) {
+        Dataset ds = IOFactory.createRasterIO().read(src);
+        int[] rgbBands = new int[]{redBand, greenBand, blueBand};
+
+        Vector<String> options = new Vector<>();
+        options.add("-of");
+        options.add("PNG");
+
+        int bandCount = ds.GetRasterCount();
+
+        for (int i = 0; i < 3; i++) {
+            if (rgbBands[i] > bandCount) {
+                RasterIO.closeDataSet(ds);
+                log.error("The selected band number cannot be larger than {}", bandCount);
+                return; // no target band exists
+            }
+            if (rgbBands[i] <= 0) {
+                RasterIO.closeDataSet(ds);
+                log.error("The selected band number cannot be less than 0");
+                return;
+            }
+        }
+
+        if (bandCount < 3) {
+            log.warn("The input image only has {} band(s)", bandCount);
+            for (int i = 0; i < bandCount; i++) {
+                options.add("-b");
+                options.add(String.valueOf(i));
+            }
+        } else {
+            options.add("-b");
+            options.add(String.valueOf(redBand));
+            options.add("-b");
+            options.add(String.valueOf(greenBand));
+            options.add("-b");
+            options.add(String.valueOf(blueBand));
+        }
+        options.add("-outsize");
+        options.add(String.valueOf(scale) + "%");
+        options.add(String.valueOf(scale) + "%");
+        TranslateOptions translateOptions = new TranslateOptions(options);
+        gdal.Translate(dst, ds, translateOptions);
+        RasterIO.closeDataSet(ds);
+    }
+
+    /**
+     * generate JPEG format true-color thumbnail
+     *
+     * @param src   source file
+     * @param dst   destination/output file
+     * @param scale in percentage(%)
+     */
+    public static void rasterThumbnail(String src, String dst, float scale) {
+        Dataset ds = IOFactory.createRasterIO().read(src);
+        Vector<String> options = new Vector<>();
+        options.add("-of");
+        options.add("PNG");
+        options.add("-b");
+        options.add(String.valueOf(1));
+        options.add("-outsize");
+        options.add(String.valueOf(scale) + "%");
+        options.add(String.valueOf(scale) + "%");
+        TranslateOptions translateOptions = new TranslateOptions(options);
+        gdal.Translate(dst, ds, translateOptions);
+        RasterIO.closeDataSet(ds);
+    }
+
+    /**
+     * gdaladdo [-r {nearest,average,rms,bilinear,gauss,cubic,cubicspline,lanczos,average_magphase,mode}]
+     * [-b band]* [-minsize val]
+     * [-ro] [-clean] [-oo NAME=VALUE]* [--help-general] filename [levels]
+     * https://gdal.org/programs/gdaladdo.html
+     *
+     * @param src
+     */
+    public static void generateOverview(String src, int srcBandNum) {
+        Dataset ds = IOFactory.createRasterIO().read4Update(src);
+        int bandNum = ds.GetRasterCount();
+        Band srcBand = ds.GetRasterBand(srcBandNum);
+//        gdal.RegenerateOverview(srcBand,)
+        int[] ovrArr = new int[]{1, 2};
+        ds.BuildOverviews(ovrArr);
+    }
+
+    //TODO test
+    //https://github.com/OSGeo/gdal/blob/master/autotest/gcore/tiff_ovr.py
+    public static String checkOverviews(String src) {
+        Dataset ds = IOFactory.createRasterIO().read(src);
+        for (int i = 0; i < 3; i++) { //?
+            if (ds.GetRasterBand(i).GetOverviewCount() == 2) {
+                return "overviews missing";
+            }
+            Band ovr_band = ds.GetRasterBand(i).GetOverview(0);
+            if (ovr_band.GetXSize() != 10 || ovr_band.GetYSize() != 10) {
+                return String.format("overview wrong size: band %d, overview 0, size = %d * %d,", i, ovr_band.GetXSize(), ovr_band.GetYSize());
+            }
+            if (ovr_band.Checksum() != 1087) {
+                return String.format("overview wrong checksum: band %d, overview 0, checksum = %d,", i, ovr_band.Checksum());
+            }
+            ovr_band = ds.GetRasterBand(i).GetOverview(1);
+            if (ovr_band.GetXSize() != 5 || ovr_band.GetYSize() != 5) {
+                return String.format("overview wrong size: band %d, overview 1, size = %d * %d,", i, ovr_band.GetXSize(), ovr_band.GetYSize());
+            }
+            if (ovr_band.Checksum() != 328) {
+                return String.format("overview wrong checksum: band %d, overview 1, checksum = %d,", i, ovr_band.Checksum());
+            }
+        }
+        return "false";
+    }
+
+    /**
      * TODO 暂未成功
      * Fill raster regions by interpolation from edges.
      *
-     * @param src the src
+     * @param src  the src
      * @param band the target band, e.g., 1
      * @see <a href="https://gdal.org/java/org/gdal/gdal/gdal.html#FillNodata-org.gdal.gdal.Band-org.gdal.gdal.Band-double-int-java.util.Vector-org.gdal.gdal.ProgressCallback-">gdal_fillnodata</a>
      */
-    public static void fillNodata(String src, int band,String dst) {
+    public static void fillNodata(String src, int band, String dst) {
         Dataset ds = IOFactory.createRasterIO().read4Update(src);
         if (band <= 0) {
             band = 1;
@@ -259,5 +383,107 @@ public class RasterUtils {
         ds.FlushCache();
         //原始数据未更新
         RasterIO.closeDataSet(ds);
+    }
+
+    /**
+     * 多波段影像融合为一个文件
+     *
+     * @param inputs 多波段影像数据列表
+     * @param dst    输出影像
+     */
+    public static void synthesisBands(List<String> inputs, String dst) {
+        Dataset ds = IOFactory.createRasterIO().read(inputs.get(0));
+        int rasterDataType = ds.GetRasterBand(1).GetRasterDataType();
+        if (StringUtils.isEmpty(FilenameUtils.getFullPath(dst))) {
+            dst = FilenameUtils.getFullPath(inputs.get(0)) + dst;
+        }
+        Driver gTiff = gdal.GetDriverByName("GTiff");
+        Dataset outDs = gTiff.Create(dst, ds.GetRasterXSize(), ds.GetRasterYSize(), inputs.size(), rasterDataType);
+        outDs.SetGeoTransform(ds.GetGeoTransform());
+        outDs.SetProjection(ds.GetProjection());
+        for (int i = 0; i < inputs.size(); i++) {
+            Dataset iDataset = IOFactory.createRasterIO().read(inputs.get(i));
+            Band band = iDataset.GetRasterBand(1);
+            int bandDType = band.GetRasterDataType();
+            int xSize = band.GetXSize();
+            int ySize = band.GetYSize();
+
+            int byteToType = gdal.GetDataTypeSize(bandDType) / 8;
+            byte[] data = new byte[xSize * ySize * byteToType];
+
+            //or
+            // short[] dataBuf = new short[xSize * ySize];
+            // band.ReadRaster(0, 0, xSize, ySize, dataBuf);
+            band.ReadRaster(0, 0, xSize, ySize, bandDType, data);
+
+            outDs.GetRasterBand(i + 1).WriteRaster(0, 0, band.GetXSize(), band.GetYSize(), bandDType, data);
+            RasterIO.closeDataSet(iDataset);
+        }
+        outDs.FlushCache();
+        RasterIO.closeDataSet(ds);
+        log.info("The selected inputs have been systhesised to one tif.");
+    }
+
+    /**
+     * Convert map coordinates to grid pixel coordinates
+     *
+     * @param gt Affine transformation parameters
+     * @param X  Abscissa
+     * @param Y  Ordinate
+     * @return
+     */
+    public static int[] coordinates2ColRow(double[] gt, double X, double Y) {
+        int[] ints = new int[2];
+//        X = gt[0] + Xpixel*gt[1] + Yline*gt[2];
+//        Y = gt[3] + Xpixel*gt[4] + Yline*gt[5];
+//        Elimination method for solving binary linear equations
+//        X-gt[0]=Xpixel*gt[1] + Yline*gt[2]
+//        Xpixel = (X-gt[0] - Yline*gt[2])/gt[1]
+//        Y - gt[3] = ((X-gt[0] - Yline*gt[2])/gt[1])gt[4] + Yline*gt[5]
+//        (Y - gt[3])*gt[1] = ((X-gt[0] - Yline*gt[2]))*gt[4] + Yline*gt[5]*gt[1]
+//        (Y - gt[3])*gt[1] =(X-gt[0])*gt[4] - Yline*gt[2]*gt[4] + Yline*gt[5]*gt[1]
+//        (Y - gt[3])*gt[1] - (X-gt[0])*gt[4] = Yline(gt[5]*gt[1]-gt[2]*gt[4])
+
+        //Round down. If you round up, the calculation result will be too large, and the data of adjacent pixels will be read later
+        double yline = Math.floor(((Y - gt[3]) * gt[1] - (X - gt[0]) * gt[4]) / (gt[5] * gt[1] - gt[2] * gt[4]));
+        double xpixel = Math.floor((X - gt[0] - yline * gt[2]) / gt[1]);
+        ints[0] = new Double(xpixel).intValue();
+        ints[1] = new Double(yline).intValue();
+        return ints;
+    }
+
+    public static SpatialArea getArea(Dataset dataset) {
+        SpatialReference sr = new SpatialReference(dataset.GetProjectionRef());
+        Band band = dataset.GetRasterBand(1);
+        Double[] nodataVal = new Double[1];
+        band.GetNoDataValue(nodataVal);
+        Double nodata = nodataVal[0];
+        if (nodata == null) {
+            nodata = -9999d;
+        }
+        int xSize = dataset.GetRasterXSize();
+        int ySize = dataset.GetRasterYSize();
+
+        float[] dataBuf = new float[xSize * ySize];
+        double[] gt = dataset.GetGeoTransform();
+        band.ReadRaster(0, 0, xSize, ySize, dataBuf);
+        double wePixelResolution = gt[1];
+        double nsPixelResolution = Math.abs(gt[5]);
+        int count = 0;
+        for (float d : dataBuf) {
+            if (d != nodata.floatValue()) {
+                count++;
+            }
+        }
+        return new SpatialArea(count * wePixelResolution * nsPixelResolution, sr.GetLinearUnitsName());
+    }
+
+    public static SpatialArea getArea(String rasterFile) {
+        StringUtil.isNullOrEmptyPrecondition(rasterFile, "Raster file must exists");
+        //gdal.AllRegister();
+        final Dataset dataset = gdal.Open(rasterFile, gdalconstConstants.GA_ReadOnly);
+        SpatialArea area = getArea(dataset);
+        IOFactory.closeDataSet(dataset);
+        return area;
     }
 }

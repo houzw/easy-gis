@@ -1,0 +1,27 @@
+{
+  "formats" : [ {
+    "mimeType" : "text/xml",
+    "schema" : "http://schemas.opengis.net/gml/2.1.2.1/feature.xsd"
+  }, {
+    "mimeType" : "text/xml",
+    "schema" : "http://schemas.opengis.net/gml/2.1.2/feature.xsd"
+  }, {
+    "mimeType" : "text/xml",
+    "schema" : "http://schemas.opengis.net/gml/2.1.1/feature.xsd"
+  }, {
+    "mimeType" : "text/xml",
+    "schema" : "http://schemas.opengis.net/gml/2.0.0/feature.xsd"
+  }, {
+    "mimeType" : "application/gml+xml; version=2.0.0",
+    "schema" : "http://schemas.opengis.net/gml/2.0.0/feature.xsd"
+  }, {
+    "mimeType" : "application/gml+xml; version=2.1.1",
+    "schema" : "http://schemas.opengis.net/gml/2.1.1/feature.xsd"
+  }, {
+    "mimeType" : "application/gml+xml; version=2.1.2",
+    "schema" : "http://schemas.opengis.net/gml/2.1.2/feature.xsd"
+  }, {
+    "mimeType" : "application/gml+xml; version=2.1.2.1",
+    "schema" : "http://schemas.opengis.net/gml/2.1.2.1/feature.xsd"
+  } ]
+}

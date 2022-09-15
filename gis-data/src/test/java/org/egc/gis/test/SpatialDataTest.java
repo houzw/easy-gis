@@ -35,15 +35,15 @@ public class SpatialDataTest {
         CoverageService service = new CoverageService("http://localhost:8088/geoserver/ows");
         //[nurc__Arc_Sample, nurc__Img_Sample, nurc__Pk50095, sf__sfdem, global__taoxi, global__landuse, nurc__mosaic, global__soil]
         System.out.println(service.availableCoverages());
-        service.setFileTempDir(youwuzhen);
+//        service.setFileTempDir(youwuzhen);
         //default name
 //        service.getCoverage("global__landuse", 25.666323798766907, 116.44297141848418, 25.693001173347675,
 //                116.4808037526092, 4326, 2415, youwuzhen_lu);
-//        service.getCoverage("egc__china_hwsd", 25.666323798766907, 116.44297141848418, 25.693001173347675,
-//                116.4808037526092, 4326, 2415, "E:/demo/seims_workspaces/seims_8/data_prepare/spatial/seims_8_soil.tif");
+        service.getCoverage("egc__china_hwsd", 25.666323798766907, 116.44297141848418, 25.693001173347675,
+                116.4808037526092, 4326, 2415, youwuzhen_soil);
         // 太小了下载会报错
-        service.getCoverage("global__soil", 25.666323798766907 - 2, 116.44297141848418 - 2, 25.693001173347675 + 2,
-                116.4808037526092 + 2, 4326, 2415, youwuzhen_soil_dsmw);
+        service.getCoverage("global__soil", 25.666323798766907 - 0.2, 116.44297141848418 - 0.2, 25.693001173347675 + 0.2,
+                116.4808037526092 + 0.2, 4326, 2415, youwuzhen_soil_dsmw);
         System.out.println(service.availableCoverageInfo());
     }
 
@@ -52,13 +52,16 @@ public class SpatialDataTest {
         String meichuanjiang_soil = "F:/data/global_seims/spatial/meichuanjiang_hwsd_soil.tif";
         String meichuanjiang_lu = "F:/data/global_seims/spatial/meichuanjiang_glcc_landuse.tif";
         String meichuanjiang_dem = "F:/data/global_seims/spatial/meichuanjiang_awad30_dem.tif";
+        String meichuanjiang_dem2 = "F:/data/global_seims/spatial/meichuanjiang_srtm1_dem.tif";
         OpenTopography ot = new OpenTopography();
         ot.okDownloadGtiff(DemTypesEnum.AW3D30, 115.5808662066601, 26.03576042480186, 116.73808931554, 27.07832416663701, meichuanjiang_dem);
 
-        CoverageService service = new CoverageService("http://localhost:8088/geoserver/ows");
-        service.getCoverage("egc__china_hwsd", 26.03576042480186, 115.5808662066601, 27.07832416663701,
-                116.73808931554, 4326, 2415, meichuanjiang_soil);
-        service.getCoverage("global__landuse", 26.03576042480186, 115.5808662066601, 27.07832416663701,
-                116.73808931554, 4326, 2415, meichuanjiang_lu);
+//        CoverageService service = new CoverageService("http://localhost:8088/geoserver/ows");
+//        service.getCoverage("egc__china_hwsd", 26.03576042480186, 115.5808662066601, 27.07832416663701,
+//                116.73808931554, 4326, 2415, meichuanjiang_soil);
+//        service.getCoverage("global__landuse", 26.03576042480186, 115.5808662066601, 27.07832416663701,
+//                116.73808931554, 4326, 2415, meichuanjiang_lu);
     }
+
+
 }

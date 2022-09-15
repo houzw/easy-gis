@@ -31,5 +31,7 @@ public class Consts {
     public static final String GET_CAPABILITIES = "GetCapabilities";
     public static final String STYLES = "STYLES";
     public static final String MEDIATYPE = "MEDIATYPE";
+    public static final String GMD_SCHEMA_2005 = "http://www.isotc211.org/2005/gmd";
+    public static final String RESULT_TYPE_RESULTS = "results";
 
 }

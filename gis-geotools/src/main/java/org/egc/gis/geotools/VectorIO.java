@@ -2,26 +2,28 @@ package org.egc.gis.geotools;
 
 import lombok.extern.slf4j.Slf4j;
 import org.egc.gis.geotools.utils.SimpleFeatureTypes;
-import org.geotools.data.DataUtilities;
-import org.geotools.data.DefaultTransaction;
-import org.geotools.data.Transaction;
+import org.geotools.data.*;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.data.simple.SimpleFeatureStore;
+import org.geotools.feature.FeatureCollection;
+import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.locationtech.jts.geom.Geometry;
+import org.opengis.feature.GeometryAttribute;
+import org.opengis.feature.Property;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.filter.Filter;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Description:
@@ -38,6 +40,35 @@ import java.util.Map;
 @Slf4j
 public class VectorIO {
 
+    /**
+     * https://docs.geotools.org/stable/userguide/library/data/shape.html
+     *
+     * @param filepath filepath
+     * @throws IOException
+     */
+    public void readShapefile(String filepath) throws IOException {
+        File file = new File(filepath);
+        Map<String, Object> map = new HashMap<>();
+        map.put("url", file.toURI().toURL());
+
+        DataStore dataStore = DataStoreFinder.getDataStore(map);
+        String typeName = dataStore.getTypeNames()[0];
+
+        FeatureSource<SimpleFeatureType, SimpleFeature> source =
+                dataStore.getFeatureSource(typeName);
+        Filter filter = Filter.INCLUDE; // ECQL.toFilter("BBOX(THE_GEOM, 10,20,30,40)")
+
+        FeatureCollection<SimpleFeatureType, SimpleFeature> collection = source.getFeatures(filter);
+        try (FeatureIterator<SimpleFeature> features = collection.features()) {
+            while (features.hasNext()) {
+                SimpleFeature feature = features.next();
+                System.out.print(feature.getID());
+                System.out.print(": ");
+                System.out.println(feature.getDefaultGeometryProperty().getValue());
+            }
+        }
+    }
+
     public SimpleFeatureCollection readShp(String shp) {
         File shpFile = new File(shp);
         //DataStore store = null;
@@ -47,7 +78,32 @@ public class VectorIO {
             store = new ShapefileDataStore(shpFile.toURI().toURL());
             //store.setCharset(StandardCharsets.UTF_8);
             features = store.getFeatureSource().getFeatures();
-//            features = store.getFeatureSource(store.getTypeNames()[0]).getFeatures();
+            SimpleFeatureType schema = features.getSchema();
+            CoordinateReferenceSystem crs = schema.getCoordinateReferenceSystem();
+            System.out.println(crs);
+            int featureSize = features.size();
+            System.out.println("要素数量："+featureSize);
+            SimpleFeatureIterator simpleFeatureIterator = features.features();
+            while (simpleFeatureIterator.hasNext()) {
+                SimpleFeature feature = simpleFeatureIterator.next();
+                System.out.println(feature.getID());
+                Collection<? extends Property> properties = feature.getValue();
+                // 要素属性
+                for(Property property : properties){
+                    System.out.println("属性名称：" + property.getName());
+                    System.out.println("属性值：" + property.getValue());
+                    System.out.println("属性类型：" + property.getType());
+                    System.out.println();
+                }
+                // geometry
+                GeometryAttribute defaultGeometryProperty = feature.getDefaultGeometryProperty();
+                System.out.println(defaultGeometryProperty.getValue());
+                System.out.println(defaultGeometryProperty.getType());
+                System.out.println(defaultGeometryProperty.getType().getName());
+                System.out.println(defaultGeometryProperty.getName());
+                System.out.println(defaultGeometryProperty.getDescriptor().getCoordinateReferenceSystem());
+            }
+
             store.dispose();
             return features;
         } catch (java.io.IOException e) {

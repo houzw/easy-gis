@@ -33,6 +33,12 @@
             <artifactId>gdal</artifactId>
             <classifier>gisinternals</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.egc</groupId>
+            <artifactId>gis-commons</artifactId>
+            <version>1.2-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

@@ -18,20 +18,14 @@ import java.io.File;
  * Wrapper of parameters of dInfinityDistanceDown
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class DInfinityDistanceDownParams implements Params {
-    private static final long serialVersionUID = -8193415301265100637L;
-
     /**
-     * <pre>
-     * dinfinityFlowDirection
-     * pitFilledElevation
-     * streamRaster
-     * weightPath
+     * <pre>     * dinfinityFlowDirection     * pitFilledElevation     * streamRaster     * weightPath
      *  </pre>
      *
      * @see Builder#Builder(String, String, String)
@@ -90,29 +84,30 @@ public class DInfinityDistanceDownParams implements Params {
     /**
      * Creates a grid containing the distance to stream calculated using the D-infinity flow model and the statistical and path methods chosen.
      */
+    @NotNull
     private String dinfinityDropToStream;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getDinfinityDropToStream() {
+        // if no output filename provided
         if (StringUtils.isBlank(dinfinityDropToStream)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(dinfinityFlowDirection, "dinfinityDropToStream", "Raster Dataset", "tif"));
         }
-        return dinfinityDropToStream;
+        return this.dinfinityDropToStream;
     }
 
     private DInfinityDistanceDownParams(Builder builder) {
-        dinfinityFlowDirection = builder.dinfinityFlowDirection;
-        pitFilledElevation = builder.pitFilledElevation;
-        streamRaster = builder.streamRaster;
-        statisticalMethod = builder.statisticalMethod;
-        distanceMethod = builder.distanceMethod;
-        checkForEdgeContamination = builder.checkForEdgeContamination;
-        weightPath = builder.weightPath;
-        dinfinityDropToStream = builder.dinfinityDropToStream;
+        this.dinfinityFlowDirection = builder.dinfinityFlowDirection;
+        this.pitFilledElevation = builder.pitFilledElevation;
+        this.streamRaster = builder.streamRaster;
+        this.statisticalMethod = builder.statisticalMethod;
+        this.distanceMethod = builder.distanceMethod;
+        this.checkForEdgeContamination = builder.checkForEdgeContamination;
+        this.weightPath = builder.weightPath;
+        this.dinfinityDropToStream = builder.dinfinityDropToStream;
     }
 
     @XmlRootElement
@@ -138,43 +133,90 @@ public class DInfinityDistanceDownParams implements Params {
             this.streamRaster = streamRaster;
         }
 
+        /**
+         * @param val A grid giving flow directions by the D-Infinity method.
+         */
         public Builder dinfinityFlowDirection(String val) {
-            dinfinityFlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.dinfinityFlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This input is a grid of elevation values.
+         */
         public Builder pitFilledElevation(String val) {
-            pitFilledElevation = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.pitFilledElevation = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid indicating streams, by using a grid cell value of 1 on streams and 0 off streams.
+         */
         public Builder streamRaster(String val) {
-            streamRaster = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.streamRaster = val;
+            }
             return this;
         }
 
+        /**
+         * default value is ave
+         *
+         * @param val Alternative values are ave, max, min, where ave for Average, max for Maximum, min for Minimum Statistical method used to calculate the distance down to the stream.
+         */
         public Builder statisticalMethod(String val) {
-            statisticalMethod = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.statisticalMethod = val;
+            }
             return this;
         }
 
+        /**
+         * default value is h
+         *
+         * @param val Alternative values are h, v, p, s, where h for Horizontal, v for Vertical, p for Pythagoras, s for Surface Distance method used to calculate the distance down to the stream.
+         */
         public Builder distanceMethod(String val) {
-            distanceMethod = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.distanceMethod = val;
+            }
             return this;
         }
 
+        /**
+         * default value is  true
+         *
+         * @param val A flag that determines whether the tool should check for edge contamination.
+         */
         public Builder checkForEdgeContamination(Boolean val) {
-            checkForEdgeContamination = val;
+
+            if (val != null) {
+                this.checkForEdgeContamination = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid giving weights (loadings) to be used in the distance calculation.
+         */
         public Builder weightPath(String val) {
-            weightPath = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.weightPath = val;
+            }
             return this;
         }
 
+        /**
+         * @param val Creates a grid containing the distance to stream calculated using the D-infinity flow model and the statistical and path methods chosen.
+         */
         public Builder dinfinityDropToStream(String val) {
-            dinfinityDropToStream = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.dinfinityDropToStream = val;
+            }
             return this;
         }
 

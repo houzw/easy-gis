@@ -18,19 +18,14 @@ import java.io.File;
  * Wrapper of parameters of dInfinityDistanceUp
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class DInfinityDistanceUpParams implements Params {
-    private static final long serialVersionUID = 3613867407453405685L;
-
     /**
-     * <pre>
-     * dinfinityFlowDirection
-     * pitFilledElevation
-     * slope
+     * <pre>     * dinfinityFlowDirection     * pitFilledElevation     * slope
      *  </pre>
      *
      * @see Builder#Builder(String, String, String)
@@ -92,29 +87,30 @@ public class DInfinityDistanceUpParams implements Params {
     /**
      *
      */
+    @NotNull
     private String dinfinityDistanceUp;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getDinfinityDistanceUp() {
+        // if no output filename provided
         if (StringUtils.isBlank(dinfinityDistanceUp)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(dinfinityFlowDirection, "dinfinityDistanceUp", "Raster Dataset", "tif"));
         }
-        return dinfinityDistanceUp;
+        return this.dinfinityDistanceUp;
     }
 
     private DInfinityDistanceUpParams(Builder builder) {
-        dinfinityFlowDirection = builder.dinfinityFlowDirection;
-        pitFilledElevation = builder.pitFilledElevation;
-        slope = builder.slope;
-        proportionThreshold = builder.proportionThreshold;
-        statisticalMethod = builder.statisticalMethod;
-        distanceMethod = builder.distanceMethod;
-        checkForEdgeContamination = builder.checkForEdgeContamination;
-        dinfinityDistanceUp = builder.dinfinityDistanceUp;
+        this.dinfinityFlowDirection = builder.dinfinityFlowDirection;
+        this.pitFilledElevation = builder.pitFilledElevation;
+        this.slope = builder.slope;
+        this.proportionThreshold = builder.proportionThreshold;
+        this.statisticalMethod = builder.statisticalMethod;
+        this.distanceMethod = builder.distanceMethod;
+        this.checkForEdgeContamination = builder.checkForEdgeContamination;
+        this.dinfinityDistanceUp = builder.dinfinityDistanceUp;
     }
 
     @XmlRootElement
@@ -140,43 +136,93 @@ public class DInfinityDistanceUpParams implements Params {
             this.slope = slope;
         }
 
+        /**
+         * @param val A grid giving flow directions by the D-Infinity method.
+         */
         public Builder dinfinityFlowDirection(String val) {
-            dinfinityFlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.dinfinityFlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This input is a grid of elevation values.
+         */
         public Builder pitFilledElevation(String val) {
-            pitFilledElevation = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.pitFilledElevation = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This input is a grid of slope values.
+         */
         public Builder slope(String val) {
-            slope = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.slope = val;
+            }
             return this;
         }
 
+        /**
+         * default value is 0.5d
+         *
+         * @param val The proportion threshold parameter where only grid cells that contribute flow with a proportion greater than this user specified threshold (t) is considered to be upslope of any given grid cell.
+         */
         public Builder proportionThreshold(Double val) {
-            proportionThreshold = val;
+
+            if (val != null) {
+                this.proportionThreshold = val;
+            }
             return this;
         }
 
+        /**
+         * default value is ave
+         *
+         * @param val Statistical method used to calculate the distance down to the stream.
+         */
         public Builder statisticalMethod(String val) {
-            statisticalMethod = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.statisticalMethod = val;
+            }
             return this;
         }
 
+        /**
+         * default value is h
+         *
+         * @param val Distance method used to calculate the distance down to the stream.
+         */
         public Builder distanceMethod(String val) {
-            distanceMethod = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.distanceMethod = val;
+            }
             return this;
         }
 
+        /**
+         * default value is  true
+         *
+         * @param val A flag that determines whether the tool should check for edge contamination.
+         */
         public Builder checkForEdgeContamination(Boolean val) {
-            checkForEdgeContamination = val;
+
+            if (val != null) {
+                this.checkForEdgeContamination = val;
+            }
             return this;
         }
 
+        /**
+         * @param val
+         */
         public Builder dinfinityDistanceUp(String val) {
-            dinfinityDistanceUp = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.dinfinityDistanceUp = val;
+            }
             return this;
         }
 

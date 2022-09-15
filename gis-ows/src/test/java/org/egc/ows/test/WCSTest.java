@@ -16,11 +16,13 @@ import org.egc.ows.client.OWSClient;
 import org.egc.ows.client.WCSClient;
 import org.egc.ows.commons.WCSUtils;
 import org.egc.ows.request.wcs.GetCoverageRequest20;
+import org.egc.ows.request.wcs.WCSRequestBuilder;
 import org.geotools.wcs.WCSConfiguration;
 import org.geotools.xsd.Parser;
 import org.junit.Test;
 
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -142,4 +144,10 @@ public class WCSTest {
         assertEquals("application/xml", formats.get(0));
     }
 
+    @Test
+    public void getCapabilitiesXml() throws JAXBException {
+        WCSRequestBuilder builder = new WCSRequestBuilder(base_url);
+//        String s = builder.GetCapabilities10();
+//        System.out.println(s);
+    }
 }

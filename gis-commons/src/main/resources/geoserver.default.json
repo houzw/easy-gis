@@ -1,0 +1,6 @@
+{
+  "geoserverurl": "http://localhost:8080/geoserver",
+  "username" : "admin",
+  "password" : "geoserver",
+  "workspacename" : "N52"
+}

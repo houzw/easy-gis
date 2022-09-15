@@ -1,0 +1,13 @@
+{
+  "formats" : [ {
+    "mimeType" : "image/x-zipped-tiff",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "image/x-zipped-geotiff",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "image/x-zipped-tiff"
+  }, {
+    "mimeType" : "image/x-zipped-geotiff"
+  } ]
+}

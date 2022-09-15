@@ -18,19 +18,14 @@ import java.io.File;
  * Wrapper of parameters of moveOutletsToStreams
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:35+08:00
+ * @date 2020-06-28T12:02:30+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class MoveOutletsToStreamsParams implements Params {
-    private static final long serialVersionUID = 5977188617362862880L;
-
     /**
-     * <pre>
-     * d8FlowDirection
-     * streamRaster
-     * outlets
+     * <pre>     * d8FlowDirection     * streamRaster     * outlets
      *  </pre>
      *
      * @see Builder#Builder(String, String, String)
@@ -68,26 +63,27 @@ public class MoveOutletsToStreamsParams implements Params {
     /**
      * A point  OGR file defining points of interest or outlets.
      */
+    @NotNull
     private String outletsFile;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getOutletsFile() {
+        // if no output filename provided
         if (StringUtils.isBlank(outletsFile)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(d8FlowDirection, "outletsFile", "File", "txt"));
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(d8FlowDirection, "outletsFile", "Feature Layer", "shp"));
         }
-        return outletsFile;
+        return this.outletsFile;
     }
 
     private MoveOutletsToStreamsParams(Builder builder) {
-        d8FlowDirection = builder.d8FlowDirection;
-        streamRaster = builder.streamRaster;
-        outlets = builder.outlets;
-        maximumDistance = builder.maximumDistance;
-        outletsFile = builder.outletsFile;
+        this.d8FlowDirection = builder.d8FlowDirection;
+        this.streamRaster = builder.streamRaster;
+        this.outlets = builder.outlets;
+        this.maximumDistance = builder.maximumDistance;
+        this.outletsFile = builder.outletsFile;
     }
 
     @XmlRootElement
@@ -110,28 +106,56 @@ public class MoveOutletsToStreamsParams implements Params {
             this.outlets = outlets;
         }
 
+        /**
+         * @param val This input is a grid of flow directions that are encoded using the D8 method where all flow from a cells goes to a single neighboring cell in the direction of steepest descent.
+         */
         public Builder d8FlowDirection(String val) {
-            d8FlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.d8FlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This output is an indicator grid (1,0) that indicates the location of streams, with a value of 1 for each of the stream cells and 0 for the remainder of the cells.
+         */
         public Builder streamRaster(String val) {
-            streamRaster = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.streamRaster = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A point feature defining points of interest or outlets that should ideally be located on a stream, but may not be exactly on the stream due to the fact that the feature point locations may not have been accurately registered with respect to the stream raster grid.
+         */
         public Builder outlets(String val) {
-            outlets = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.outlets = val;
+            }
             return this;
         }
 
+        /**
+         * default value is 50d
+         *
+         * @param val This input paramater is the maximum number of grid cells that the points in the input outlet feature  will be moved before they are saved to the output outlet feature.
+         */
         public Builder maximumDistance(Double val) {
-            maximumDistance = val;
+
+            if (val != null) {
+                this.maximumDistance = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A point  OGR file defining points of interest or outlets.
+         */
         public Builder outletsFile(String val) {
-            outletsFile = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.outletsFile = val;
+            }
             return this;
         }
 

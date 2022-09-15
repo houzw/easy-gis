@@ -18,18 +18,14 @@ import java.io.File;
  * Wrapper of parameters of pitRemove
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class PitRemoveParams implements Params {
-    private static final long serialVersionUID = 7083951096653785240L;
-
     /**
-     * <pre>
-     * elevation
-     * depressionMask
+     * <pre>     * elevation     * depressionMask
      *  </pre>
      *
      * @see Builder#Builder(String)
@@ -56,25 +52,26 @@ public class PitRemoveParams implements Params {
     /**
      * A grid of elevation values with pits removed so that flow is routed off of the domain.
      */
+    @NotNull
     private String pitFilledElevation;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getPitFilledElevation() {
+        // if no output filename provided
         if (StringUtils.isBlank(pitFilledElevation)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(elevation, "pitFilledElevation", "Raster Dataset", "tif"));
         }
-        return pitFilledElevation;
+        return this.pitFilledElevation;
     }
 
     private PitRemoveParams(Builder builder) {
-        elevation = builder.elevation;
-        fillConsideringOnly4WayNeighbors = builder.fillConsideringOnly4WayNeighbors;
-        depressionMask = builder.depressionMask;
-        pitFilledElevation = builder.pitFilledElevation;
+        this.elevation = builder.elevation;
+        this.fillConsideringOnly4WayNeighbors = builder.fillConsideringOnly4WayNeighbors;
+        this.depressionMask = builder.depressionMask;
+        this.pitFilledElevation = builder.pitFilledElevation;
     }
 
     @XmlRootElement
@@ -92,23 +89,44 @@ public class PitRemoveParams implements Params {
             this.elevation = elevation;
         }
 
+        /**
+         * @param val A digital elevation model (DEM) grid to serve as the base input for the terrain analysis and stream delineation.
+         */
         public Builder elevation(String val) {
-            elevation = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.elevation = val;
+            }
             return this;
         }
 
+        /**
+         * @param val If this option is selected Fill ensures that the grid is hydrologically conditioned with cell to cell connectivity in only 4 directions (N, S, E or W neighbors).
+         */
         public Builder fillConsideringOnly4WayNeighbors(Boolean val) {
-            fillConsideringOnly4WayNeighbors = val;
+
+            if (val != null) {
+                this.fillConsideringOnly4WayNeighbors = val;
+            }
             return this;
         }
 
+        /**
+         * @param val
+         */
         public Builder depressionMask(String val) {
-            depressionMask = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.depressionMask = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid of elevation values with pits removed so that flow is routed off of the domain.
+         */
         public Builder pitFilledElevation(String val) {
-            pitFilledElevation = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.pitFilledElevation = val;
+            }
             return this;
         }
 

@@ -115,6 +115,35 @@ public class WCSRequestBuilder {
         return writer.toString();
     }
 
+   /* public String GetCapabilities20() throws JAXBException {
+       *//* ObjectFactory of = new ObjectFactory();
+        net.opengis.wcs.v_2_0.GetCapabilitiesType getCapabilitiesType = of.createGetCapabilitiesType();
+        JAXBElement<net.opengis.wcs.v_2_0.GetCapabilitiesType> getCapabilities = of.createGetCapabilities(getCapabilitiesType);
+
+        // serialise to xml
+        StringWriter writer = new StringWriter();
+        JAXBContext context = JAXBContext.newInstance(net.opengis.wcs.v_2_0.GetCapabilitiesType.class);
+
+        Marshaller m = context.createMarshaller();
+        QName qName = new QName("http://www.opengis.net/wcs/2.0.2", "GetCapabilities");
+        JAXBElement<GetCapabilitiesType> root = new JAXBElement<>(qName, GetCapabilitiesType.class, getCapabilitiesType);
+        m.marshal(root, writer);
+        return writer.toString();*//*
+        Wcs20Factory wcs20Factory = Wcs20Factory.eINSTANCE;
+        GetCapabilitiesType getCapabilitiesType = wcs20Factory.createGetCapabilitiesType();
+        getCapabilitiesType.setBaseUrl(serviceRoot);
+        getCapabilitiesType.setService("WCS");
+
+        // serialise to xml
+        StringWriter writer = new StringWriter();
+        JAXBContext context = JAXBContext.newInstance(GetCapabilitiesType.class);
+        Marshaller m = context.createMarshaller();
+        QName qName = new QName("http://www.opengis.net/wcs/1.0.0", "GetCapabilities");
+        JAXBElement<GetCapabilities> root = new JAXBElement<>(qName, GetCapabilities.class, getCapabilitiesType);
+        m.marshal(root, writer);
+        return getCapabilitiesType.toString();
+    }*/
+
     /*
      * WCS 1.0.0: http://gisserver.domain.com:6080/arcgis/services/World/Temperature/ImageServer/WCSServer?
      * SERVICE=WCS

@@ -1,0 +1,6 @@
+{
+  "formats" : [ {
+    "mimeType" : "application/vnd.google-earth.kml+xml",
+    "schema" : "http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd"
+  } ]
+}

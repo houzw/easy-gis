@@ -18,19 +18,14 @@ import java.io.File;
  * Wrapper of parameters of d8ExtremeUpslopeValue
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class D8ExtremeUpslopeValueParams implements Params {
-    private static final long serialVersionUID = 6443168184968635943L;
-
     /**
-     * <pre>
-     * d8FlowDirection
-     * value
-     * outlets
+     * <pre>     * d8FlowDirection     * value     * outlets
      *  </pre>
      *
      * @see Builder#Builder(String, String)
@@ -75,27 +70,28 @@ public class D8ExtremeUpslopeValueParams implements Params {
     /**
      * A grid of the maximum/minimum upslope values.
      */
+    @NotNull
     private String extremeValue;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getExtremeValue() {
+        // if no output filename provided
         if (StringUtils.isBlank(extremeValue)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(d8FlowDirection, "extremeValue", "Raster Dataset", "tif"));
         }
-        return extremeValue;
+        return this.extremeValue;
     }
 
     private D8ExtremeUpslopeValueParams(Builder builder) {
-        d8FlowDirection = builder.d8FlowDirection;
-        value = builder.value;
-        useMaximumUpslopeValue = builder.useMaximumUpslopeValue;
-        checkForEdgeContamination = builder.checkForEdgeContamination;
-        outlets = builder.outlets;
-        extremeValue = builder.extremeValue;
+        this.d8FlowDirection = builder.d8FlowDirection;
+        this.value = builder.value;
+        this.useMaximumUpslopeValue = builder.useMaximumUpslopeValue;
+        this.checkForEdgeContamination = builder.checkForEdgeContamination;
+        this.outlets = builder.outlets;
+        this.extremeValue = builder.extremeValue;
     }
 
     @XmlRootElement
@@ -117,33 +113,69 @@ public class D8ExtremeUpslopeValueParams implements Params {
             this.value = value;
         }
 
+        /**
+         * @param val A grid of D8 flow directions which are defined, for each cell, as the direction of the one of its eight adjacent or diagonal neighbors with the steepest downward slope.
+         */
         public Builder d8FlowDirection(String val) {
-            d8FlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.d8FlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This is the grid of values of which the maximum or minimum upslope value is selected.
+         */
         public Builder value(String val) {
-            value = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.value = val;
+            }
             return this;
         }
 
+        /**
+         * default value is  true
+         *
+         * @param val A flag to indicate whether the maximum or minimum upslope value is to be calculated.
+         */
         public Builder useMaximumUpslopeValue(Boolean val) {
-            useMaximumUpslopeValue = val;
+
+            if (val != null) {
+                this.useMaximumUpslopeValue = val;
+            }
             return this;
         }
 
+        /**
+         * default value is  true
+         *
+         * @param val A flag that indicates whether the tool should check for edge contamination.
+         */
         public Builder checkForEdgeContamination(Boolean val) {
-            checkForEdgeContamination = val;
+
+            if (val != null) {
+                this.checkForEdgeContamination = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A point feature defining outlets of interest.
+         */
         public Builder outlets(String val) {
-            outlets = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.outlets = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid of the maximum/minimum upslope values.
+         */
         public Builder extremeValue(String val) {
-            extremeValue = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.extremeValue = val;
+            }
             return this;
         }
 

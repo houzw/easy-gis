@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>easy-gis</artifactId>
+        <groupId>org.egc</groupId>
+        <version>1.2-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>gis-wps-client</artifactId>
+    <packaging>jar</packaging>
+    <name>gis-wps-client</name>
+    <url>http://www.example.com</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <n52-wps.version>4.0.0-beta.10</n52-wps.version>
+<!--        <n52-wps.version>3.6.3</n52-wps.version>-->
+        <gt.version>13.5</gt.version>
+        <n52.sensorweb.version>2.7.0</n52.sensorweb.version>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.egc</groupId>
+            <artifactId>gis-geotools</artifactId>
+            <version>1.2-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.geotools</groupId>
+                    <artifactId>geotools</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlbeans</groupId>
+            <artifactId>xmlbeans</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <!--   gis-ows客户端针对 JavaPS，这个支持传统的 52 north WPS    -->
+        <!-- https://mvnrepository.com/artifact/org.n52.wps/52n-wps-client-lib -->
+        <!-- https://wiki.52north.org/Geoprocessing/TutorialClientAPI-->
+        <dependency>
+            <groupId>org.n52.wps</groupId>
+            <artifactId>52n-wps-client-lib</artifactId>
+            <version>${n52-wps.version}</version>
+        </dependency>
+
+      <!--  <dependency>
+            <groupId>org.n52.geoprocessing</groupId>
+            <artifactId>wps-client-lib</artifactId>
+            <version>1.1.1</version>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.n52.wps</groupId>
+            <artifactId>52n-wps-io-geotools</artifactId>
+            <version>${n52-wps.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--   高版本的会报错 java.lang.NoClassDefFoundError: org/geotools/xml/Configuration     -->
+        <dependency>
+            <groupId>org.geotools.xsd</groupId>
+            <artifactId>gt-xsd-core</artifactId>
+            <version>${gt.version}</version>
+        </dependency>
+        <!--   read geotiff     -->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-coverage</artifactId>
+            <version>${gt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-main</artifactId>
+            <version>${gt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+    </build>
+</project>

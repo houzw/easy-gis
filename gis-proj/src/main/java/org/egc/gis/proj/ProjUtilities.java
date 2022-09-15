@@ -10,6 +10,7 @@ import org.locationtech.jts.geom.Coordinate;
 public class ProjUtilities {
 
     /**
+     * 转换度分秒经纬度为十进制经纬度
      * Converting degrees-minutes-seconds values to decimal degree values
      *
      * @param degree the degree

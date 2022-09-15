@@ -18,14 +18,12 @@ import java.io.File;
  * Wrapper of parameters of connectdown
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class ConnectdownParams implements Params {
-    private static final long serialVersionUID = 5436222256458098151L;
-
     /**
      * <pre>
      * d8FlowDirection
@@ -63,40 +61,42 @@ public class ConnectdownParams implements Params {
     /**
      * This output is point a OGR file where each point is created from watershed grid having the largest contributing area for each zone.
      */
+    @NotNull
     private String outletsFile;
 
     /**
      * This output is a point OGR file where each outlet is moved downflow a specified number of grid cells using flow directions.
      */
+    @NotNull
     private String movedoutletsFile;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getOutletsFile() {
+        // if no output filename provided
         if (StringUtils.isBlank(outletsFile)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(d8FlowDirection, "outletsFile", "File", "txt"));
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(d8FlowDirection, "outletsFile", "Feature Layer", "shp"));
         }
-        return outletsFile;
+        return this.outletsFile;
     }
 
-    // if no output filename provided
     public String getMovedoutletsFile() {
+        // if no output filename provided
         if (StringUtils.isBlank(movedoutletsFile)) {
-            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(d8FlowDirection, "movedoutletsFile", "File", "txt"));
+            return FilenameUtils.normalize(outputDir + File.separator + namingOutput(d8FlowDirection, "movedoutletsFile", "Feature Layer", "shp"));
         }
-        return movedoutletsFile;
+        return this.movedoutletsFile;
     }
 
     private ConnectdownParams(Builder builder) {
-        d8FlowDirection = builder.d8FlowDirection;
-        d8ContributingArea = builder.d8ContributingArea;
-        watershed = builder.watershed;
-        numberOfGridCells = builder.numberOfGridCells;
-        outletsFile = builder.outletsFile;
-        movedoutletsFile = builder.movedoutletsFile;
+        this.d8FlowDirection = builder.d8FlowDirection;
+        this.d8ContributingArea = builder.d8ContributingArea;
+        this.watershed = builder.watershed;
+        this.numberOfGridCells = builder.numberOfGridCells;
+        this.outletsFile = builder.outletsFile;
+        this.movedoutletsFile = builder.movedoutletsFile;
     }
 
     @XmlRootElement
@@ -118,33 +118,64 @@ public class ConnectdownParams implements Params {
             this.d8ContributingArea = d8ContributingArea;
         }
 
+        /**
+         * @param val This input is a grid of flow directions that are encoded using the D8 method where all flow from a cells goes to a single neighboring cell in the direction of steepest descent.
+         */
         public Builder d8FlowDirection(String val) {
-            d8FlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.d8FlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid giving the contributing area value in terms of the number of grid cells (or the summation of weights) for each cell taken as its own contribution plus the contribution from upslope neighbors that drain in to it using the D8 algorithm.
+         */
         public Builder d8ContributingArea(String val) {
-            d8ContributingArea = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.d8ContributingArea = val;
+            }
             return this;
         }
 
+        /**
+         * @param val Watershed grid delineated from gage watershed function or streamreachwatershed function.
+         */
         public Builder watershed(String val) {
-            watershed = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.watershed = val;
+            }
             return this;
         }
 
+        /**
+         * @param val Number of grid cells move to downstream based on flow directions.
+         */
         public Builder numberOfGridCells(Long val) {
-            numberOfGridCells = val;
+
+            if (val != null) {
+                this.numberOfGridCells = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This output is point a OGR file where each point is created from watershed grid having the largest contributing area for each zone.
+         */
         public Builder outletsFile(String val) {
-            outletsFile = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.outletsFile = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This output is a point OGR file where each outlet is moved downflow a specified number of grid cells using flow directions.
+         */
         public Builder movedoutletsFile(String val) {
-            movedoutletsFile = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.movedoutletsFile = val;
+            }
             return this;
         }
 

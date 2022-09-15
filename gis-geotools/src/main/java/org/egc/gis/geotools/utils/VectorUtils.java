@@ -115,4 +115,5 @@ public class VectorUtils {
         }
         return new Measure(0.0, SI.SQUARE_METRE);
     }
+
 }

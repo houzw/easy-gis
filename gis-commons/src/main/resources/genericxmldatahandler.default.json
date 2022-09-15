@@ -1,0 +1,8 @@
+{
+  "formats" : [ {
+    "mimeType" : "text/xml"
+  }, {
+    "mimeType" : "text/xml; subtype=gml/2.1.2",
+    "schema" : "http://schemas.opengis.net/gml/2.1.2/feature.xsd"
+  } ]
+}

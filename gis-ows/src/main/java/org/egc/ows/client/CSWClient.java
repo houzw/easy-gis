@@ -24,19 +24,19 @@ public class CSWClient {
     static net.opengis.csw.v_2_0_2.ObjectFactory cswof = new net.opengis.csw.v_2_0_2.ObjectFactory();
     static net.opengis.filter.v_1_1_0.ObjectFactory of = new net.opengis.filter.v_1_1_0.ObjectFactory();
     static net.opengis.gml.v_3_1_1.ObjectFactory gmlof = new net.opengis.gml.v_3_1_1.ObjectFactory();
-    static Marshaller csw_jaxbmarshaller;
-    static Unmarshaller csw_jaxbUnmarshaller;
+    //static Marshaller csw_jaxbmarshaller;
+    //static Unmarshaller csw_jaxbUnmarshaller;
+    public static final String DEFAULT_TYPE_NAME = "csw:Record";
+    public static final String DEFAULT_OUTPUT_SCHEMA = "http://www.opengis.net/cat/csw/2.0.2";
+    public static final String DEFAULT_NAMESPACE = "http://www.opengis.net/cat/csw/2.0.2";
+    public static final String XMLNS = "http://www.opengis.net/cat/csw";
+    public static final String CONSTRAINT_LANGUAGE_CQL_TEXT = "CQL_TEXT";
 
-    static {
-        JAXBContext cswJaxbContext = null;
-        try {
-            cswJaxbContext = JAXBContext.newInstance(net.opengis.csw.v_2_0_2.ObjectFactory.class, net.opengis.filter.v_1_1_0.ObjectFactory.class, net.opengis.gml.v_3_1_1.ObjectFactory.class);
-            csw_jaxbUnmarshaller = cswJaxbContext.createUnmarshaller();
-            csw_jaxbmarshaller = cswJaxbContext.createMarshaller();
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
-    }
+   /*private void init() throws JAXBException {
+        JAXBContext cswJaxbContext = JAXBContext.newInstance(net.opengis.csw.v_2_0_2.ObjectFactory.class, net.opengis.filter.v_1_1_0.ObjectFactory.class, net.opengis.gml.v_3_1_1.ObjectFactory.class);
+        csw_jaxbUnmarshaller = cswJaxbContext.createUnmarshaller();
+        csw_jaxbmarshaller = cswJaxbContext.createMarshaller();
+    }*/
 
     public String getServiceEndpoint() {
         return serviceEndpoint;
@@ -59,9 +59,10 @@ public class CSWClient {
             URI url = this.requestBuilder.getCapabilities(CSWRequestBuilder.Version.Version_202);
             String s = HttpUtils.doGetString(url);
             assert s != null;
+            //init();
             return JAXB.unmarshal(new StringReader(s), net.opengis.csw.v_2_0_2.CapabilitiesType.class);
         } catch (URISyntaxException e) {
-            throw new BusinessException(e, "URISyntaxException");
+            throw new BusinessException(e, "URISyntaxException or JAXBException");
         }
     }
 
@@ -74,7 +75,7 @@ public class CSWClient {
         QueryConstraintType constraint = cswof.createQueryConstraintType();
         constraint.setVersion("1.1.0");
         query.setConstraint(constraint);
-        query.getTypeNames().add(new QName(CSWRequestBuilder.CSW_202_NS,"Record"));
+        query.getTypeNames().add(new QName(CSWRequestBuilder.CSW_202_NS, "Record"));
         query.getTypeNames().add(new QName("http://www.isotc211.org/2005/gmd",
                 "MD_Metadata"));
 

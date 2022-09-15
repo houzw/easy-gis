@@ -1,0 +1,7 @@
+{
+  "formats": [
+  {"mimeType":"application/wms", default = "true"}
+  {"mimeType":"application/wcs"}
+  {"mimeType":"application/wfs"}
+  ]
+}

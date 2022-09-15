@@ -18,21 +18,14 @@ import java.io.File;
  * Wrapper of parameters of dInfinityConcentrationLimitedAcccumulation
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class DInfinityConcentrationLimitedAcccumulationParams implements Params {
-    private static final long serialVersionUID = -2123491500314228973L;
-
     /**
-     * <pre>
-     * dinfinityFlowDirection
-     * effectiveRunoffWeight
-     * disturbanceIndicator
-     * decayMultiplier
-     * outlets
+     * <pre>     * dinfinityFlowDirection     * effectiveRunoffWeight     * disturbanceIndicator     * decayMultiplier     * outlets
      *  </pre>
      *
      * @see Builder#Builder(String, String, String, String)
@@ -89,43 +82,45 @@ public class DInfinityConcentrationLimitedAcccumulationParams implements Params 
     /**
      * The grid giving the specific discharge of the flow carrying the constituent being loaded at the concentration threshold specified.
      */
+    @NotNull
     private String overlandFlowSpecificDischarge;
 
     /**
      * A grid giving the resulting concentration of the compound of interest in the flow.
      */
+    @NotNull
     private String concentration;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getOverlandFlowSpecificDischarge() {
+        // if no output filename provided
         if (StringUtils.isBlank(overlandFlowSpecificDischarge)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(dinfinityFlowDirection, "overlandFlowSpecificDischarge", "Raster Dataset", "tif"));
         }
-        return overlandFlowSpecificDischarge;
+        return this.overlandFlowSpecificDischarge;
     }
 
-    // if no output filename provided
     public String getConcentration() {
+        // if no output filename provided
         if (StringUtils.isBlank(concentration)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(dinfinityFlowDirection, "concentration", "Raster Dataset", "tif"));
         }
-        return concentration;
+        return this.concentration;
     }
 
     private DInfinityConcentrationLimitedAcccumulationParams(Builder builder) {
-        dinfinityFlowDirection = builder.dinfinityFlowDirection;
-        effectiveRunoffWeight = builder.effectiveRunoffWeight;
-        disturbanceIndicator = builder.disturbanceIndicator;
-        decayMultiplier = builder.decayMultiplier;
-        outlets = builder.outlets;
-        concentrationThreshold = builder.concentrationThreshold;
-        checkForEdgeContamination = builder.checkForEdgeContamination;
-        overlandFlowSpecificDischarge = builder.overlandFlowSpecificDischarge;
-        concentration = builder.concentration;
+        this.dinfinityFlowDirection = builder.dinfinityFlowDirection;
+        this.effectiveRunoffWeight = builder.effectiveRunoffWeight;
+        this.disturbanceIndicator = builder.disturbanceIndicator;
+        this.decayMultiplier = builder.decayMultiplier;
+        this.outlets = builder.outlets;
+        this.concentrationThreshold = builder.concentrationThreshold;
+        this.checkForEdgeContamination = builder.checkForEdgeContamination;
+        this.overlandFlowSpecificDischarge = builder.overlandFlowSpecificDischarge;
+        this.concentration = builder.concentration;
     }
 
     @XmlRootElement
@@ -154,48 +149,99 @@ public class DInfinityConcentrationLimitedAcccumulationParams implements Params 
             this.decayMultiplier = decayMultiplier;
         }
 
+        /**
+         * @param val A grid giving flow direction by the D-infinity method.
+         */
         public Builder dinfinityFlowDirection(String val) {
-            dinfinityFlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.dinfinityFlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid giving the input quantity (notionally effective runoff or excess precipitation) to be used in the D-infinity weighted contributing area evaluation of Overland Flow Specific Discharge.
+         */
         public Builder effectiveRunoffWeight(String val) {
-            effectiveRunoffWeight = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.effectiveRunoffWeight = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid that indicates the source zone of the area of substance supply and must be 1 inside the zone and 0 or "no data" over the rest of the domain.
+         */
         public Builder disturbanceIndicator(String val) {
-            disturbanceIndicator = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.disturbanceIndicator = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid giving the factor by which flow leaving each grid cell is multiplied before accumulation on downslope grid cells.
+         */
         public Builder decayMultiplier(String val) {
-            decayMultiplier = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.decayMultiplier = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This optional input is a point feature  defining outlets of interest.
+         */
         public Builder outlets(String val) {
-            outlets = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.outlets = val;
+            }
             return this;
         }
 
+        /**
+         * default value is 1d
+         *
+         * @param val The concentration or solubility threshold.
+         */
         public Builder concentrationThreshold(Double val) {
-            concentrationThreshold = val;
+
+            if (val != null) {
+                this.concentrationThreshold = val;
+            }
             return this;
         }
 
+        /**
+         * default value is  true
+         *
+         * @param val This checkbox determines whether the tool should check for edge contamination.
+         */
         public Builder checkForEdgeContamination(Boolean val) {
-            checkForEdgeContamination = val;
+
+            if (val != null) {
+                this.checkForEdgeContamination = val;
+            }
             return this;
         }
 
+        /**
+         * @param val The grid giving the specific discharge of the flow carrying the constituent being loaded at the concentration threshold specified.
+         */
         public Builder overlandFlowSpecificDischarge(String val) {
-            overlandFlowSpecificDischarge = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.overlandFlowSpecificDischarge = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid giving the resulting concentration of the compound of interest in the flow.
+         */
         public Builder concentration(String val) {
-            concentration = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.concentration = val;
+            }
             return this;
         }
 

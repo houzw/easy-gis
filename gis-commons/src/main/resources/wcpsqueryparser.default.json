@@ -1,0 +1,6 @@
+{
+  "formats" : [ {
+    "mimeType" : "text/plain",
+    "schema" : "http://schemas.opengis.net/wcps/1.0/wcpsAll.xsd"
+  } ]
+}

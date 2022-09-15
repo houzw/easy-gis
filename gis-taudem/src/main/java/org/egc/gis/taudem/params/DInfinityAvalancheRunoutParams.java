@@ -18,19 +18,14 @@ import java.io.File;
  * Wrapper of parameters of dInfinityAvalancheRunout
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class DInfinityAvalancheRunoutParams implements Params {
-    private static final long serialVersionUID = -6027299520652204039L;
-
     /**
-     * <pre>
-     * pitFilledElevation
-     * dinfinityFlowDirection
-     * avalancheSourceSite
+     * <pre>     * pitFilledElevation     * dinfinityFlowDirection     * avalancheSourceSite
      *  </pre>
      *
      * @see Builder#Builder(String, String, String)
@@ -81,42 +76,44 @@ public class DInfinityAvalancheRunoutParams implements Params {
     /**
      * This grid Identifies the avalanche's runout zone (affected area) using a runout zone indicator with value 0 to indicate that this grid cell is not in the runout zone and value > 0 to indicate that this grid cell is in the runout zone.
      */
+    @NotNull
     private String runoutZone;
 
     /**
      * This is a grid of the flow distance from the source site that has the highest angle to each cell.
      */
+    @NotNull
     private String pathDistance;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getRunoutZone() {
+        // if no output filename provided
         if (StringUtils.isBlank(runoutZone)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "runoutZone", "Raster Dataset", "tif"));
         }
-        return runoutZone;
+        return this.runoutZone;
     }
 
-    // if no output filename provided
     public String getPathDistance() {
+        // if no output filename provided
         if (StringUtils.isBlank(pathDistance)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "pathDistance", "Raster Dataset", "tif"));
         }
-        return pathDistance;
+        return this.pathDistance;
     }
 
     private DInfinityAvalancheRunoutParams(Builder builder) {
-        pitFilledElevation = builder.pitFilledElevation;
-        dinfinityFlowDirection = builder.dinfinityFlowDirection;
-        avalancheSourceSite = builder.avalancheSourceSite;
-        proportionThreshold = builder.proportionThreshold;
-        alphaAngleThreshold = builder.alphaAngleThreshold;
-        pathDistanceMethod = builder.pathDistanceMethod;
-        runoutZone = builder.runoutZone;
-        pathDistance = builder.pathDistance;
+        this.pitFilledElevation = builder.pitFilledElevation;
+        this.dinfinityFlowDirection = builder.dinfinityFlowDirection;
+        this.avalancheSourceSite = builder.avalancheSourceSite;
+        this.proportionThreshold = builder.proportionThreshold;
+        this.alphaAngleThreshold = builder.alphaAngleThreshold;
+        this.pathDistanceMethod = builder.pathDistanceMethod;
+        this.runoutZone = builder.runoutZone;
+        this.pathDistance = builder.pathDistance;
     }
 
     @XmlRootElement
@@ -142,43 +139,89 @@ public class DInfinityAvalancheRunoutParams implements Params {
             this.avalancheSourceSite = avalancheSourceSite;
         }
 
+        /**
+         * @param val A grid of elevation values.
+         */
         public Builder pitFilledElevation(String val) {
-            pitFilledElevation = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.pitFilledElevation = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid giving flow directions by the D-Infinity method.
+         */
         public Builder dinfinityFlowDirection(String val) {
-            dinfinityFlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.dinfinityFlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This is a grid of source areas for snow avalanches that are commonly identified manually using a mix of experience and visual interpretation of maps.
+         */
         public Builder avalancheSourceSite(String val) {
-            avalancheSourceSite = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.avalancheSourceSite = val;
+            }
             return this;
         }
 
+        /**
+         * default value is 0.2d
+         *
+         * @param val This value is a threshold proportion that is used to limit the disperson of flow caused by using the D-infinity multiple flow direction method for determining flow direction.
+         */
         public Builder proportionThreshold(Double val) {
-            proportionThreshold = val;
+
+            if (val != null) {
+                this.proportionThreshold = val;
+            }
             return this;
         }
 
+        /**
+         * default value is 20d
+         *
+         * @param val This value is the threshold angle, called the Alpha Angle, that is used to determine which of the cells downslope from the source cells are in the affected area.
+         */
         public Builder alphaAngleThreshold(Double val) {
-            alphaAngleThreshold = val;
+
+            if (val != null) {
+                this.alphaAngleThreshold = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This option selects the method used to measure the distance used to calculate the slope angle.
+         */
         public Builder pathDistanceMethod(String val) {
-            pathDistanceMethod = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.pathDistanceMethod = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This grid Identifies the avalanche's runout zone (affected area) using a runout zone indicator with value 0 to indicate that this grid cell is not in the runout zone and value > 0 to indicate that this grid cell is in the runout zone.
+         */
         public Builder runoutZone(String val) {
-            runoutZone = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.runoutZone = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This is a grid of the flow distance from the source site that has the highest angle to each cell.
+         */
         public Builder pathDistance(String val) {
-            pathDistance = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.pathDistance = val;
+            }
             return this;
         }
 

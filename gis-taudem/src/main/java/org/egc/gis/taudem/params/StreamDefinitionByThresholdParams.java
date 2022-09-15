@@ -18,18 +18,14 @@ import java.io.File;
  * Wrapper of parameters of streamDefinitionByThreshold
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:35+08:00
+ * @date 2020-06-28T12:02:30+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class StreamDefinitionByThresholdParams implements Params {
-    private static final long serialVersionUID = 8262785351229766844L;
-
     /**
-     * <pre>
-     * accumulatedStreamSource
-     * mask
+     * <pre>     * accumulatedStreamSource     * mask
      *  </pre>
      *
      * @see Builder#Builder(String)
@@ -60,25 +56,26 @@ public class StreamDefinitionByThresholdParams implements Params {
     /**
      * This is an indicator grid (1,0) that indicates the location of streams, with a value of 1 for each of the stream cells and 0 for the remainder of the cells.
      */
+    @NotNull
     private String streamRaster;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getStreamRaster() {
+        // if no output filename provided
         if (StringUtils.isBlank(streamRaster)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(accumulatedStreamSource, "streamRaster", "Raster Dataset", "tif"));
         }
-        return streamRaster;
+        return this.streamRaster;
     }
 
     private StreamDefinitionByThresholdParams(Builder builder) {
-        accumulatedStreamSource = builder.accumulatedStreamSource;
-        mask = builder.mask;
-        threshold = builder.threshold;
-        streamRaster = builder.streamRaster;
+        this.accumulatedStreamSource = builder.accumulatedStreamSource;
+        this.mask = builder.mask;
+        this.threshold = builder.threshold;
+        this.streamRaster = builder.streamRaster;
     }
 
     @XmlRootElement
@@ -96,23 +93,46 @@ public class StreamDefinitionByThresholdParams implements Params {
             this.accumulatedStreamSource = accumulatedStreamSource;
         }
 
+        /**
+         * @param val This grid nominally accumulates some characteristic or combination of characteristics of the watershed.
+         */
         public Builder accumulatedStreamSource(String val) {
-            accumulatedStreamSource = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.accumulatedStreamSource = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This optional input is a grid that is used to mask the domain of interest and output is only provided where this grid is >= 0.
+         */
         public Builder mask(String val) {
-            mask = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.mask = val;
+            }
             return this;
         }
 
+        /**
+         * default value is 100d
+         *
+         * @param val This parameter is compared to the value in the Accumulated Stream Source grid (*ssa) to determine if the cell should be considered a stream cell.
+         */
         public Builder threshold(Double val) {
-            threshold = val;
+
+            if (val != null) {
+                this.threshold = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This is an indicator grid (1,0) that indicates the location of streams, with a value of 1 for each of the stream cells and 0 for the remainder of the cells.
+         */
         public Builder streamRaster(String val) {
-            streamRaster = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.streamRaster = val;
+            }
             return this;
         }
 

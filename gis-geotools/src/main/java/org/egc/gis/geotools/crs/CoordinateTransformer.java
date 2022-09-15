@@ -60,7 +60,7 @@ public class CoordinateTransformer {
     /**
      * http://johnewart.net/posts/2013/geotools_custom_crs/
      *
-     * @param wkt
+     * @param wkt wkt string
      * @return
      */
     public static CoordinateReferenceSystem customCrsFromWkt(String wkt) {

@@ -1,8 +1,16 @@
 package org.egc.ows.request.csw;
 
+import net.opengis.cat.csw20.Csw20Factory;
+import net.opengis.cat.csw20.GetCapabilitiesType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -16,7 +24,6 @@ import static org.egc.ows.commons.Consts.*;
  * @date 2020 /10/2 19:35
  */
 public class CSWRequestBuilder {
-
 
     public static final String GMD_NS = "http://www.isotc211.org/2005/gmd";
     public static final String GML_NS = "http://www.opengis.net/gml";
@@ -76,6 +83,19 @@ public class CSWRequestBuilder {
         Version(String version) {
             this.version = version;
         }
+    }
+
+    public String GetCapabilities() throws JAXBException {
+        Csw20Factory csw20Factory = Csw20Factory.eINSTANCE;
+        GetCapabilitiesType getCapabilitiesType = csw20Factory.createGetCapabilitiesType();
+        // serialise to xml
+        StringWriter writer = new StringWriter();
+        JAXBContext context = JAXBContext.newInstance(net.opengis.csw.v_2_0_2.GetCapabilitiesType.class);
+        Marshaller m = context.createMarshaller();
+        QName qName = new QName("http://www.opengis.net/csw/2.0.2", "GetCapabilities");
+        JAXBElement<GetCapabilitiesType> root = new JAXBElement<>(qName, GetCapabilitiesType.class, getCapabilitiesType);
+        m.marshal(root, writer);
+        return writer.toString();
     }
 
 

@@ -1,4 +1,4 @@
-package org.egc.gis.db;
+package org.egc.gis.db.cmd;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

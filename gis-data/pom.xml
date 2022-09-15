@@ -21,7 +21,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <netcdfJavaVersion>5.5.0</netcdfJavaVersion>
     </properties>
+    <repositories>
+        <repository>
+            <id>unidata-all</id>
+            <name>Unidata All</name>
+            <url>https://artifacts.unidata.ucar.edu/repository/unidata-all/</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -39,6 +47,21 @@
             <artifactId>gis-ows</artifactId>
             <version>1.2-SNAPSHOT</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/edu.ucar/netcdf4 -->
+<!--        https://docs.unidata.ucar.edu/netcdf-java/current/userguide/file_types.html-->
+        <!-- https://mvnrepository.com/artifact/edu.ucar/netcdfAll -->
+        <!--<dependency>
+            <groupId>edu.ucar</groupId>
+            <artifactId>netcdfAll</artifactId>
+            <version>${netcdfJavaVersion}</version>
+        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/edu.ucar/cdm -->
+        <dependency>
+            <groupId>edu.ucar</groupId>
+            <artifactId>cdm-core</artifactId>
+            <version>${netcdfJavaVersion}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

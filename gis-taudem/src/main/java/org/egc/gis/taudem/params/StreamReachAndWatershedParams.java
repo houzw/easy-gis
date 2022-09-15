@@ -18,21 +18,14 @@ import java.io.File;
  * Wrapper of parameters of streamReachAndWatershed
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:30+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class StreamReachAndWatershedParams implements Params {
-    private static final long serialVersionUID = -8730494915989904370L;
-
     /**
-     * <pre>
-     * pitFilledElevation
-     * d8FlowDirection
-     * d8DrainageArea
-     * streamRaster
-     * outlets
+     * <pre>     * pitFilledElevation     * d8FlowDirection     * d8DrainageArea     * streamRaster     * outlets
      *  </pre>
      *
      * @see Builder#Builder(String, String, String, String)
@@ -81,84 +74,89 @@ public class StreamReachAndWatershedParams implements Params {
     /**
      * The Stream Order Grid has cells values of streams ordered according to the Strahler order system.
      */
+    @NotNull
     private String streamOrder;
 
     /**
      * This output is a text file that details the network topological connectivity is stored in the Stream Network Tree file.
      */
+    @NotNull
     private String networkConnectivityTree;
 
     /**
      * This output is a text file that contains the coordinates and attributes of points along the stream network.
      */
+    @NotNull
     private String networkCoordinates;
 
     /**
      * This output is a polyline OGR file giving the links in a stream network.
      */
+    @NotNull
     private String streamReachFile;
 
     /**
      * This output grid identified each reach watershed with a unique ID number, or in the case where the delineate single watershed option was checked, the entire area draining to the stream network is identified with a single ID.
      */
+    @NotNull
     private String watershed;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getStreamOrder() {
+        // if no output filename provided
         if (StringUtils.isBlank(streamOrder)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "streamOrder", "Raster Dataset", "tif"));
         }
-        return streamOrder;
+        return this.streamOrder;
     }
 
-    // if no output filename provided
     public String getNetworkConnectivityTree() {
+        // if no output filename provided
         if (StringUtils.isBlank(networkConnectivityTree)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "networkConnectivityTree", "File", "txt"));
         }
-        return networkConnectivityTree;
+        return this.networkConnectivityTree;
     }
 
-    // if no output filename provided
     public String getNetworkCoordinates() {
+        // if no output filename provided
         if (StringUtils.isBlank(networkCoordinates)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "networkCoordinates", "File", "txt"));
         }
-        return networkCoordinates;
+        return this.networkCoordinates;
     }
 
-    // if no output filename provided
     public String getStreamReachFile() {
+        // if no output filename provided
         if (StringUtils.isBlank(streamReachFile)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "streamReachFile", "File", "txt"));
         }
-        return streamReachFile;
+        return this.streamReachFile;
     }
 
-    // if no output filename provided
     public String getWatershed() {
+        // if no output filename provided
         if (StringUtils.isBlank(watershed)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(pitFilledElevation, "watershed", "Raster Dataset", "tif"));
         }
-        return watershed;
+        return this.watershed;
     }
 
     private StreamReachAndWatershedParams(Builder builder) {
-        pitFilledElevation = builder.pitFilledElevation;
-        d8FlowDirection = builder.d8FlowDirection;
-        d8DrainageArea = builder.d8DrainageArea;
-        streamRaster = builder.streamRaster;
-        outlets = builder.outlets;
-        delineateSingleWatershed = builder.delineateSingleWatershed;
-        streamOrder = builder.streamOrder;
-        networkConnectivityTree = builder.networkConnectivityTree;
-        networkCoordinates = builder.networkCoordinates;
-        streamReachFile = builder.streamReachFile;
-        watershed = builder.watershed;
+        this.pitFilledElevation = builder.pitFilledElevation;
+        this.d8FlowDirection = builder.d8FlowDirection;
+        this.d8DrainageArea = builder.d8DrainageArea;
+        this.streamRaster = builder.streamRaster;
+        this.outlets = builder.outlets;
+        this.delineateSingleWatershed = builder.delineateSingleWatershed;
+        this.streamOrder = builder.streamOrder;
+        this.networkConnectivityTree = builder.networkConnectivityTree;
+        this.networkCoordinates = builder.networkCoordinates;
+        this.streamReachFile = builder.streamReachFile;
+        this.watershed = builder.watershed;
     }
 
     @XmlRootElement
@@ -189,58 +187,116 @@ public class StreamReachAndWatershedParams implements Params {
             this.streamRaster = streamRaster;
         }
 
+        /**
+         * @param val This input is a grid of elevation values.
+         */
         public Builder pitFilledElevation(String val) {
-            pitFilledElevation = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.pitFilledElevation = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This input is a grid of flow directions that are encoded using the D8 method where all flow from a cells goes to a single neighboring cell in the direction of steepest descent.
+         */
         public Builder d8FlowDirection(String val) {
-            d8FlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.d8FlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid giving the contributing area value in terms of the number of grid cells (or the summation of weights) for each cell taken as its own contribution plus the contribution from upslope neighbors that drain in to it using the D8 algorithm.
+         */
         public Builder d8DrainageArea(String val) {
-            d8DrainageArea = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.d8DrainageArea = val;
+            }
             return this;
         }
 
+        /**
+         * @param val An indicator grid indicating streams, by using a grid cell value of 1 on streams and 0 off streams.
+         */
         public Builder streamRaster(String val) {
-            streamRaster = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.streamRaster = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A point feature defining points of interest.
+         */
         public Builder outlets(String val) {
-            outlets = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.outlets = val;
+            }
             return this;
         }
 
+        /**
+         * default value is  false
+         *
+         * @param val This option causes the tool to delineate a single watershed by representing the entire area draining to the Stream Network as a single value in the output watershed grid.
+         */
         public Builder delineateSingleWatershed(Boolean val) {
-            delineateSingleWatershed = val;
+
+            if (val != null) {
+                this.delineateSingleWatershed = val;
+            }
             return this;
         }
 
+        /**
+         * @param val The Stream Order Grid has cells values of streams ordered according to the Strahler order system.
+         */
         public Builder streamOrder(String val) {
-            streamOrder = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.streamOrder = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This output is a text file that details the network topological connectivity is stored in the Stream Network Tree file.
+         */
         public Builder networkConnectivityTree(String val) {
-            networkConnectivityTree = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.networkConnectivityTree = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This output is a text file that contains the coordinates and attributes of points along the stream network.
+         */
         public Builder networkCoordinates(String val) {
-            networkCoordinates = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.networkCoordinates = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This output is a polyline OGR file giving the links in a stream network.
+         */
         public Builder streamReachFile(String val) {
-            streamReachFile = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.streamReachFile = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This output grid identified each reach watershed with a unique ID number, or in the case where the delineate single watershed option was checked, the entire area draining to the stream network is identified with a single ID.
+         */
         public Builder watershed(String val) {
-            watershed = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.watershed = val;
+            }
             return this;
         }
 

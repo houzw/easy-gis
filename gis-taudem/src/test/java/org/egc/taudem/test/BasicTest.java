@@ -1,7 +1,10 @@
 package org.egc.taudem.test;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.egc.commons.command.ExecResult;
 import org.egc.gis.taudem.TauDEMAnalysis;
+import org.egc.gis.taudem.TauDEMWorkflow;
 import org.egc.gis.taudem.params.D8FlowDirectionsParams;
 import org.egc.gis.taudem.params.PitRemoveParams;
 import org.junit.Before;
@@ -26,6 +29,7 @@ public class BasicTest {
     public void init() {
         analysis = TauDEMAnalysis.getInstance();
         analysis.init(outdir);
+        Configurator.setAllLevels("", Level.DEBUG);
     }
 
     @Test
@@ -55,4 +59,14 @@ public class BasicTest {
         analysis.d8FlowDirections(params);
         System.out.println(params.getD8Slope());
     }
+
+    @Test
+    public void testWorkflow() {
+        String dem = "F:/data/global_seims/spatial/ywzdem_aw3d30.tif";
+        String shp = "F:/data/global_seims/spatial/outlet_beijing1954.shp";
+        String outdir = "H:/gisdemo/out/3133/";
+        TauDEMWorkflow.watershedDelineation(dem, shp, 35, true, outdir);
+
+    }
+
 }

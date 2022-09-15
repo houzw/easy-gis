@@ -18,18 +18,14 @@ import java.io.File;
  * Wrapper of parameters of dInfinityUpslopeDependence
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class DInfinityUpslopeDependenceParams implements Params {
-    private static final long serialVersionUID = 8014027308120049569L;
-
     /**
-     * <pre>
-     * dinfinityFlowDirection
-     * destination
+     * <pre>     * dinfinityFlowDirection     * destination
      *  </pre>
      *
      * @see Builder#Builder(String, String)
@@ -52,24 +48,25 @@ public class DInfinityUpslopeDependenceParams implements Params {
     /**
      * A grid quantifing the amount each source point in the domain contributes to the zone defined by the destination grid.
      */
+    @NotNull
     private String upslopeDependence;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getUpslopeDependence() {
+        // if no output filename provided
         if (StringUtils.isBlank(upslopeDependence)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(dinfinityFlowDirection, "upslopeDependence", "Raster Dataset", "tif"));
         }
-        return upslopeDependence;
+        return this.upslopeDependence;
     }
 
     private DInfinityUpslopeDependenceParams(Builder builder) {
-        dinfinityFlowDirection = builder.dinfinityFlowDirection;
-        destination = builder.destination;
-        upslopeDependence = builder.upslopeDependence;
+        this.dinfinityFlowDirection = builder.dinfinityFlowDirection;
+        this.destination = builder.destination;
+        this.upslopeDependence = builder.upslopeDependence;
     }
 
     @XmlRootElement
@@ -88,18 +85,33 @@ public class DInfinityUpslopeDependenceParams implements Params {
             this.destination = destination;
         }
 
+        /**
+         * @param val A grid giving flow direction by the D-Infinity method where the flow direction angle is determined as the direction of the steepest downward slope on the eight triangular facets formed in a 3 x 3 grid cell window centered on the grid cell of interest.
+         */
         public Builder dinfinityFlowDirection(String val) {
-            dinfinityFlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.dinfinityFlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid that encodes the destination zone that may receive flow from upslope.
+         */
         public Builder destination(String val) {
-            destination = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.destination = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid quantifing the amount each source point in the domain contributes to the zone defined by the destination grid.
+         */
         public Builder upslopeDependence(String val) {
-            upslopeDependence = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.upslopeDependence = val;
+            }
             return this;
         }
 

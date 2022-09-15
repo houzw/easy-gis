@@ -18,19 +18,14 @@ import java.io.File;
  * Wrapper of parameters of dInfinityContributingArea
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class DInfinityContributingAreaParams implements Params {
-    private static final long serialVersionUID = 5178914606888747681L;
-
     /**
-     * <pre>
-     * dinfinityFlowDirection
-     * outlets
-     * weight
+     * <pre>     * dinfinityFlowDirection     * outlets     * weight
      *  </pre>
      *
      * @see Builder#Builder(String)
@@ -66,26 +61,27 @@ public class DInfinityContributingAreaParams implements Params {
     /**
      * A grid of specific catchment area which is the contributing area per unit contour length using the multiple flow direction D-infinity approach.
      */
+    @NotNull
     private String dinfinitySpecificCatchmentArea;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getDinfinitySpecificCatchmentArea() {
+        // if no output filename provided
         if (StringUtils.isBlank(dinfinitySpecificCatchmentArea)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(dinfinityFlowDirection, "dinfinitySpecificCatchmentArea", "Raster Dataset", "tif"));
         }
-        return dinfinitySpecificCatchmentArea;
+        return this.dinfinitySpecificCatchmentArea;
     }
 
     private DInfinityContributingAreaParams(Builder builder) {
-        dinfinityFlowDirection = builder.dinfinityFlowDirection;
-        outlets = builder.outlets;
-        weight = builder.weight;
-        checkForEdgeContamination = builder.checkForEdgeContamination;
-        dinfinitySpecificCatchmentArea = builder.dinfinitySpecificCatchmentArea;
+        this.dinfinityFlowDirection = builder.dinfinityFlowDirection;
+        this.outlets = builder.outlets;
+        this.weight = builder.weight;
+        this.checkForEdgeContamination = builder.checkForEdgeContamination;
+        this.dinfinitySpecificCatchmentArea = builder.dinfinitySpecificCatchmentArea;
     }
 
     @XmlRootElement
@@ -104,28 +100,56 @@ public class DInfinityContributingAreaParams implements Params {
             this.dinfinityFlowDirection = dinfinityFlowDirection;
         }
 
+        /**
+         * @param val A grid of flow directions based on the D-infinity flow method using the steepest slope of a triangular facet (Tarboton, 1997, "A New Method for the Determination of Flow Directions and Contributing Areas in Grid Digital Elevation Models," Water Resources Research, 33(2): 309-319).
+         */
         public Builder dinfinityFlowDirection(String val) {
-            dinfinityFlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.dinfinityFlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A point feature defining the outlets of interest.
+         */
         public Builder outlets(String val) {
-            outlets = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.outlets = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid giving contribution to flow for each cell.
+         */
         public Builder weight(String val) {
-            weight = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.weight = val;
+            }
             return this;
         }
 
+        /**
+         * default value is  true
+         *
+         * @param val A flag that indicates whether the tool should check for edge contamination.
+         */
         public Builder checkForEdgeContamination(Boolean val) {
-            checkForEdgeContamination = val;
+
+            if (val != null) {
+                this.checkForEdgeContamination = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid of specific catchment area which is the contributing area per unit contour length using the multiple flow direction D-infinity approach.
+         */
         public Builder dinfinitySpecificCatchmentArea(String val) {
-            dinfinitySpecificCatchmentArea = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.dinfinitySpecificCatchmentArea = val;
+            }
             return this;
         }
 

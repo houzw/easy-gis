@@ -1,0 +1,73 @@
+{
+  "formats" : [ {
+    "mimeType" : "application/img",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "image/tiff",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "image/geotiff",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/geotiff",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/dbase",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/remap",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/x-erdas-hfa",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/x-netcdf",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/dgn",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "image/jpeg",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "image/png",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/x-geotiff",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/hdf4-eos",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "text/plain",
+    "encoding" : "base64"
+  }, {
+    "mimeType" : "application/img"
+  }, {
+    "mimeType" : "image/tiff"
+  }, {
+    "mimeType" : "image/geotiff"
+  }, {
+    "mimeType" : "application/geotiff"
+  }, {
+    "mimeType" : "application/dbase"
+  }, {
+    "mimeType" : "application/remap"
+  }, {
+    "mimeType" : "application/x-erdas-hfa"
+  }, {
+    "mimeType" : "application/x-netcdf"
+  }, {
+    "mimeType" : "application/dgn"
+  }, {
+    "mimeType" : "image/jpeg"
+  }, {
+    "mimeType" : "image/png"
+  }, {
+    "mimeType" : "application/x-geotiff"
+  }, {
+    "mimeType" : "application/hdf4-eos"
+  }, {
+    "mimeType" : "text/plain"
+  } ]
+}

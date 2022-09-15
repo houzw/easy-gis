@@ -18,20 +18,14 @@ import java.io.File;
  * Wrapper of parameters of dInfinityDecayingAccumulation
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class DInfinityDecayingAccumulationParams implements Params {
-    private static final long serialVersionUID = 3716566273567797162L;
-
     /**
-     * <pre>
-     * dinfinityFlowDirection
-     * decayMultiplier
-     * weight
-     * outlets
+     * <pre>     * dinfinityFlowDirection     * decayMultiplier     * weight     * outlets
      *  </pre>
      *
      * @see Builder#Builder(String, String)
@@ -73,27 +67,28 @@ public class DInfinityDecayingAccumulationParams implements Params {
     /**
      * The D-Infinity Decaying Accumulation tool creates a grid of the accumulated mass at each location in the domain where mass moves with the D-infinity flow field, but is subject to first order decay in moving from cell to cell.
      */
+    @NotNull
     private String decayedSpecificCatchmentArea;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getDecayedSpecificCatchmentArea() {
+        // if no output filename provided
         if (StringUtils.isBlank(decayedSpecificCatchmentArea)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(dinfinityFlowDirection, "decayedSpecificCatchmentArea", "Raster Dataset", "tif"));
         }
-        return decayedSpecificCatchmentArea;
+        return this.decayedSpecificCatchmentArea;
     }
 
     private DInfinityDecayingAccumulationParams(Builder builder) {
-        dinfinityFlowDirection = builder.dinfinityFlowDirection;
-        decayMultiplier = builder.decayMultiplier;
-        weight = builder.weight;
-        outlets = builder.outlets;
-        checkForEdgeContamination = builder.checkForEdgeContamination;
-        decayedSpecificCatchmentArea = builder.decayedSpecificCatchmentArea;
+        this.dinfinityFlowDirection = builder.dinfinityFlowDirection;
+        this.decayMultiplier = builder.decayMultiplier;
+        this.weight = builder.weight;
+        this.outlets = builder.outlets;
+        this.checkForEdgeContamination = builder.checkForEdgeContamination;
+        this.decayedSpecificCatchmentArea = builder.decayedSpecificCatchmentArea;
     }
 
     @XmlRootElement
@@ -115,33 +110,66 @@ public class DInfinityDecayingAccumulationParams implements Params {
             this.decayMultiplier = decayMultiplier;
         }
 
+        /**
+         * @param val A grid giving flow direction by the D-infinity method.
+         */
         public Builder dinfinityFlowDirection(String val) {
-            dinfinityFlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.dinfinityFlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid giving the factor by which flow leaving each grid cell is multiplied before accumulation on downslope grid cells.
+         */
         public Builder decayMultiplier(String val) {
-            decayMultiplier = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.decayMultiplier = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid giving weights (loadings) to be used in the accumulation.
+         */
         public Builder weight(String val) {
-            weight = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.weight = val;
+            }
             return this;
         }
 
+        /**
+         * @param val This optional input is a point feature  defining outlets of interest.
+         */
         public Builder outlets(String val) {
-            outlets = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.outlets = val;
+            }
             return this;
         }
 
+        /**
+         * default value is  true
+         *
+         * @param val This checkbox determines whether the tool should check for edge contamination.
+         */
         public Builder checkForEdgeContamination(Boolean val) {
-            checkForEdgeContamination = val;
+
+            if (val != null) {
+                this.checkForEdgeContamination = val;
+            }
             return this;
         }
 
+        /**
+         * @param val The D-Infinity Decaying Accumulation tool creates a grid of the accumulated mass at each location in the domain where mass moves with the D-infinity flow field, but is subject to first order decay in moving from cell to cell.
+         */
         public Builder decayedSpecificCatchmentArea(String val) {
-            decayedSpecificCatchmentArea = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.decayedSpecificCatchmentArea = val;
+            }
             return this;
         }
 

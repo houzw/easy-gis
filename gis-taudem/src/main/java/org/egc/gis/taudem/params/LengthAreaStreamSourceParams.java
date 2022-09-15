@@ -18,18 +18,14 @@ import java.io.File;
  * Wrapper of parameters of lengthAreaStreamSource
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:30+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class LengthAreaStreamSourceParams implements Params {
-    private static final long serialVersionUID = 2570066969224877268L;
-
     /**
-     * <pre>
-     * length
-     * contributingArea
+     * <pre>     * length     * contributingArea
      *  </pre>
      *
      * @see Builder#Builder(String, String)
@@ -69,26 +65,27 @@ public class LengthAreaStreamSourceParams implements Params {
     /**
      * An indicator grid (1,0) that evaluates A >= (M)(L^y), based on the maximum upslope path length, the D8 contributing area grid inputs, and parameters M and y.
      */
+    @NotNull
     private String streamSource;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getStreamSource() {
+        // if no output filename provided
         if (StringUtils.isBlank(streamSource)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(length, "streamSource", "Raster Dataset", "tif"));
         }
-        return streamSource;
+        return this.streamSource;
     }
 
     private LengthAreaStreamSourceParams(Builder builder) {
-        length = builder.length;
-        contributingArea = builder.contributingArea;
-        thresholdM = builder.thresholdM;
-        exponentY = builder.exponentY;
-        streamSource = builder.streamSource;
+        this.length = builder.length;
+        this.contributingArea = builder.contributingArea;
+        this.thresholdM = builder.thresholdM;
+        this.exponentY = builder.exponentY;
+        this.streamSource = builder.streamSource;
     }
 
     @XmlRootElement
@@ -109,28 +106,59 @@ public class LengthAreaStreamSourceParams implements Params {
             this.contributingArea = contributingArea;
         }
 
+        /**
+         * @param val A grid of the maximum upslope length for each cell.
+         */
         public Builder length(String val) {
-            length = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.length = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid of contributing area values for each cell that were calculated using the D8 algorithm.
+         */
         public Builder contributingArea(String val) {
-            contributingArea = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.contributingArea = val;
+            }
             return this;
         }
 
+        /**
+         * default value is 0.03d
+         *
+         * @param val The multiplier threshold (M) parameter which is used in the formula: A > (M)(L^y), to identify the beginning of streams.
+         */
         public Builder thresholdM(Double val) {
-            thresholdM = val;
+
+            if (val != null) {
+                this.thresholdM = val;
+            }
             return this;
         }
 
+        /**
+         * default value is 1.3d
+         *
+         * @param val The exponent (y) parameter which is used in the formula: A > (M)(L^y), to identify the beginning of streams.
+         */
         public Builder exponentY(Double val) {
-            exponentY = val;
+
+            if (val != null) {
+                this.exponentY = val;
+            }
             return this;
         }
 
+        /**
+         * @param val An indicator grid (1,0) that evaluates A >= (M)(L^y), based on the maximum upslope path length, the D8 contributing area grid inputs, and parameters M and y.
+         */
         public Builder streamSource(String val) {
-            streamSource = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.streamSource = val;
+            }
             return this;
         }
 

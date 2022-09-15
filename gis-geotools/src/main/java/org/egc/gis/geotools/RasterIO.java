@@ -31,6 +31,7 @@ import java.io.IOException;
  */
 @Slf4j
 public class RasterIO {
+
     public static GridCoverage2D readZippedGeoTiff(String zipFile) {
         Hints hints = new Hints(Hints.FORCE_LONGITUDE_FIRST_AXIS_ORDER,
                 Boolean.TRUE);
@@ -120,4 +121,5 @@ public class RasterIO {
             return false;
         }
     }
+
 }

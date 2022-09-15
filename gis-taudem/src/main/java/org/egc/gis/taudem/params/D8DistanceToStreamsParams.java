@@ -18,18 +18,14 @@ import java.io.File;
  * Wrapper of parameters of d8DistanceToStreams
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:36+08:00
+ * @date 2020-06-28T12:02:31+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class D8DistanceToStreamsParams implements Params {
-    private static final long serialVersionUID = -2093292811600675024L;
-
     /**
-     * <pre>
-     * d8FlowDirection
-     * streamRaster
+     * <pre>     * d8FlowDirection     * streamRaster
      *  </pre>
      *
      * @see Builder#Builder(String, String)
@@ -61,25 +57,26 @@ public class D8DistanceToStreamsParams implements Params {
     /**
      * A grid giving the horizontal distance along the flow path as defined by the D8 Flow Directions Grid to the streams in the Stream Raster Grid.
      */
+    @NotNull
     private String distanceToStreams;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getDistanceToStreams() {
+        // if no output filename provided
         if (StringUtils.isBlank(distanceToStreams)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(d8FlowDirection, "distanceToStreams", "Raster Dataset", "tif"));
         }
-        return distanceToStreams;
+        return this.distanceToStreams;
     }
 
     private D8DistanceToStreamsParams(Builder builder) {
-        d8FlowDirection = builder.d8FlowDirection;
-        streamRaster = builder.streamRaster;
-        threshold = builder.threshold;
-        distanceToStreams = builder.distanceToStreams;
+        this.d8FlowDirection = builder.d8FlowDirection;
+        this.streamRaster = builder.streamRaster;
+        this.threshold = builder.threshold;
+        this.distanceToStreams = builder.distanceToStreams;
     }
 
     @XmlRootElement
@@ -99,23 +96,46 @@ public class D8DistanceToStreamsParams implements Params {
             this.streamRaster = streamRaster;
         }
 
+        /**
+         * @param val This input is a grid of flow directions that are encoded using the D8 method where all flow from a cells goes to a single neighboring cell in the direction of steepest descent.
+         */
         public Builder d8FlowDirection(String val) {
-            d8FlowDirection = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.d8FlowDirection = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid indicating streams.
+         */
         public Builder streamRaster(String val) {
-            streamRaster = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.streamRaster = val;
+            }
             return this;
         }
 
+        /**
+         * default value is 50d
+         *
+         * @param val This value acts as threshold on the Stream Raster Grid to determine the location of streams.
+         */
         public Builder threshold(Double val) {
-            threshold = val;
+
+            if (val != null) {
+                this.threshold = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid giving the horizontal distance along the flow path as defined by the D8 Flow Directions Grid to the streams in the Stream Raster Grid.
+         */
         public Builder distanceToStreams(String val) {
-            distanceToStreams = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.distanceToStreams = val;
+            }
             return this;
         }
 

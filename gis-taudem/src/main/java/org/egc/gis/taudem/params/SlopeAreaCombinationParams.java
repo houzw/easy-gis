@@ -18,18 +18,14 @@ import java.io.File;
  * Wrapper of parameters of slopeAreaCombination
  *
  * @author houzhiwei
- * @date 2020-05-21T14:24:35+08:00
+ * @date 2020-06-28T12:02:30+08:00
  */
 @Data
 @XmlRootElement
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class SlopeAreaCombinationParams implements Params {
-    private static final long serialVersionUID = 7260747079578982986L;
-
     /**
-     * <pre>
-     * slope
-     * area
+     * <pre>     * slope     * area
      *  </pre>
      *
      * @see Builder#Builder(String, String)
@@ -69,26 +65,27 @@ public class SlopeAreaCombinationParams implements Params {
     /**
      * A grid of slope-area values = (S^m)(A^n) calculated from the slope grid, specific catchment area grid, m slope exponent parameter, and n area exponent parameter.
      */
+    @NotNull
     private String slopeArea;
 
     @Setter
     @XmlElement
     private String outputDir = System.getProperty("java.io.tmpdir");
 
-    // if no output filename provided
     public String getSlopeArea() {
+        // if no output filename provided
         if (StringUtils.isBlank(slopeArea)) {
             return FilenameUtils.normalize(outputDir + File.separator + namingOutput(slope, "slopeArea", "Raster Dataset", "tif"));
         }
-        return slopeArea;
+        return this.slopeArea;
     }
 
     private SlopeAreaCombinationParams(Builder builder) {
-        slope = builder.slope;
-        area = builder.area;
-        slopeExponentM = builder.slopeExponentM;
-        areaExponentN = builder.areaExponentN;
-        slopeArea = builder.slopeArea;
+        this.slope = builder.slope;
+        this.area = builder.area;
+        this.slopeExponentM = builder.slopeExponentM;
+        this.areaExponentN = builder.areaExponentN;
+        this.slopeArea = builder.slopeArea;
     }
 
     @XmlRootElement
@@ -109,28 +106,59 @@ public class SlopeAreaCombinationParams implements Params {
             this.area = area;
         }
 
+        /**
+         * @param val This input is a grid of slope values.
+         */
         public Builder slope(String val) {
-            slope = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.slope = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid giving the specific catchment area for each cell taken as its own contribution (grid cell length or summation of weights) plus the proportional contribution from upslope neighbors that drain in to it.
+         */
         public Builder area(String val) {
-            area = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.area = val;
+            }
             return this;
         }
 
+        /**
+         * default value is 2d
+         *
+         * @param val The slope exponent (m) parameter which will be used in the formula: (S^m)(A^n), that is used to create the slope-area grid.
+         */
         public Builder slopeExponentM(Double val) {
-            slopeExponentM = val;
+
+            if (val != null) {
+                this.slopeExponentM = val;
+            }
             return this;
         }
 
+        /**
+         * default value is 1d
+         *
+         * @param val The area exponent (n) parameter which will be used in the formula: (S^m)(A^n), that is used to create the slope-area grid.
+         */
         public Builder areaExponentN(Double val) {
-            areaExponentN = val;
+
+            if (val != null) {
+                this.areaExponentN = val;
+            }
             return this;
         }
 
+        /**
+         * @param val A grid of slope-area values = (S^m)(A^n) calculated from the slope grid, specific catchment area grid, m slope exponent parameter, and n area exponent parameter.
+         */
         public Builder slopeArea(String val) {
-            slopeArea = val;
+            if (StringUtils.isNotBlank(val)) {
+                this.slopeArea = val;
+            }
             return this;
         }
 
