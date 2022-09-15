@@ -46,7 +46,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
         <!--   gis-ows客户端针对 JavaPS，这个支持传统的 52 north WPS    -->
