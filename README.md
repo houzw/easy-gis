@@ -13,10 +13,10 @@
 - easy-to-use
 - easy-to-learn
 
-
 ---
 
 决定项目或模块是否 install 或 deploy 的配置
+
 ```xml
 <properties>
    <maven.deploy.skip>true</maven.deploy.skip>
@@ -27,21 +27,26 @@
 ---
 
 ## 注意事项
+
+部分模块或功能尚处于开发过程中！
+
 ### 部分子模块暂未提交到 github，使用时注意在根目录的 `pom.xml` 中排除
+
 ### gis-ows/gis-wps-client
+
 1. geotools 版本
-52n-wps 依赖的版本为 8.7，更新到最新版可能出现问题
+   52n-wps 依赖的版本为 8.7，更新到最新版可能出现问题
 2. xercesImpl
-如果把 xercesImpl （2.7.1） 更新为 2.12.0，可能出现 `could not decode InputStream` （wps-client-lib） 
-或 `Error occured while transfer` （52n-wps-client-lib）
-```xml
- <dependency>
+   如果把 xercesImpl （2.7.1） 更新为 2.12.0，可能出现 `could not decode InputStream` （wps-client-lib） 
+   或 `Error occured while transfer` （52n-wps-client-lib）
+   
+   ```xml
+   <dependency>
      <groupId>xerces</groupId>
      <artifactId>xercesImpl</artifactId>
      <version>2.12.0</version>
- </dependency>
-```
-
+   </dependency>
+   ```
 
 ## 参考项目
 
