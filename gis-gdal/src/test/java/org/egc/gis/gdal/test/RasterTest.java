@@ -6,6 +6,7 @@ import org.egc.gis.gdal.dto.RasterMetadata;
 import org.egc.gis.gdal.raster.RasterIO;
 import org.egc.gis.gdal.raster.RasterInfo;
 import org.egc.gis.gdal.raster.RasterUtils;
+import org.egc.gis.gdal.raster.GDALThumbnail;
 import org.gdal.gdal.Dataset;
 import org.gdal.gdalconst.gdalconst;
 import org.junit.Test;
@@ -52,8 +53,12 @@ public class RasterTest extends TestCase {
 
     public void testThumbnail() {
         String data = "D:/data/demos/synthesisBands652.tif";
-        RasterUtils.truecolorThumbnail(data, demoDir + "1.png", 1, 2, 3, 30);
-        RasterUtils.rasterThumbnail(data, demoDir + "2.png",  30);
+        GDALThumbnail gdalThumbnail =  new GDALThumbnail();
+        //gdalThumbnail.truecolorThumbnail(data, demoDir + "1.png", 1, 2, 3, 30);
+        //gdalThumbnail.rasterThumbnail(data, demoDir + "2.png",  30);
+        double scale = gdalThumbnail.getScale(data, 512);
+        System.out.println(scale);
+        //gdalThumbnail.createThumbnail()
     }
 
     public void testFiles() throws IOException {
