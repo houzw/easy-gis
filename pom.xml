@@ -48,7 +48,7 @@
         <httpclient.version>4.5.13</httpclient.version>
         <commonsHttp.version>3.0.1</commonsHttp.version>
         <geotools.version>22.0</geotools.version>
-        <guava.version>30.0-jre</guava.version>
+        <guava.version>32.0.0-jre</guava.version>
         <hutool.version>4.5.15</hutool.version>
         <commons-lang3.version>3.5</commons-lang3.version>
         <commons-io.version>2.5</commons-io.version>
